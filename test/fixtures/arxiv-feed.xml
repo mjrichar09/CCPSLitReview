@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>ArXiv Query</title>
+  <entry>
+    <id>http://arxiv.org/abs/2607.01234v1</id>
+    <published>2026-07-25T10:00:00Z</published>
+    <updated>2026-07-25T10:00:00Z</updated>
+    <title>Hybrid mechanistic-neural models for CHO fed-batch prediction</title>
+    <summary>We combine a kinetic core with a neural residual to predict titer.</summary>
+    <author><name>A. Researcher</name></author>
+    <author><name>B. Coauthor</name></author>
+    <link href="http://arxiv.org/abs/2607.01234v1" rel="alternate" type="text/html"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2607.05678v2</id>
+    <published>2026-07-22T08:30:00Z</published>
+    <updated>2026-07-23T08:30:00Z</updated>
+    <title>Bayesian optimal design for bioreactor scale-down qualification</title>
+    <summary>A hierarchical model for scale-down equivalence.</summary>
+    <author><name>C. Statistician</name></author>
+    <link href="http://arxiv.org/abs/2607.05678v2" rel="alternate" type="text/html"/>
+  </entry>
+  <!-- Older than the test window: the scan must stop here, so the entry after
+       it is never emitted even though it is in range. -->
+  <entry>
+    <id>http://arxiv.org/abs/2606.00001v1</id>
+    <published>2026-06-15T08:30:00Z</published>
+    <title>Out of window paper</title>
+    <summary>Should not appear.</summary>
+    <author><name>D. Early</name></author>
+    <link href="http://arxiv.org/abs/2606.00001v1" rel="alternate" type="text/html"/>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2607.09999v1</id>
+    <published>2026-07-28T08:30:00Z</published>
+    <title>Unreachable because the scan already stopped</title>
+    <summary>Should not appear.</summary>
+    <author><name>E. Later</name></author>
+    <link href="http://arxiv.org/abs/2607.09999v1" rel="alternate" type="text/html"/>
+  </entry>
+</feed>

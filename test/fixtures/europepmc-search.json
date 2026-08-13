@@ -1,0 +1,30 @@
+{
+  "hitCount": 2,
+  "nextCursorMark": "AoJw",
+  "resultList": {
+    "result": [
+      {
+        "id": "42472568",
+        "source": "MED",
+        "pmid": "42472568",
+        "doi": "10.1016/j.biotechadv.2026.108986",
+        "title": "Advancing process control toward continuous biomanufacturing.",
+        "authorString": "Kim D, Park S, Lee C.",
+        "journalTitle": "Biotechnology advances",
+        "pubYear": "2026",
+        "firstPublicationDate": "2026-07-19",
+        "abstractText": "Continuous biomanufacturing is gaining attention."
+      },
+      {
+        "id": "PPR812345",
+        "source": "PPR",
+        "doi": "10.1101/2026.07.20.999999",
+        "title": "A digital twin for perfusion N-1 seed trains",
+        "authorString": "Preprint A, Preprint B.",
+        "pubYear": "2026",
+        "firstPublicationDate": "2026-07-20",
+        "abstractText": "We qualify a digital twin against pilot data."
+      }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>FDA biologics guidance</title>
+  <entry>
+    <title>Draft guidance: comparability for post-approval manufacturing changes</title>
+    <link rel="alternate" href="https://www.fda.gov/g/1"/>
+    <updated>2026-07-24T00:00:00Z</updated>
+    <summary>Comment period opens for the draft guidance.</summary>
+    <author><name>CBER</name></author>
+  </entry>
+  <entry>
+    <title>Out of window guidance</title>
+    <link rel="alternate" href="https://www.fda.gov/g/0"/>
+    <updated>2026-05-02T00:00:00Z</updated>
+    <summary>Older than the window.</summary>
+  </entry>
+</feed>

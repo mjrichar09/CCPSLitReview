@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <channel>
+    <title>BioProcess International</title>
+    <item>
+      <title>CDMO expands perfusion capacity at Irish site</title>
+      <link>https://bioprocessintl.com/a/1</link>
+      <description>&lt;p&gt;The facility adds four 2,000 L perfusion trains.&lt;/p&gt;</description>
+      <pubDate>Tue, 28 Jul 2026 09:00:00 +0000</pubDate>
+      <dc:creator>Staff Reporter</dc:creator>
+    </item>
+    <item>
+      <title>Raman in-line monitoring reaches commercial scale</title>
+      <link>https://bioprocessintl.com/a/2</link>
+      <description>Real-time release testing moves closer.</description>
+      <pubDate>Thu, 30 Jul 2026 12:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Executive appointment at a contract manufacturer</title>
+      <link>https://bioprocessintl.com/a/3</link>
+      <description>A new chief commercial officer starts in September.</description>
+      <pubDate>Fri, 31 Jul 2026 12:00:00 +0000</pubDate>
+    </item>
+    <item>
+      <title>Old news from before the window</title>
+      <link>https://bioprocessintl.com/a/0</link>
+      <description>Should be filtered out by date.</description>
+      <pubDate>Sun, 01 Jun 2026 12:00:00 +0000</pubDate>
+    </item>
+  </channel>
+</rss>

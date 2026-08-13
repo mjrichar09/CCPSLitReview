@@ -1,0 +1,25 @@
+{
+  "name": "ccpslitreview",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "test": "node --test test/*.test.js",
+    "digest": "NODE_USE_ENV_PROXY=1 node --env-file-if-exists=.env.local scripts/digest.mjs",
+    "fetch": "NODE_USE_ENV_PROXY=1 node --env-file-if-exists=.env.local scripts/digest.mjs --stage fetch --dry-run"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^5.2.5",
+    "next": "16.2.10",
+    "react": "19.2.4",
+    "react-dom": "19.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "16.2.10"
+  }
+}

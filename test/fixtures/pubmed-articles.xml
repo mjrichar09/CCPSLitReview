@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PubmedArticleSet>
+  <!-- Structured abstract, electronic ArticleDate, DOI, normal authors. -->
+  <PubmedArticle>
+    <MedlineCitation Status="Publisher" Owner="NLM">
+      <PMID Version="1">42472568</PMID>
+      <Article PubModel="Print-Electronic">
+        <Journal>
+          <Title>Biotechnology advances</Title>
+          <JournalIssue CitedMedium="Internet">
+            <PubDate><Year>2026</Year><Month>Sep</Month></PubDate>
+          </JournalIssue>
+        </Journal>
+        <ArticleTitle>Raman-based feedback control of <i>CHO</i> fed-batch culture.</ArticleTitle>
+        <Abstract>
+          <AbstractText Label="BACKGROUND">Raman probes are now routine.</AbstractText>
+          <AbstractText Label="RESULTS">Glucose was held at 2 g/L for 14 days.</AbstractText>
+        </Abstract>
+        <AuthorList CompleteYN="Y">
+          <Author ValidYN="Y"><LastName>Kim</LastName><ForeName>Dongkyu</ForeName></Author>
+          <Author ValidYN="Y"><LastName>Park</LastName><Initials>S</Initials></Author>
+        </AuthorList>
+        <ArticleDate DateType="Electronic"><Year>2026</Year><Month>07</Month><Day>19</Day></ArticleDate>
+      </Article>
+    </MedlineCitation>
+    <PubmedData>
+      <ArticleIdList>
+        <ArticleId IdType="pubmed">42472568</ArticleId>
+        <ArticleId IdType="doi">10.1016/J.Biotechadv.2026.108986</ArticleId>
+      </ArticleIdList>
+    </PubmedData>
+  </PubmedArticle>
+
+  <!-- No DOI, no ArticleDate, MedlineDate free text, collective author,
+       single unlabelled abstract. -->
+  <PubmedArticle>
+    <MedlineCitation Status="MEDLINE" Owner="NLM">
+      <PMID Version="1">42488823</PMID>
+      <Article PubModel="Print">
+        <Journal>
+          <Title>Journal of biotechnology</Title>
+          <JournalIssue CitedMedium="Print">
+            <PubDate><MedlineDate>2026 Jul-Aug</MedlineDate></PubDate>
+          </JournalIssue>
+        </Journal>
+        <ArticleTitle>Perfusion seed train intensification: a consortium report.</ArticleTitle>
+        <Abstract>
+          <AbstractText>N-1 perfusion raised inoculation density fourfold.</AbstractText>
+        </Abstract>
+        <AuthorList CompleteYN="Y">
+          <Author ValidYN="Y"><CollectiveName>BioPhorum Cell Culture Workstream</CollectiveName></Author>
+        </AuthorList>
+      </Article>
+    </MedlineCitation>
+    <PubmedData>
+      <ArticleIdList>
+        <ArticleId IdType="pubmed">42488823</ArticleId>
+      </ArticleIdList>
+    </PubmedData>
+  </PubmedArticle>
+
+  <!-- Untitled record: must be dropped rather than emitted. -->
+  <PubmedArticle>
+    <MedlineCitation Status="Publisher" Owner="NLM">
+      <PMID Version="1">99999999</PMID>
+      <Article PubModel="Print">
+        <Journal><Title>Ghost journal</Title></Journal>
+        <ArticleTitle></ArticleTitle>
+      </Article>
+    </MedlineCitation>
+  </PubmedArticle>
+</PubmedArticleSet>
