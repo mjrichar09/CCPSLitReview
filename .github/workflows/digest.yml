@@ -1,0 +1,209 @@
+name: Monthly digest
+
+# The whole write path lives here: Actions runs the pipeline, commits the month's
+# JSON to the default branch, and Vercel rebuilds on that push. The Next.js app
+# never writes — see CLAUDE.md, "Storage layer".
+
+on:
+  schedule:
+    # 06:17 UTC on the 2nd of each month. The 2nd, not the 1st, so a source that
+    # indexes the previous month's tail late still lands inside the window; the
+    # odd minute keeps this off the top-of-hour spike where Actions queues.
+    - cron: '17 6 2 * *'
+  workflow_dispatch:
+    inputs:
+      stage:
+        description: 'Pipeline stage to run through'
+        type: choice
+        default: all
+        options: [all, fetch, normalize, score]
+      month:
+        description: 'Target month YYYY-MM (default: the month the window ends in)'
+        type: string
+      since:
+        description: 'Window start YYYY-MM-DD (overrides the default 35-day window)'
+        type: string
+      dry_run:
+        description: 'Write and commit nothing; print the result and upload it as an artifact'
+        type: boolean
+        default: true
+      force:
+        description: 'Allow overwriting an already-written month (months are append-only otherwise)'
+        type: boolean
+        default: false
+      score_model:
+        description: 'Override the scoring model for this run — must be a key of knownModels (e.g. openai/gpt-oss-120b)'
+        type: string
+      log_level:
+        description: 'Log verbosity'
+        type: choice
+        default: info
+        options: [debug, info, warn, error]
+
+permissions:
+  contents: write
+  issues: write
+
+# Two runs committing to the same branch would race on the ledger. Queue instead
+# of cancelling: a half-finished run that has already spent LLM budget should be
+# allowed to land its staging artifacts.
+concurrency:
+  group: digest
+  cancel-in-progress: false
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          # Full history: the commit step rebases onto the remote before pushing,
+          # which a depth-1 clone cannot do.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      - run: npm ci
+
+      # Config errors should fail in seconds, before any network or LLM spend.
+      # This also validates score_model, which is checked against knownModels.
+      - name: Validate config
+        env:
+          DIGEST_MODEL_SCORE: ${{ inputs.score_model }}
+        run: node --input-type=module -e "import { loadConfig } from './lib/config.js'; loadConfig(); console.log('config ok');"
+
+      # Resolved before the run, not after: once a month file is on disk the
+      # window resolver would see it as the last committed run and answer with
+      # the *next* month instead.
+      - name: Resolve target month
+        id: target
+        env:
+          IN_MONTH: ${{ inputs.month }}
+          IN_SINCE: ${{ inputs.since }}
+        run: |
+          set -euo pipefail
+          MONTH=$(node --input-type=module -e "
+            import { loadConfig } from './lib/config.js';
+            import { resolveWindow } from './lib/util/window.js';
+            const c = loadConfig();
+            const w = await resolveWindow({
+              month: process.env.IN_MONTH || undefined,
+              since: process.env.IN_SINCE || undefined,
+              defaultDays: c.window.defaultDays,
+            });
+            process.stdout.write(w.month);
+          ")
+          echo "month=$MONTH" >> "$GITHUB_OUTPUT"
+          echo "::notice::target month $MONTH"
+
+      - name: Run pipeline
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+          DIGEST_MODEL_SCORE: ${{ inputs.score_model }}
+          IN_MONTH: ${{ inputs.month }}
+          IN_SINCE: ${{ inputs.since }}
+        run: |
+          set -euo pipefail
+          # Built with `if`, not `[ ... ] && args+=(...)`: under `set -e` a false
+          # test as the last command of a line exits the whole step.
+          args=(--stage "${{ inputs.stage || 'all' }}" --log-level "${{ inputs.log_level || 'info' }}")
+          if [ -n "$IN_MONTH" ]; then args+=(--month "$IN_MONTH"); fi
+          if [ -n "$IN_SINCE" ]; then args+=(--since "$IN_SINCE"); fi
+          if [ "${{ inputs.dry_run }}" = "true" ]; then args+=(--dry-run); fi
+          if [ "${{ inputs.force }}" = "true" ]; then args+=(--force); fi
+
+          mkdir -p run-output
+          echo "running: npm run digest -- ${args[*]}"
+          # stdout is the machine-readable dump (large on a dry run); stderr
+          # carries the human tables and stays in the job log where they are read.
+          npm run digest -- "${args[@]}" > run-output/stdout.json
+
+      # Uploaded whether the run passed or failed: on a failure the partial
+      # tables are the diagnosis, and on a dry run this dump is the deliverable.
+      - name: Collect artifacts
+        if: always()
+        run: |
+          mkdir -p run-output
+          cp -r data/digest/staging run-output/staging 2>/dev/null || true
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: digest-${{ github.run_id }}
+          path: run-output/
+          retention-days: 14
+
+      # The default branch is the only branch Vercel builds. A dispatch from a
+      # feature branch still runs and still uploads — it just does not commit,
+      # which is what stops this repeating TrendTracker's stranded-report bug.
+      - name: Commit the month
+        if: ${{ inputs.dry_run != true && github.ref_name == github.event.repository.default_branch }}
+        env:
+          MONTH: ${{ steps.target.outputs.month }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          git config user.name  'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add data/digest
+          if git diff --cached --quiet; then
+            echo "::notice::nothing to commit — no new report and no ledger change"
+            exit 0
+          fi
+          git commit -m "digest: $MONTH"
+          for attempt in 1 2 3 4; do
+            if git pull --rebase origin "$BRANCH" && git push origin "HEAD:$BRANCH"; then
+              exit 0
+            fi
+            echo "push attempt $attempt failed; retrying"
+            sleep $((2 ** attempt))
+          done
+          echo "::error::could not push the digest commit after 4 attempts"
+          exit 1
+
+      - name: Report that no commit was attempted
+        if: ${{ inputs.dry_run != true && github.ref_name != github.event.repository.default_branch }}
+        run: |
+          echo "::warning::ran on '${{ github.ref_name }}', not the default branch '${{ github.event.repository.default_branch }}' — nothing was committed. Reports are only committed to the default branch, because that is the only branch Vercel builds."
+
+      # One open issue per outage, commented on rather than duplicated: a source
+      # that stays down would otherwise open a new issue every month.
+      - name: Open or update the failure issue
+        if: failure()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          MONTH: ${{ steps.target.outputs.month }}
+        run: |
+          set -euo pipefail
+          gh label create digest-failure --color B60205 --description 'The monthly digest workflow failed' 2>/dev/null || true
+          BODY=$(cat <<EOF
+          The monthly digest run failed.
+
+          | | |
+          |---|---|
+          | Run | $RUN_URL |
+          | Trigger | ${{ github.event_name }} |
+          | Ref | ${{ github.ref_name }} |
+          | Stage | ${{ inputs.stage || 'all' }} |
+          | Month | ${MONTH:-unresolved} |
+
+          This is **not** a source outage on its own — adapters fail soft and land
+          in \`source_health\`. Reaching here means either a source failed in every
+          category it ran in, or a stage outside the adapters threw. The job log and
+          the \`digest-${{ github.run_id }}\` artifact carry the detail.
+          EOF
+          )
+          EXISTING=$(gh issue list --label digest-failure --state open --limit 1 --json number --jq '.[0].number')
+          if [ -n "$EXISTING" ]; then
+            gh issue comment "$EXISTING" --body "$BODY"
+          else
+            gh issue create --title 'Monthly digest run failed' --label digest-failure --body "$BODY"
+          fi

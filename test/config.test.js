@@ -144,3 +144,26 @@ test('naming a disabled feed by id still selects it', () => {
   c.categories[0].sources.rss = { enabled: true, ids: ['off'] };
   assert.deepEqual(resolveFeeds(c, c.categories[0]).map((f) => f.id), ['off']);
 });
+
+test('DIGEST_MODEL_SCORE swaps the stage model, provider and rates together', () => {
+  const config = loadConfig(realConfig, { env: { DIGEST_MODEL_SCORE: 'openai/gpt-oss-120b' } });
+  assert.equal(config.models.score.model, 'openai/gpt-oss-120b');
+  assert.equal(config.models.score.provider, 'groq');
+  // The rates must travel with the model — cost-accounting a Groq run at
+  // Anthropic prices is worse than reporting no cost at all.
+  assert.deepEqual(config.models.score.rates, { input: 0.15, output: 0.6 });
+  // and the override must not leak into the other stages
+  assert.equal(config.models.summarize.provider, 'anthropic');
+});
+
+test('an unknown model name in an override is a config error, not a silent fallback', () => {
+  assert.throws(
+    () => loadConfig(realConfig, { env: { DIGEST_MODEL_SCORE: 'gpt-9-turbo' } }),
+    /DIGEST_MODEL_SCORE.*not in knownModels/s,
+  );
+});
+
+test('no override leaves the configured models untouched', () => {
+  const config = loadConfig(realConfig, { env: {} });
+  assert.equal(config.models.score.model, 'claude-haiku-4-5');
+});
