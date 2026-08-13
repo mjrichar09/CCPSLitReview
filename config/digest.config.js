@@ -441,6 +441,13 @@ const config = {
       provider: 'anthropic',
       model: 'claude-haiku-4-5',
       rates: { input: 1.0, output: 5.0 },
+      // Scoring is ~40 calls of ~45s each. Sequentially that is over half an
+      // hour and does not fit an Actions job; at 4 in flight it is under ten
+      // minutes. 0.75 rps sustains 45 requests/minute, just under the lowest
+      // Anthropic tier's 50 rpm, so the concurrency cap is what binds rather
+      // than a 429.
+      concurrency: 4,
+      rps: 0.75,
     },
     summarize: {
       provider: 'anthropic',

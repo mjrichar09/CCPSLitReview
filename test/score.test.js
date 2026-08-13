@@ -122,3 +122,50 @@ test('the rubric is sent as a cacheable system prompt, not repeated in the user 
   assert.ok(call.schema, 'a JSON schema constrains the response');
   assert.doesNotMatch(call.user, /SCOPE/, 'and is not duplicated per batch');
 });
+
+/** A stub whose calls finish out of the order they were made in. */
+function racingProvider(delayFor) {
+  const started = [];
+  return {
+    provider: 'stub',
+    model: 'stub-1',
+    rates: { input: 1, output: 5 },
+    started,
+    async complete(args) {
+      started.push({ user: args.user, system: args.system });
+      const n = (args.user.match(/^\[\d+\]/gm) ?? []).length;
+      await new Promise((r) => setTimeout(r, delayFor(args.user)));
+      return {
+        text: JSON.stringify({
+          scores: Array.from({ length: n }, (_, i) => ({ index: i, relevance: 4, categories: [], rationale: 'r' })),
+        }),
+        usage: { input_tokens: 100, output_tokens: 20 },
+      };
+    },
+  };
+}
+
+test('results are applied in batch order even when the calls finish out of order', async () => {
+  // Batches run concurrently, so completion order is not input order. The report
+  // must still be reproducible from its inputs: a run that reorders items
+  // depending on which API call happened to return first is not.
+  const provider = racingProvider((user) => (user.includes('Paper 2') ? 40 : 1));
+  const result = await score({ items: items(6), config, provider });
+
+  assert.deepEqual(
+    result.items.map((i) => i.title),
+    ['Paper 0', 'Paper 1', 'Paper 2', 'Paper 3', 'Paper 4', 'Paper 5'],
+  );
+});
+
+test('the first batch of every category is issued before any second batch, so the rubric cache is written once', async () => {
+  // Firing same-category batches together would have each miss the cache and
+  // re-write it, which is the whole saving on the highest-volume stage.
+  const provider = racingProvider(() => 5);
+  const mixed = [...items(4, 'upstream_pd'), ...items(4, 'modeling_ml')];
+  await score({ items: mixed, config, provider });
+
+  assert.equal(provider.started.length, 4, '4 items per category at batchSize 2 is two batches each');
+  const firstWave = provider.started.slice(0, 2).map((c) => c.system);
+  assert.equal(new Set(firstWave).size, 2, 'the opening calls carry two different rubrics — one cache write each');
+});
