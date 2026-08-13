@@ -22,7 +22,7 @@ Also still open:
 
 ## Backlog
 
-- [ ] **Phase 2** — normalize, dedupe, ledger, provider abstraction, scoring gate (see PLAN.md §6)
+- [ ] **Phase 2 — finish**: run the scoring gate live once `ANTHROPIC_API_KEY` exists, and deliver the kept/dropped table plus the Haiku-vs-Groq comparison
 - [ ] **Phase 3** — summarize, synthesize, write month JSON + ledger + `run_stats`
 - [ ] **Phase 4** — Actions workflow with `workflow_dispatch`, dry-run input, failure issue
 - [ ] **Phase 5** — `/digest` and `/digest/[month]` pages, README how-tos
@@ -32,6 +32,9 @@ Also still open:
 - [ ] Optional: custom domain on Vercel
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
+
+- [x] Phase 2 build: dedupe (identifier + title), ledger with year sharding, per-stage provider abstraction, usage/cost accounting, scoring gate with batching and a strict-JSON contract (2026-08-13)
+- [x] `htpd_automation` category — eleven categories total (2026-08-13)
 
 - [x] Repo scaffolding ported from TrendTracker: package.json, eslint/jsconfig/next config, app shell, design tokens (2026-08-13)
 - [x] `lib/digest.js` + `lib/digestDir.js` read layer, month-keyed (2026-08-13)
