@@ -4,7 +4,7 @@ A monthly research digest for one expert reader (upstream CHO process developmen
 
 - Repo: https://github.com/mjrichar09/CCPSLitReview (private)
 - Reference implementation this repo's patterns came from: [TrendTracker](https://github.com/mjrichar09/TrendTracker) — its read/write layer, page structure, and scaffolding were ported; its finance domain code was not.
-- **Status: Phase 1 complete.** Fetch works end to end; scoring, summarisation, the workflow, and the viewer pages are not built yet. See PLAN.md for the phase plan and TODO.md for what's next.
+- **Status: Phases 1, 2 and 4 complete.** Fetch, normalize/dedupe and the scoring gate run end to end in the Actions workflow, verified on a live month. Summarisation, the month writer, and the viewer pages are not built yet. See PLAN.md for the phase plan and TODO.md for what's next.
 
 ## Document map — what to read when, what to update when
 
@@ -78,12 +78,14 @@ data/digest/
 - **A missing verdict in a scoring batch halts the run.** An item the model skipped and an item it judged irrelevant are indistinguishable downstream, so `score.js` refuses to guess.
 - **`is_recurring` has a precise meaning:** the item was reported in an earlier month, but matched a category it has *not* been reported under. Items whose categories were all covered before are dropped outright. `lib/util/ledger.js` `classify()` is the definition.
 - **Each stage reads its predecessor's staging artifact when one exists.** That is what makes re-runs cheap — a re-run after a mid-pipeline failure costs no re-fetching and no re-scoring. `--fresh` forces a rebuild from fetch.
+- **Scoring batches run concurrently, in two waves: the first batch of every category, then all the rest.** Sequential scoring took 41 minutes for one month and did not fit an Actions job. The wave split is not cosmetic — a flat pool fires same-category batches together, and each then misses and re-writes the rubric cache. Verdicts are applied in batch order, never completion order, so concurrency cannot change the report.
 - **Provider is per stage, not global** (`models.<stage>.provider`). Scoring is high-volume bounded judgement; generation is the product. Both answer the same `complete({ system, user, schema })`.
 - **Pages are static/SSG — never add `force-dynamic` or runtime filesystem reads.** Vercel's runtime fs is read-only and ephemeral; the write path is exclusively Actions → commit → push. There are no API routes at all, unlike TrendTracker.
 - **The Actions job commits to the default branch.** TrendTracker's routine committed to `claude/*` session branches and Vercel only builds `main`, which stranded two weekly reports invisibly. Committing straight to the default branch is why this design can't repeat that.
 - **Never unref a timer in `lib/util/throttle.js`.** The refill timer is the only thing holding the event loop open while jobs wait on tokens; unref'ing it lets Node exit mid-run with code 0 and partial results. `test/throttle.test.js` guards this.
 - **Strip inline tags before XML parsing, not after.** PubMed embeds `<i>`, `<sub>` etc. inside titles and abstracts; fast-xml-parser splits mixed content into `#text` plus siblings and loses the ordering, silently dropping words. `pubmed.js` strips them from the raw string first.
 - **Store title, abstract, metadata, and link only.** No article bodies, no scraping, no paywall circumvention. Sources must be official APIs or RSS.
+- **Redirect the CLI with `npm run --silent`.** Without `--silent`, npm prints a two-line banner to stdout ahead of the JSON and the captured artifact does not parse.
 - Secrets (`ANTHROPIC_API_KEY`, `NCBI_API_KEY`, optionally `GROQ_API_KEY`) live in Actions secrets and `.env.local` — never committed.
 
 ## Environment notes

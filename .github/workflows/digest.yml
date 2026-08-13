@@ -123,7 +123,9 @@ jobs:
           echo "running: npm run digest -- ${args[*]}"
           # stdout is the machine-readable dump (large on a dry run); stderr
           # carries the human tables and stays in the job log where they are read.
-          npm run digest -- "${args[@]}" > run-output/stdout.json
+          # --silent matters: without it npm prints its own two-line banner to
+          # stdout ahead of the JSON, and the uploaded artifact does not parse.
+          npm run --silent digest -- "${args[@]}" > run-output/stdout.json
 
       # Uploaded whether the run passed or failed: on a failure the partial
       # tables are the diagnosis, and on a dry run this dump is the deliverable.

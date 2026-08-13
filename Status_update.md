@@ -1,5 +1,49 @@
 # Status updates
 
+## 2026-08-13 (Phase 4, out of order) — The Actions workflow, and the first live scoring run
+
+The API keys turned out to live in **GitHub Actions secrets**, which a dev container cannot read by design. Rather than move a key, Phase 4 was brought forward: build the workflow first, and let scoring run where the keys already are. No key entered a session.
+
+**`.github/workflows/digest.yml`** — monthly on the 2nd at 06:17 UTC, plus `workflow_dispatch` with `stage`, `month`, `since`, `dry_run` (defaulting to **true**), `force`, `score_model` and `log_level`. It commits only when running on the default branch; a dispatch from a feature branch still runs and uploads, then warns instead of committing. One open failure issue is commented on rather than duplicated, so a source that stays down does not open an issue every month. Also added `ci.yml`: lint, tests and `next build` on every push.
+
+**`DIGEST_MODEL_<STAGE>`** overrides a stage's model for one run, resolved through `knownModels` so the provider and the per-token rates travel with the name. A free-text model is rejected at config validation — an unknown model would cost-account at the wrong price, and a wrong cost table is worse than none. This makes the Haiku-vs-Groq comparison a dispatch input rather than a config edit.
+
+**The first live run failed, and the failure was the point.** It ran **41 minutes without finishing** against a 45-minute job timeout and was cancelled. Scoring a month is ~48 calls of ~45s each and they ran strictly one at a time — a limit no unit test could have shown, because the stub provider returns instantly.
+
+Batches now run **4 in flight through the existing token-bucket limiter, in two waves**. Wave one is the first batch of each category — the calls that write the rubric cache, all for different rubrics. Wave two is everything else. A flat pool would have fired same-category batches together, so each would miss and re-write the cache. Verdicts are applied after every call returns, **in batch order rather than completion order**, because concurrency must not change which items land in the report or in what sequence; a test pins that with a provider that finishes out of order. Second run: **4m57s end to end.**
+
+**The scoring gate, on a real month (2026-08, 35-day window):**
+
+1298 raw → 754 unique → **1039 category-level judgements → 180 kept** at threshold 3. Trimmed to `max_items` that is 111 category slots, 128 distinct papers. Zero non-ok entries in `source_health`.
+
+| category | seen | kept | cap |
+|---|---:|---:|---:|
+| pat_control | 58 | 9 | 12 |
+| upstream_pd | 135 | 23 | 12 |
+| harvest_dsp | 56 | 11 | 10 |
+| media_dev | 53 | 6 | 10 |
+| intensification | 31 | 11 | 12 |
+| modeling_ml | 143 | 22 | 15 |
+| cell_line_dev | 26 | 7 | 10 |
+| product_quality | 112 | 23 | 12 |
+| htpd_automation | 86 | 9 | 10 |
+| cmc_reg | 245 | 31 | 10 |
+| industry | 94 | 28 | 10 |
+
+Score distribution across all 1039 judgements: 0→621, 1→127, 2→111, 3→79, 4→63, 5→38. The mass at 0 is the query net being wide on purpose and the gate doing its job.
+
+**Spot-checking the verdicts, which is the part that mattered.** The fives are right: 13C MFA on CHO perfusion identifying glycosylation flux bottlenecks; PDK inhibition against the Warburg effect with a 2× titer lift; base-editing GS knockout mapping PTC position to knockout completeness; FDA's own account of process models in approved applications. The zeros are genuine noise the wide net drags in — microplastics in sludge, CO2 reduction catalysis, keratinocyte cosmetics. The twos are defensible near-misses: yeast fermentation Raman, in-silico-only transfer learning, cultured meat scale-up.
+
+One case confirms the category boundaries work as written: a CHO bispecific single-cell-cloning paper scored **2 under `upstream_pd` and 5 under `cell_line_dev`** — exactly the boundary the `cell_line_dev` rubric spells out ("if the lever is the cell line, it belongs here").
+
+**Cost, measured rather than estimated:** 48 calls, 334,106 input and 61,254 output tokens, **$0.6404** for the month — $0.0036 per kept item. That is well above the $0.38 Phase 1 estimated for scoring, because eleven categories over a wider net is 1039 judgements, not the ~600 assumed.
+
+**Prompt caching is currently a no-op, and the ledger said so.** Both cache counters came back **0**. Haiku's minimum cacheable prefix is 2048 tokens and the scoring system prompt is about 1k, so `cache_control` is silently ignored. The forgone saving is ~14% of scoring input — about **$0.04 a month** — so the fix is not to pad a prompt; it is to stop believing the comment. The comment in `anthropic.js` now records the measurement instead of the intention. This is exactly why usage accounting reports cache tokens separately.
+
+**One defect the artifact exposed:** `npm run digest > file` prepends npm's own two-line banner to stdout, so the uploaded JSON did not parse. `npm run --silent`.
+
+**Open at session end**: the Groq side-by-side has not been run — the mechanism is in place (`score_model: openai/gpt-oss-120b`) and it is one dispatch. The repo default branch is still `claude/plan-review-repo-setup-8ikgmv`; `main` is fast-forwarded onto it so the switch is now a no-op, but until it is made the workflow will not commit. Phase 3 (summarize, synthesize, write) is next.
+
 ## 2026-08-13 (Phase 2) — Normalize, dedupe, ledger, providers and the scoring gate
 
 Added `htpd_automation` (ambr/microbioreactors, robotic liquid handling, automated sampling, DOE execution, self-driving labs) — eleven categories now. Then built Phase 2.

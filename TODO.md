@@ -2,29 +2,24 @@
 
 ## Next session plan
 
-**Phase 2 is built and awaiting review.** Normalize, dedupe, ledger, provider abstraction and the scoring gate are done; 82 tests green, lint clean. Eleven categories after adding `htpd_automation`.
+**Phase 2 and Phase 4 are done and verified against a live run.** The scoring gate has now executed for real in Actions: 1298 raw → 754 unique → 1039 judgements → 180 kept, in 4m57s for $0.64. See Status_update.md for the per-category table and the verdict spot-check. 87 tests green, lint clean.
 
-On a live 35-day window: **1278 raw → 734 unique → 734 kept** (544 collapsed on identifier, 0 on title — verified genuine, see Status_update.md). Provenance after dedupe: europepmc 535, pubmed 249, rss 94, biorxiv 41, arxiv 4. 214 items carry more than one category; 719/734 have an abstract.
+**Phase 3 is next**: summarize, synthesize, and the month writer. The inputs are settled — `staging/<month>/scored.json` is the contract, `max_items` trims 180 keeps down to 111 category slots (128 distinct papers), and `is_recurring` is already defined in `lib/util/ledger.js`.
 
-**The one thing blocking completion of Phase 2: `ANTHROPIC_API_KEY`.** Scoring is written and unit-tested against a stub provider but has never run live. With a key in `.env.local` the next step is a single command:
+Two things need a decision from you, neither blocking:
 
-```
-npm run digest -- --stage score --since 2026-07-09 --dry-run
-```
+1. **Six categories score over their cap** — `cmc_reg` 31 vs 10, `industry` 28 vs 10, `upstream_pd` 23 vs 12, `product_quality` 23 vs 12, `modeling_ml` 22 vs 15, `harvest_dsp` 11 vs 10. The write stage will trim to the cap by relevance, so nothing breaks; the question is whether those caps are the right size for what you actually want to read each month.
+2. **The Groq side-by-side has not been run.** It is one dispatch — `score_model: openai/gpt-oss-120b` — and would cost about $0.09 against Haiku's $0.64. Worth doing before Phase 3 fixes the shape of scored.json, or not at all if $0.64/month is simply fine.
 
-which produces the kept/dropped table per category with rationales, plus the real cost table — the deliverable Phase 2 owes you. Add `GROQ_API_KEY` too and the same month can be scored on both for the side-by-side.
+And one one-click item still outstanding:
 
-Also still open:
-
-1. **Set the repo's default branch to `main`** (Settings → General → Default branch). Phase 4's workflow commits to the default branch.
-2. **`NCBI_API_KEY`** (optional) — lifts PubMed from 3 to 10 req/s.
-3. **Unfiltered RSS on `cmc_reg`/`industry`** (225 + 94 after dedupe, ~43% of the corpus) stays by design; the kept/dropped table decides whether a pre-filter earns its keep.
+- **Set the repo default branch to `main`** (Settings → General → Default branch). `main` and `claude/plan-review-repo-setup-8ikgmv` now point at the same commit, so this is a no-op switch — but until it is made, the workflow runs and uploads without ever committing a report, by design.
 
 ## Backlog
 
-- [ ] **Phase 2 — finish**: run the scoring gate live once `ANTHROPIC_API_KEY` exists, and deliver the kept/dropped table plus the Haiku-vs-Groq comparison
 - [ ] **Phase 3** — summarize, synthesize, write month JSON + ledger + `run_stats`
-- [ ] **Phase 4** — Actions workflow with `workflow_dispatch`, dry-run input, failure issue
+- [ ] Run the Haiku-vs-Groq side-by-side (`score_model: openai/gpt-oss-120b`) and decide the scoring provider on quality, not cost
+- [ ] Revisit `max_items` — six of eleven categories score over cap
 - [ ] **Phase 5** — `/digest` and `/digest/[month]` pages, README how-tos
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
@@ -33,6 +28,9 @@ Also still open:
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
 
+- [x] Phase 4: Actions workflow (schedule + dispatch, default-branch commit guard, failure issue) and CI (2026-08-13)
+- [x] Live scoring run in Actions — 180 kept of 1039 judged, $0.64, 4m57s (2026-08-13)
+- [x] Score batches concurrently; the sequential stage did not fit a 45-minute job (2026-08-13)
 - [x] Phase 2 build: dedupe (identifier + title), ledger with year sharding, per-stage provider abstraction, usage/cost accounting, scoring gate with batching and a strict-JSON contract (2026-08-13)
 - [x] `htpd_automation` category — eleven categories total (2026-08-13)
 
