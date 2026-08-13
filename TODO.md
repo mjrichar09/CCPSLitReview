@@ -4,6 +4,8 @@
 
 **Phase 1 is complete and awaiting review.** Fetch runs end to end against all eight categories and five sources; 983 raw records in 86s on a live 35-day window (2026-07-09 → 2026-08-13), zero failed sources, 47/47 tests green, lint clean, `next build` static.
 
+**Query precision pass done (2026-08-13).** Reviewed and asked to weight toward mammalian cell culture. Shipped: the original anchor terms plus a title-only exclusion of off-target expression systems, and an `EXPRESSION SYSTEM` weighting block on all six science rubrics. 983 → 950 records, 51 microbial papers removed, known-good PAT/modelling work retained. Two earlier attempts over-filtered and are documented in Status_update.md — read that before widening these queries again.
+
 Before starting Phase 2 (normalize / dedupe / score), three tuning questions want an answer — all visible in the Phase 1 counts and none of them blocking:
 
 1. **arXiv returned 2 records in 35 days.** The three configured categories (`stat.ML`, `eess.SY`, `q-bio.QM`) intersected with bioprocess abstract terms is a very narrow net; a lot of hybrid-modelling work posts to `cs.LG` or `math.OC` instead. Widen the category list, loosen the terms, or accept that arXiv is a low-yield/high-signal source?

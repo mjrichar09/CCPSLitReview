@@ -1,6 +1,22 @@
 # Status updates
 
-## 2026-08-13 (last) — Repo bootstrapped from TrendTracker; Phase 1 (fetch) complete
+## 2026-08-13 (later) — Query precision pass: weight toward mammalian cell culture
+
+User reviewed the Phase 1 sample, accepted the overall noise level as expected for a first query design, and asked for one change: select more heavily for mammalian cell culture.
+
+**Three attempts, measured against the same window each time. The first two made it worse, and the diffs are why:**
+
+1. **Anchor restricted to mammalian terms only.** Dropped 386 of 517 science-category records. An automated check said "zero false drops", but that check only flagged items *naming* a mammalian system — reading the dropped titles showed it had discarded genuinely relevant organism-agnostic methods work ("Raman-guided sample subset selection… in bioprocesses", "Machine Learning-Enabled Raman Spectroscopy for PAT and Real-Time Release Testing"). The metric was blind to the failure it was supposed to catch.
+2. **Two-tier: mammalian terms OR organism-clean generic terms**, with the mammalian vocabulary widened (HEK293, Vero, hybridoma, ADC, therapeutic protein) to compensate. Worse. Those terms are ubiquitous in clinical literature, so it imported cancer imaging, photoimmunotherapy, quantum dots, and Alzheimer's work. Adding `yeast` to the exclusion on an abstract match also killed real PAT papers, since bioprocess methods papers mention yeast in passing constantly.
+3. **What shipped: the original anchor term list, untouched, plus a title-only exclusion** of off-target expression systems. Removes 51 records — all microbial (E. coli pathway engineering, Komagataella, Corynebacterium, 2'-fucosyllactose, methanol valorization) — and adds 7 of the same low-grade noise that already existed. All three known-good PAT/modelling papers retained. 983 → 950 records.
+
+**The general lesson, recorded because it will recur when the queries are refined again:** widening the inclusion list is how this goes wrong. Every term added to reach one more relevant paper reaches a whole clinical literature that shares the vocabulary. Precision belongs in the exclusion (title-only, so a passing mention is harmless) and in the rubric.
+
+**Weighting moved to where it belongs.** The fetch anchor stays broad enough to keep methods work; the mammalian preference is now an `EXPRESSION SYSTEM` block appended to all six science-category rubrics — full value for CHO/HEK293/NS0/hybridoma, 0 for microbial/algal/plant/insect unless the abstract shows the method transfers, and organism-agnostic work judged on whether an upstream CHO group could apply it. A model can read an abstract and judge transferability; a query can only match strings. `cmc_reg` and `industry` are not organism-scoped and keep their own rubrics.
+
+**Still unanswered from the review**: arXiv breadth, whether to pre-filter the unfiltered `cmc_reg`/`industry` RSS pull, Endpoints on/off, the missing `main` branch, and keys.
+
+## 2026-08-13 — Repo bootstrapped from TrendTracker; Phase 1 (fetch) complete
 
 Started from an empty repo. Reviewed [TrendTracker](https://github.com/mjrichar09/TrendTracker) as the reference implementation, wrote PLAN.md, got approval, built Phase 1.
 
