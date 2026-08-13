@@ -1,5 +1,17 @@
 # Status updates
 
+## 2026-08-13 (latest) — Coverage expansion, two new categories, and an RSS bug we were causing
+
+Answered the open review questions: work from `main`, expand the net, find an Endpoints alternative.
+
+- **Two new categories, both real gaps for this reader.** `cell_line_dev` (vectors, targeted integration, transposases, host engineering, clone screening and stability, specific productivity) and `product_quality` (glycans, charge variants, aggregation, and which upstream levers move them — the bridge between upstream and CMC). Each carries an explicit boundary clause against its neighbours so the scorer is not guessing. 43 and 153 records respectively in a 35-day window.
+- **arXiv widened** to `cs.LG` and `math.OC` alongside `stat.ML`/`eess.SY`/`q-bio.QM`. Yield went 2 → 4 in 35 days. That is genuinely what is there: the scan now reports `examined 5 of 240 results before reaching 2026-07-01`, i.e. only five matching papers are newer than the window edge. arXiv is a low-volume, high-signal source here and should not be judged on count.
+- **Fixed a misleading counter.** The arXiv note reported the number of results arXiv *returned* as though it were the number *examined* — "scanned 240" when the scan actually broke at entry 5. It overstated search depth ~50x.
+- **Endpoints News: three approaches tried, none shipped.** Its own feed 403s to any non-browser client on every path (`/feed`, `/feed/atom`, `/rss`, `/channel/news/feed`). Reading it through Google News RSS *did* work technically, but the `site:endpts.com` query returns 14 items whose newest is February 2025 — it would have added the appearance of coverage with none of the substance, so it was removed rather than left in. Replaced instead with **BioPharma Dive** (capacity, CDMO, supply chain — what Endpoints was wanted for) and **The Cell Culture Dish** (the most upstream-specific outlet found). Cell Culture Dish is currently dormant: 11 items, newest 2026-04-16. Kept anyway — it costs one request and is on-topic when it does post.
+- **The FDA feed's intermittent 401s were our fault.** The RSS adapter fetched each feed once *per category*, so with eight categories on the regulatory tag the FDA got eight identical requests per run and its rate limiter answered with 401 — which, being non-standard for throttling, our retry logic correctly treated as permanent. Two fixes: a per-run feed cache keyed on URL that stores the *promise* (so concurrent categories collapse into one request), and an opt-in `retryStatuses` on the HTTP helper so RSS can treat 401 as transient. Result: 1170 records with **zero degraded sources**.
+
+Ten categories, five sources, 1170 records in 111s. `main` now exists and carries all of this.
+
 ## 2026-08-13 (later) — Query precision pass: weight toward mammalian cell culture
 
 User reviewed the Phase 1 sample, accepted the overall noise level as expected for a first query design, and asked for one change: select more heavily for mammalian cell culture.

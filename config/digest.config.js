@@ -47,8 +47,14 @@ const sources = {
     // arXiv asks for one request every ~3s.
     rps: 0.34,
     concurrency: 1,
-    categories: ['stat.ML', 'eess.SY', 'q-bio.QM'],
-    maxResults: 120,
+    // cs.LG and math.OC added after the first Phase 1 run returned only 2
+    // records in 35 days: most hybrid-modelling and optimisation work for
+    // bioprocess posts there rather than to stat.ML/eess.SY.
+    categories: ['stat.ML', 'eess.SY', 'q-bio.QM', 'cs.LG', 'math.OC'],
+    // Results are scanned newest-first and the scan stops at the window edge,
+    // so this is a ceiling on how far back one request can reach, not a cap on
+    // what is kept. Raised with the category list.
+    maxResults: 300,
   },
   crossref: {
     // Enrichment only — DOI resolution, journal name, date normalisation.
@@ -70,10 +76,19 @@ const sources = {
       { id: 'gen', name: 'GEN', url: 'https://www.genengnews.com/feed/', tags: ['trade'] },
       { id: 'fierce-pharma', name: 'Fierce Pharma', url: 'https://www.fiercepharma.com/rss/xml', tags: ['trade', 'industry'] },
       { id: 'fda-cber', name: 'FDA biologics guidance', url: 'https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/biologics/rss.xml', tags: ['regulatory'] },
-      // Endpoints serves its public feed to browser user-agents but returns 403
-      // to ours. Reading it would mean misrepresenting the client, so it is off
-      // by default — flip `enabled` if you decide otherwise.
+      // Added to cover what Endpoints would have. Cell Culture Dish is the most
+      // upstream-specific outlet of the set; BioPharma Dive carries the
+      // capacity/CDMO/supply-chain reporting Endpoints was wanted for.
+      { id: 'biopharmadive', name: 'BioPharma Dive', url: 'https://www.biopharmadive.com/feeds/news/', tags: ['trade', 'industry', 'manufacturing'] },
+      { id: 'cellculturedish', name: 'The Cell Culture Dish', url: 'https://cellculturedish.com/feed/', tags: ['trade', 'manufacturing'] },
+      // Endpoints' own feed returns 403 to any non-browser client, on every
+      // path tried (/feed, /feed/atom, /rss, /channel/news/feed). Left here
+      // disabled as documentation of that, not as a live source.
       { id: 'endpoints', name: 'Endpoints News', url: 'https://endpts.com/feed/', tags: ['trade', 'industry'], enabled: false },
+      // Reading Endpoints through Google News RSS was tried and rejected on the
+      // evidence: the site:endpts.com query returns 14 items whose newest is
+      // from February 2025, so it is not currently indexed fresh and would have
+      // added the appearance of coverage without the substance.
     ],
   },
 };
@@ -293,6 +308,54 @@ REQUIRED: the work must have an actual bioprocess, cell culture, or biomanufactu
       },
       // Brief: modeling_ml skips trade press.
       rss: { enabled: false },
+    },
+  },
+
+  {
+    id: 'cell_line_dev',
+    name: 'Cell Line Development & Clone Selection',
+    max_items: 10,
+    scope: `Expression vector and promoter design for CHO; random versus targeted integration and site-specific integration into defined loci; transposase systems (piggyBac, Sleeping Beauty); host cell engineering including CRISPR knockouts affecting productivity, glycosylation, apoptosis, or lactate metabolism; selection systems (GS/MSX, DHFR/MTX); single-cell cloning and clonality assurance; clone screening strategy and its correlation to bench and manufacturing scale; clonal and production stability over generations; specific productivity and its trade-off against growth.
+
+Boundary with upstream_pd: if the lever is the cell line or its genome, it belongs here; if the lever is how the bioreactor is operated, it belongs in upstream_pd.${MAMMALIAN_PREFERENCE}`,
+    sources: {
+      pubmed: {
+        query: `("cell line development"[tiab] OR "clone selection"[tiab] OR "clone screening"[tiab] OR "clonal stability"[tiab] OR "production stability"[tiab] OR "specific productivity"[tiab] OR "targeted integration"[tiab] OR "site-specific integration"[tiab] OR "transposase"[tiab] OR "piggyBac"[tiab] OR "Sleeping Beauty"[tiab] OR "single-cell cloning"[tiab] OR "expression vector"[tiab] OR "host cell engineering"[tiab] OR "glutamine synthetase"[tiab] OR "dihydrofolate reductase"[tiab] OR "stable pool"[tiab]) AND ${MAMMALIAN_ANCHOR}`,
+      },
+      europepmc: {
+        query: `("cell line development" OR "clone selection" OR "clone screening" OR "clonal stability" OR "specific productivity" OR "targeted integration" OR transposase OR piggyBac OR "single-cell cloning" OR "expression vector" OR "host cell engineering" OR "glutamine synthetase" OR "stable pool") AND ${EPMC_ANCHOR}`,
+      },
+      biorxiv: {
+        enabled: true,
+        terms: ['cho cell', 'cell line', 'clonal', 'targeted integration', 'transposase', 'expression vector', 'host cell engineering'],
+      },
+      rss: {
+        terms: ['cell line development', 'clone selection', 'cell line engineering', 'expression system', 'stable pool', 'transposase', 'targeted integration'],
+      },
+    },
+  },
+
+  {
+    id: 'product_quality',
+    name: 'Product Quality & CQA Control from Upstream',
+    max_items: 12,
+    scope: `How upstream conditions move product quality attributes: N-glycosylation (galactosylation, fucosylation, high mannose, sialylation), charge variants, C-terminal lysine, aggregation and fragmentation, deamidation and oxidation, and disulfide/free thiol. Media and feed levers on glycans — manganese, galactose, uridine, nucleotide sugar precursors. Effects of pH, temperature, dissolved oxygen, osmolality, ammonia, and culture duration on quality. Glycoengineering by host or process. Quality comparability across scales and sites, and the analytics used to establish it. Control strategy connecting an upstream parameter to a CQA.
+
+Boundary with harvest_dsp: quality changes arising in culture belong here; clearance and quality changes arising in purification belong there. Boundary with cmc_reg: the science of the attribute belongs here, the guidance and filing expectations belong there.${MAMMALIAN_PREFERENCE}`,
+    sources: {
+      pubmed: {
+        query: `("glycosylation"[tiab] OR "glycan"[tiab] OR "glycoform"[tiab] OR "galactosylation"[tiab] OR "fucosylation"[tiab] OR "high mannose"[tiab] OR "sialylation"[tiab] OR "charge variant"[tiab] OR "C-terminal lysine"[tiab] OR "aggregation"[tiab] OR "fragmentation"[tiab] OR "deamidation"[tiab] OR "critical quality attribute*"[tiab] OR "product quality"[tiab] OR "glycoengineering"[tiab]) AND ${MAMMALIAN_ANCHOR}`,
+      },
+      europepmc: {
+        query: `(glycosylation OR glycan OR glycoform OR galactosylation OR fucosylation OR "high mannose" OR sialylation OR "charge variant" OR "C-terminal lysine" OR aggregation OR deamidation OR "critical quality attribute" OR "product quality" OR glycoengineering) AND ${EPMC_ANCHOR}`,
+      },
+      biorxiv: {
+        enabled: true,
+        terms: ['glycosylation', 'glycan', 'charge variant', 'aggregation', 'critical quality attribute', 'product quality'],
+      },
+      rss: {
+        terms: ['glycosylation', 'glycan', 'charge variant', 'critical quality attribute', 'product quality', 'comparability', 'aggregation'],
+      },
     },
   },
 

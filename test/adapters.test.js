@@ -96,9 +96,10 @@ test('biorxiv: maps an API collection entry and splits semicolon authors', () =>
 // --- arXiv ------------------------------------------------------------------
 
 test('arxiv: keeps in-window entries and stops at the first older one', () => {
-  const { records, seen } = parseArxiv(fixture('arxiv-feed.xml'), 'modeling_ml', WINDOW);
+  const { records, examined, returned } = parseArxiv(fixture('arxiv-feed.xml'), 'modeling_ml', WINDOW);
 
-  assert.equal(seen, 4);
+  assert.equal(returned, 4, 'the fixture feed carries four entries');
+  assert.equal(examined, 3, 'the scan stops at the out-of-window entry rather than reading all four');
   assert.equal(records.length, 2, 'the scan breaks at the out-of-window entry');
   assert.deepEqual(
     records.map((r) => r.published),

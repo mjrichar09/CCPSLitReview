@@ -4,15 +4,16 @@
 
 **Phase 1 is complete and awaiting review.** Fetch runs end to end against all eight categories and five sources; 983 raw records in 86s on a live 35-day window (2026-07-09 → 2026-08-13), zero failed sources, 47/47 tests green, lint clean, `next build` static.
 
+**Search expanded (2026-08-13).** Ten categories now: added `cell_line_dev` and `product_quality`. arXiv widened to cs.LG/math.OC (yield 2 → 4; genuinely low volume, not a config fault). Endpoints replaced with BioPharma Dive + Cell Culture Dish after its feed proved unreadable and the Google News route proved stale. Fixed a self-inflicted FDA rate-limit via a per-run feed cache. 1170 records, zero degraded.
+
 **Query precision pass done (2026-08-13).** Reviewed and asked to weight toward mammalian cell culture. Shipped: the original anchor terms plus a title-only exclusion of off-target expression systems, and an `EXPRESSION SYSTEM` weighting block on all six science rubrics. 983 → 950 records, 51 microbial papers removed, known-good PAT/modelling work retained. Two earlier attempts over-filtered and are documented in Status_update.md — read that before widening these queries again.
 
-Before starting Phase 2 (normalize / dedupe / score), three tuning questions want an answer — all visible in the Phase 1 counts and none of them blocking:
+Before starting Phase 2 (normalize / dedupe / score), what is left from the review:
 
-1. **arXiv returned 2 records in 35 days.** The three configured categories (`stat.ML`, `eess.SY`, `q-bio.QM`) intersected with bioprocess abstract terms is a very narrow net; a lot of hybrid-modelling work posts to `cs.LG` or `math.OC` instead. Widen the category list, loosen the terms, or accept that arXiv is a low-yield/high-signal source?
-2. **`cmc_reg` and `industry` pull RSS unfiltered** (104 and 84 items). That is the design — the brief says these categories lean on RSS and the relevance gate sorts it out — but together they are ~19% of the scoring volume. Phase 2's kept/dropped table will show whether a pre-filter earns its keep.
-3. **Endpoints News is disabled.** It serves its public feed to browser user-agents and returns 403 to ours. Reading it would mean misrepresenting the client, so it is off by default — your call whether to flip it.
-
-Then Phase 2 proper: normalize, dedupe (identity + fuzzy title), the ledger, the provider abstraction, and the scoring gate — delivering a kept/dropped table per category and a Haiku-vs-Groq comparison on the same month.
+1. **`ANTHROPIC_API_KEY`** in GitHub Actions secrets and `.env.local` — needed for the scoring half of Phase 2. Normalize/dedupe/ledger need no key and can be built first. **Not Vercel** — the deployed app makes no external calls and needs no keys.
+2. **Set the repo's default branch to `main`** (Settings → General → Default branch). `main` exists and carries everything, but the default still points at the old feature branch, and Phase 4's workflow commits to the default branch.
+3. **`NCBI_API_KEY`** (optional) — lifts PubMed from 3 to 10 req/s; it is the slowest source.
+4. **Unfiltered RSS on `cmc_reg`/`industry`** (114 + 94) stays as-is by design; Phase 2's kept/dropped table decides whether a pre-filter earns its keep.
 
 ## Backlog
 
