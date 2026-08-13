@@ -1,6 +1,27 @@
 # Status updates
 
-## 2026-08-13 (latest) — Coverage expansion, two new categories, and an RSS bug we were causing
+## 2026-08-13 (Phase 2) — Normalize, dedupe, ledger, providers and the scoring gate
+
+Added `htpd_automation` (ambr/microbioreactors, robotic liquid handling, automated sampling, DOE execution, self-driving labs) — eleven categories now. Then built Phase 2.
+
+**Normalize and dedupe, measured on a live 35-day window:** 1278 raw → 734 unique → 734 kept. 544 collapsed on identifier, 0 on title.
+
+That zero looked wrong, so it was checked rather than accepted: no exact-title duplicates remain in the output, and of 734 items 635 are DOI-keyed against a single PMID-keyed one. DOI coverage from both PubMed and Europe PMC is near-total, so the identifier pass catches essentially everything and the title pass has nothing left to do. It is insurance, not dead weight — the one candidate pair above 0.75 Jaccard ("duvakitug in ulcerative colitis" vs "in Crohn's") is correctly *rejected* at the 0.9 threshold. The 98 title-keyed items are exactly the 94 RSS plus 4 arXiv records, which carry no DOI.
+
+**Ledger.** `external_id → {title, first_seen_month, categories, url}`, merged across the base file and any year shards, sharding past 5000 entries by first-seen year with the base file emptied rather than deleted so a half-finished migration cannot leave an id in two places. `is_recurring` was given a precise definition rather than left vague: an item reported in an earlier month that now matches a category it has *not* been reported under. Items whose categories were all covered before are dropped.
+
+**Providers.** `complete({system, user, schema})` behind `models.<stage>.provider`, with Anthropic and Groq implementations — Groq over plain `fetch` against its OpenAI-compatible endpoint rather than adding a second SDK. Structured output goes through a JSON schema on both, so a malformed response is a provider contract violation rather than something to regex out of prose.
+
+**Scoring.** One call per category per batch, the rubric sent as a cached system prefix rather than re-billed per batch. Items addressed by index; a missing verdict **halts the run** rather than being treated as a zero, because a skipped item and an irrelevant item are indistinguishable downstream. Usage accounting records tokens and USD per stage and model, with cache reads at 0.1x and writes at 1.25x.
+
+**Two defects found while building, both mine:**
+
+- Adding `method`/`body` parameters to the HTTP helper put the request `body` in a temporal dead zone: an inner `const body = await res.text()` shares its block, so *every* request failed with "Cannot access 'body' before initialization". Caught immediately because the live run went to zero records — and covered now by `test/http.test.js`.
+- Rewriting the CLI for multi-stage dropped the dead-source exit guard, so that total wipeout **exited 0**. Restored, and written into CLAUDE.md as an invariant: fail-soft adapters plus no guard means an outage is indistinguishable from a quiet month.
+
+82 tests, lint clean. Scoring is built and unit-tested against a stub provider but has not run live — it needs `ANTHROPIC_API_KEY`, and fails with exactly that message and exit 1. Artifact reuse verified: a normalize re-run costs 0.5s instead of 120s.
+
+## 2026-08-13 — Coverage expansion, two new categories, and an RSS bug we were causing
 
 Answered the open review questions: work from `main`, expand the net, find an Endpoints alternative.
 

@@ -2,18 +2,23 @@
 
 ## Next session plan
 
-**Phase 1 is complete and awaiting review.** Fetch runs end to end against ten categories and five sources; 1170 raw records in 111s on a live 35-day window (2026-07-09 → 2026-08-13), zero degraded sources, 47/47 tests green, lint clean, `next build` static.
+**Phase 2 is built and awaiting review.** Normalize, dedupe, ledger, provider abstraction and the scoring gate are done; 82 tests green, lint clean. Eleven categories after adding `htpd_automation`.
 
-**Search expanded (2026-08-13).** Ten categories now: added `cell_line_dev` and `product_quality`. arXiv widened to cs.LG/math.OC (yield 2 → 4; genuinely low volume, not a config fault). Endpoints replaced with BioPharma Dive + Cell Culture Dish after its feed proved unreadable and the Google News route proved stale. Fixed a self-inflicted FDA rate-limit via a per-run feed cache. 1170 records, zero degraded.
+On a live 35-day window: **1278 raw → 734 unique → 734 kept** (544 collapsed on identifier, 0 on title — verified genuine, see Status_update.md). Provenance after dedupe: europepmc 535, pubmed 249, rss 94, biorxiv 41, arxiv 4. 214 items carry more than one category; 719/734 have an abstract.
 
-**Query precision pass done (2026-08-13).** Reviewed and asked to weight toward mammalian cell culture. Shipped: the original anchor terms plus a title-only exclusion of off-target expression systems, and an `EXPRESSION SYSTEM` weighting block on all six science rubrics. 983 → 950 records, 51 microbial papers removed, known-good PAT/modelling work retained. Two earlier attempts over-filtered and are documented in Status_update.md — read that before widening these queries again.
+**The one thing blocking completion of Phase 2: `ANTHROPIC_API_KEY`.** Scoring is written and unit-tested against a stub provider but has never run live. With a key in `.env.local` the next step is a single command:
 
-Before starting Phase 2 (normalize / dedupe / score), what is left from the review:
+```
+npm run digest -- --stage score --since 2026-07-09 --dry-run
+```
 
-1. **`ANTHROPIC_API_KEY`** in GitHub Actions secrets and `.env.local` — needed for the scoring half of Phase 2. Normalize/dedupe/ledger need no key and can be built first. **Not Vercel** — the deployed app makes no external calls and needs no keys.
-2. **Set the repo's default branch to `main`** (Settings → General → Default branch). `main` exists and carries everything, but the default still points at the old feature branch, and Phase 4's workflow commits to the default branch.
-3. **`NCBI_API_KEY`** (optional) — lifts PubMed from 3 to 10 req/s; it is the slowest source.
-4. **Unfiltered RSS on `cmc_reg`/`industry`** (114 + 94) stays as-is by design; Phase 2's kept/dropped table decides whether a pre-filter earns its keep.
+which produces the kept/dropped table per category with rationales, plus the real cost table — the deliverable Phase 2 owes you. Add `GROQ_API_KEY` too and the same month can be scored on both for the side-by-side.
+
+Also still open:
+
+1. **Set the repo's default branch to `main`** (Settings → General → Default branch). Phase 4's workflow commits to the default branch.
+2. **`NCBI_API_KEY`** (optional) — lifts PubMed from 3 to 10 req/s.
+3. **Unfiltered RSS on `cmc_reg`/`industry`** (225 + 94 after dedupe, ~43% of the corpus) stays by design; the kept/dropped table decides whether a pre-filter earns its keep.
 
 ## Backlog
 

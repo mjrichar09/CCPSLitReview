@@ -13,6 +13,7 @@
     "fetch": "NODE_USE_ENV_PROXY=1 node --env-file-if-exists=.env.local scripts/digest.mjs --stage fetch --dry-run"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.116.0",
     "fast-xml-parser": "^5.2.5",
     "next": "16.2.10",
     "react": "19.2.4",

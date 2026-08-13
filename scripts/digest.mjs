@@ -2,39 +2,48 @@
 import { parseArgs } from 'node:util';
 import { loadConfig } from '../lib/config.js';
 import { resolveWindow } from '../lib/util/window.js';
-import { fetchAll, summarize } from '../lib/pipeline/fetch.js';
+import { fetchAll, summarize as summarizeHealth } from '../lib/pipeline/fetch.js';
+import { normalize } from '../lib/pipeline/normalize.js';
+import { score } from '../lib/pipeline/score.js';
+import { readStage, writeStage } from '../lib/util/staging.js';
+import { createUsageLedger } from '../lib/util/usage.js';
 import { SEARCH_SOURCES } from '../lib/adapters/index.js';
 import { log, setLogLevel } from '../lib/util/log.js';
 
 const STAGES = ['fetch', 'normalize', 'score', 'summarize', 'synthesize', 'write', 'all'];
-const IMPLEMENTED = new Set(['fetch']); // Phase 1
+const IMPLEMENTED = new Set(['fetch', 'normalize', 'score', 'all']); // Phases 1-2
+const ORDER = ['fetch', 'normalize', 'score'];
 
 const USAGE = `
 Usage: node scripts/digest.mjs --stage <stage> [options]
 
 Stages
   fetch        run every enabled adapter and collect raw records   (Phase 1)
-  normalize    unify schema, dedupe against the ledger             (Phase 2)
+  normalize    unify schema, dedupe, drop what was already seen    (Phase 2)
   score        LLM relevance gate                                  (Phase 2)
   summarize    per-item summary + why_it_matters                   (Phase 3)
   synthesize   per-category narrative, Top 5, editorial overview   (Phase 3)
   write        emit the month's JSON and update the ledger         (Phase 3)
-  all          every stage in order                                (Phase 3)
+  all          every implemented stage in order
+
+Each stage reads its predecessor's staging artifact when one exists, so a
+re-run after a mid-pipeline failure costs no re-fetching and no re-scoring.
 
 Options
   --month YYYY-MM     target month (default: the month the window ends in)
   --since YYYY-MM-DD  override the window start
   --category <id>     restrict to one category (repeatable)
   --source <id>       restrict to one source (repeatable)
-  --dry-run           fetch and score but write nothing; print to stdout
+  --dry-run           write nothing; print the result to stdout
+  --fresh             ignore existing staging artifacts and re-run from fetch
   --force             allow overwriting an already-written month
   --log-level <lvl>   debug | info | warn | error   (default: info)
   --help              this message
 
 Examples
   node scripts/digest.mjs --stage fetch --dry-run
-  node scripts/digest.mjs --stage fetch --dry-run --category modeling_ml
-  node scripts/digest.mjs --stage fetch --dry-run --since 2026-07-01 --source pubmed
+  node scripts/digest.mjs --stage normalize --dry-run
+  node scripts/digest.mjs --stage score --category modeling_ml --dry-run
 `.trimStart();
 
 async function main() {
@@ -46,6 +55,7 @@ async function main() {
       category: { type: 'string', multiple: true },
       source: { type: 'string', multiple: true },
       'dry-run': { type: 'boolean', default: false },
+      fresh: { type: 'boolean', default: false },
       force: { type: 'boolean', default: false },
       'log-level': { type: 'string', default: 'info' },
       help: { type: 'boolean', default: false },
@@ -59,130 +69,59 @@ async function main() {
   }
 
   setLogLevel(values['log-level']);
-
   const stage = values.stage;
-  if (!STAGES.includes(stage)) {
-    fail(`unknown stage "${stage}" — expected one of ${STAGES.join(', ')}`);
-  }
-  if (!IMPLEMENTED.has(stage)) {
-    fail(`stage "${stage}" is not implemented yet (Phase 1 ships fetch only)`);
-  }
+  if (!STAGES.includes(stage)) fail(`unknown stage "${stage}" — expected one of ${STAGES.join(', ')}`);
+  if (!IMPLEMENTED.has(stage)) fail(`stage "${stage}" is not implemented yet (Phases 1-2 ship fetch, normalize, score)`);
 
   const config = loadConfig();
-
-  let categories = config.categories;
-  if (values.category?.length) {
-    const wanted = new Set(values.category);
-    const unknown = [...wanted].filter((c) => !config.categories.some((x) => x.id === c));
-    if (unknown.length) fail(`unknown category ids: ${unknown.join(', ')}`);
-    categories = config.categories.filter((c) => wanted.has(c.id));
-  }
-
-  if (values.source?.length) {
-    const unknown = values.source.filter((s) => !SEARCH_SOURCES.includes(s));
-    if (unknown.length) fail(`unknown source ids: ${unknown.join(', ')}`);
-    categories = restrictSources(categories, new Set(values.source));
-  }
-
+  const categories = selectCategories(config, values);
   const window = await resolveWindow({
     since: values.since,
     month: values.month,
     defaultDays: config.window.defaultDays,
   });
+  const month = window.month;
+  const dry = values['dry-run'];
+  const usage = createUsageLedger();
 
   log.info('window resolved', {
-    from: window.from.toISOString(),
-    to: window.to.toISOString(),
-    month: window.month,
-    reason: window.reason,
+    from: window.from.toISOString(), to: window.to.toISOString(), month, reason: window.reason,
   });
 
-  const started = Date.now();
-  const { records, health } = await fetchAll({ config, window, categories });
+  const target = stage === 'all' ? ORDER[ORDER.length - 1] : stage;
+  const wanted = ORDER.slice(0, ORDER.indexOf(target) + 1);
+  const ctx = { config, categories, window, month, dry, fresh: values.fresh, usage };
 
-  printSummary(summarize(health, categories), health, records, Date.now() - started);
-
-  if (values['dry-run']) {
-    // Records to stdout so the run stays pipeable; everything else is stderr.
-    process.stdout.write(JSON.stringify({ month: window.month, window: { from: window.from, to: window.to }, records }, null, 2) + '\n');
-  } else {
-    log.warn('fetch stage writes nothing in Phase 1 — re-run with --dry-run to see the records');
+  let result = null;
+  for (const step of wanted) {
+    result = await runStage(step, ctx, result);
   }
 
-  // A source that failed everywhere is worth a non-zero exit even though the
-  // run itself completed: it means a whole feed of the digest went dark.
-  const dead = deadSources(health);
+  report(target, result, ctx);
+
+  const totals = usage.totals();
+  if (totals.calls > 0) {
+    process.stderr.write(usage.table({ keptItems: result?.items?.length ?? null }));
+  }
+
+  if (dry) {
+    process.stdout.write(`${JSON.stringify({ month, stage: target, ...result }, null, 2)}\n`);
+  }
+
+  // Adapters fail soft by design, which means a run where *every* source died
+  // still completes. That must not look like success: without this, a total
+  // outage produces an empty digest and exit 0.
+  const dead = deadSources(result?.health);
   if (dead.length > 0) {
-    log.error('sources failed in every category', { sources: dead.join(',') });
+    log.error('sources failed in every category they ran in', { sources: dead.join(',') });
     process.exitCode = 1;
   }
 }
 
-function restrictSources(categories, wanted) {
-  return categories.map((c) => {
-    const sources = { ...(c.sources ?? {}) };
-    for (const id of SEARCH_SOURCES) {
-      sources[id] = { ...(sources[id] ?? {}), enabled: wanted.has(id) ? (sources[id]?.enabled ?? true) : false };
-    }
-    return { ...c, sources };
-  });
-}
-
-function printSummary({ sources, rows, total }, health, records, ms) {
-  const w = Math.max(14, ...rows.map((r) => r.category.length));
-  const col = (s) => String(s).padStart(10);
-
-  const out = [];
-  out.push('');
-  out.push(`fetched ${total} raw records in ${(ms / 1000).toFixed(1)}s`);
-  out.push('');
-  out.push(`${'category'.padEnd(w)}${sources.map(col).join('')}${col('total')}`);
-  out.push('-'.repeat(w + (sources.length + 1) * 10));
-
-  for (const row of rows) {
-    const cells = row.cells.map((cell) => {
-      if (!cell) return col('·');
-      if (cell.status === 'failed') return col('FAIL');
-      return col(cell.status === 'degraded' ? `${cell.fetched}!` : cell.fetched);
-    });
-    out.push(`${row.category.padEnd(w)}${cells.join('')}${col(row.total)}`);
-  }
-
-  out.push('-'.repeat(w + (sources.length + 1) * 10));
-  const totals = sources.map((s) =>
-    col(health.filter((h) => h.source === s && h.category !== '*').reduce((n, h) => n + h.fetched, 0)),
-  );
-  out.push(`${'total'.padEnd(w)}${totals.join('')}${col(total)}`);
-  out.push('');
-  out.push(`unique DOIs: ${new Set(records.filter((r) => r.doi).map((r) => r.doi)).size}   ` +
-    `with abstract: ${records.filter((r) => r.abstract).length}/${records.length}`);
-
-  const problems = health.filter((h) => h.status !== 'ok');
-  if (problems.length > 0) {
-    out.push('');
-    out.push('source_health problems:');
-    for (const p of problems) {
-      out.push(`  [${p.status}] ${p.source}/${p.category}${p.error ? ` — ${p.error}` : ''}`);
-    }
-  }
-
-  const notes = health.filter((h) => h.notes?.length);
-  if (notes.length > 0) {
-    out.push('');
-    out.push('notes:');
-    for (const n of notes) {
-      for (const note of n.notes) out.push(`  ${n.source}/${n.category}: ${note}`);
-    }
-  }
-  out.push('');
-
-  process.stderr.write(out.join('\n') + '\n');
-}
-
-/** Sources that failed in every category they ran in. */
+/** Sources that failed in every category they were enabled for. */
 function deadSources(health) {
   const bySource = new Map();
-  for (const h of health) {
+  for (const h of health ?? []) {
     if (h.category === '*') continue;
     if (!bySource.has(h.source)) bySource.set(h.source, []);
     bySource.get(h.source).push(h);
@@ -190,6 +129,149 @@ function deadSources(health) {
   return [...bySource.entries()]
     .filter(([, entries]) => entries.length > 0 && entries.every((e) => e.status === 'failed'))
     .map(([source]) => source);
+}
+
+async function runStage(step, ctx, previous) {
+  const { month, dry, fresh } = ctx;
+
+  if (!fresh) {
+    const cached = await readStage(month, artifactFor(step));
+    if (cached) {
+      log.info('reusing staging artifact', { stage: step, month, file: `${artifactFor(step)}.json` });
+      return cached;
+    }
+  }
+
+  switch (step) {
+    case 'fetch': {
+      const { records, health } = await fetchAll({ config: ctx.config, window: ctx.window, categories: ctx.categories });
+      const out = { month, window: { from: ctx.window.from, to: ctx.window.to }, records, health };
+      if (!dry) await writeStage(month, 'raw', out);
+      return out;
+    }
+    case 'normalize': {
+      const raw = previous ?? (await readStage(month, 'raw'));
+      if (!raw) throw new Error('normalize: no raw records — run --stage fetch first');
+      const out = await normalize({ records: raw.records, month, config: ctx.config });
+      out.health = raw.health;
+      if (!dry) await writeStage(month, 'normalized', out);
+      return out;
+    }
+    case 'score': {
+      const normalized = previous ?? (await readStage(month, 'normalized'));
+      if (!normalized) throw new Error('score: nothing normalized — run --stage normalize first');
+      const out = await score({ items: normalized.items, config: ctx.config, usage: ctx.usage });
+      out.month = month;
+      out.health = normalized.health;
+      out.run_stats = ctx.usage.toJSON({ stage: 'score' });
+      // scored.json is committed even on a normal run: a future routine-based
+      // generator reads it out of the repo (PLAN.md §7).
+      if (!dry) await writeStage(month, 'scored', out);
+      return out;
+    }
+    default:
+      throw new Error(`no runner for stage "${step}"`);
+  }
+}
+
+const ARTIFACTS = { fetch: 'raw', normalize: 'normalized', score: 'scored' };
+function artifactFor(step) {
+  return ARTIFACTS[step];
+}
+
+function selectCategories(config, values) {
+  let categories = config.categories;
+  if (values.category?.length) {
+    const wanted = new Set(values.category);
+    const unknown = [...wanted].filter((c) => !config.categories.some((x) => x.id === c));
+    if (unknown.length) fail(`unknown category ids: ${unknown.join(', ')}`);
+    categories = config.categories.filter((c) => wanted.has(c.id));
+  }
+  if (values.source?.length) {
+    const unknown = values.source.filter((s) => !SEARCH_SOURCES.includes(s));
+    if (unknown.length) fail(`unknown source ids: ${unknown.join(', ')}`);
+    const wanted = new Set(values.source);
+    categories = categories.map((c) => {
+      const sources = { ...(c.sources ?? {}) };
+      for (const id of SEARCH_SOURCES) {
+        sources[id] = { ...(sources[id] ?? {}), enabled: wanted.has(id) ? (sources[id]?.enabled ?? true) : false };
+      }
+      return { ...c, sources };
+    });
+  }
+  return categories;
+}
+
+function report(stage, result, ctx) {
+  if (stage === 'fetch') return printFetch(result, ctx);
+  if (stage === 'normalize') return printNormalize(result);
+  if (stage === 'score') return printScore(result, ctx);
+}
+
+function printFetch(result, ctx) {
+  const { sources, rows, total } = summarizeHealth(result.health, ctx.categories);
+  const w = Math.max(16, ...rows.map((r) => r.category.length));
+  const col = (s) => String(s).padStart(10);
+  const out = ['', `fetched ${total} raw records`, ''];
+  out.push(`${'category'.padEnd(w)}${sources.map(col).join('')}${col('total')}`);
+  out.push('-'.repeat(w + (sources.length + 1) * 10));
+  for (const row of rows) {
+    const cells = row.cells.map((cell) =>
+      !cell ? col('·') : cell.status === 'failed' ? col('FAIL') : col(cell.status === 'degraded' ? `${cell.fetched}!` : cell.fetched),
+    );
+    out.push(`${row.category.padEnd(w)}${cells.join('')}${col(row.total)}`);
+  }
+  out.push('-'.repeat(w + (sources.length + 1) * 10));
+  out.push('');
+  printProblems(result.health, out);
+  process.stderr.write(`${out.join('\n')}\n`);
+}
+
+function printNormalize(result) {
+  const s = result.stats;
+  const out = [
+    '',
+    `normalize: ${s.input} raw → ${s.output} unique → ${s.kept} kept`,
+    '',
+    `  collapsed by identifier  ${String(s.byId).padStart(5)}`,
+    `  collapsed by title       ${String(s.byTitle).padStart(5)}   (same paper, different ids across sources)`,
+    `  dropped as already seen  ${String(s.dropped_as_seen).padStart(5)}`,
+    `  marked recurring         ${String(s.recurring).padStart(5)}`,
+    `  ledger size              ${String(s.ledger_size).padStart(5)}`,
+    '',
+  ];
+  process.stderr.write(`${out.join('\n')}\n`);
+}
+
+function printScore(result, ctx) {
+  const s = result.stats;
+  const out = ['', `score: ${s.scored} judged → ${s.kept} kept at threshold ${s.threshold}`, ''];
+  const w = Math.max(16, ...Object.keys(s.by_category).map((k) => k.length));
+  out.push(`${'category'.padEnd(w)}${'seen'.padStart(8)}${'kept'.padStart(8)}${'dropped'.padStart(9)}`);
+  out.push('-'.repeat(w + 25));
+  for (const [id, t] of Object.entries(s.by_category)) {
+    out.push(`${id.padEnd(w)}${String(t.seen).padStart(8)}${String(t.kept).padStart(8)}${String(t.dropped).padStart(9)}`);
+  }
+  out.push('-'.repeat(w + 25));
+
+  const cap = new Map(ctx.config.categories.map((c) => [c.id, c.max_items]));
+  const over = Object.entries(s.by_category).filter(([id, t]) => t.kept > (cap.get(id) ?? Infinity));
+  if (over.length > 0) {
+    out.push('');
+    out.push('over max_items (the write stage will trim to the cap, highest relevance first):');
+    for (const [id, t] of over) out.push(`  ${id}: ${t.kept} kept, cap ${cap.get(id)}`);
+  }
+  out.push('');
+  process.stderr.write(`${out.join('\n')}\n`);
+}
+
+function printProblems(health, out) {
+  const problems = (health ?? []).filter((h) => h.status !== 'ok');
+  if (problems.length > 0) {
+    out.push('source_health problems:');
+    for (const p of problems) out.push(`  [${p.status}] ${p.source}/${p.category}${p.error ? ` — ${p.error}` : ''}`);
+    out.push('');
+  }
 }
 
 function fail(msg) {

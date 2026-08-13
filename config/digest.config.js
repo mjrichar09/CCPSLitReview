@@ -360,6 +360,30 @@ Boundary with harvest_dsp: quality changes arising in culture belong here; clear
   },
 
   {
+    id: 'htpd_automation',
+    name: 'High-Throughput PD & Lab Automation',
+    max_items: 10,
+    scope: `Automated and high-throughput process development: ambr250/ambr15 and other micro- and mini-bioreactor systems; deep-well plate and shake-flask screening as scale-down formats; robotic liquid handling and automated feeding; automated and at-line sampling, cell counting, and metabolite analysis; integration of analytics into the screening loop; execution of DOE campaigns at scale; closed-loop and self-driving laboratory approaches where the platform proposes the next experiment; data infrastructure, LIMS and ELN plumbing that makes high-throughput PD data usable; qualification of high-throughput systems as scale-down models.
+
+Boundary with upstream_pd: if the finding is about the process condition, it belongs there; if it is about the platform, the throughput, or the automation that produced it, it belongs here. Boundary with modeling_ml: a new experimental-design algorithm belongs there, its automated execution belongs here — a closed-loop paper may legitimately carry both.${MAMMALIAN_PREFERENCE}`,
+    sources: {
+      pubmed: {
+        query: `("high-throughput"[tiab] OR "high throughput"[tiab] OR "ambr"[tiab] OR "microbioreactor*"[tiab] OR "micro-bioreactor*"[tiab] OR "miniature bioreactor*"[tiab] OR "deep well"[tiab] OR "deep-well"[tiab] OR "automated sampling"[tiab] OR "liquid handling"[tiab] OR "robotic"[tiab] OR "laboratory automation"[tiab] OR "self-driving laborator*"[tiab] OR "closed-loop experiment*"[tiab] OR "screening platform"[tiab]) AND ${MAMMALIAN_ANCHOR}`,
+      },
+      europepmc: {
+        query: `("high-throughput" OR ambr OR microbioreactor* OR "micro-bioreactor" OR "miniature bioreactor" OR "deep well" OR "automated sampling" OR "liquid handling" OR robotic OR "laboratory automation" OR "self-driving laboratory" OR "screening platform") AND ${EPMC_ANCHOR}`,
+      },
+      biorxiv: {
+        enabled: true,
+        terms: ['high-throughput', 'microbioreactor', 'ambr', 'automation', 'liquid handling', 'screening platform', 'self-driving lab'],
+      },
+      rss: {
+        terms: ['automation', 'high-throughput', 'high throughput', 'ambr', 'robotic', 'microbioreactor', 'digital lab', 'lab of the future', 'self-driving lab'],
+      },
+    },
+  },
+
+  {
     id: 'cmc_reg',
     name: 'CMC Regulatory & Guidance',
     max_items: 10,
