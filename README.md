@@ -1,8 +1,8 @@
 # CCPSLitReview
 
-A monthly automated research digest for upstream CHO process development and CMC. A scheduled GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eight bioprocessing topics, filters for relevance, summarises what survives, and commits one JSON report per month. A read-only Next.js viewer renders it.
+A monthly automated research digest for upstream CHO process development and CMC. A scheduled GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eleven bioprocessing topics, filters for relevance, summarises what survives, and commits one JSON report per month. A read-only Next.js viewer renders it.
 
-**Status: Phase 1 (fetch) complete.** Scoring, summarisation, the Actions workflow, and the viewer pages are not built yet — see [PLAN.md](PLAN.md) for the phase plan.
+**Status: fetch, normalize, score and the Actions workflow are built.** Summarisation, the month writer, and the viewer pages are not — see [PLAN.md](PLAN.md) for the phase plan.
 
 ## Setup
 
@@ -40,6 +40,7 @@ npm run dev          # the viewer, at http://localhost:3000
 --category <id>     restrict to one category (repeatable)
 --source <id>       restrict to one source (repeatable)
 --dry-run           write nothing; print the report to stdout
+--fresh             ignore existing staging artifacts and re-run from fetch
 --force             allow overwriting an already-written month
 --log-level <lvl>   debug | info | warn | error
 ```
@@ -100,6 +101,19 @@ npm run digest -- --stage all --month 2026-09 --force     # then overwrite
 ```
 
 Months are append-only: without `--force`, writing a month that already exists is refused. Stages are independently runnable and each skips work whose output already exists, so re-running after a mid-pipeline failure does not re-fetch or re-score.
+
+### Run the pipeline in Actions
+
+`.github/workflows/digest.yml` runs on the 2nd of each month at 06:17 UTC and can be dispatched by hand from the Actions tab. Its inputs mirror the CLI: `stage`, `month`, `since`, `dry_run`, `force`, `log_level`, plus `score_model`.
+
+`dry_run` defaults to **true** on a manual dispatch, so the safe thing is the default: the run fetches, normalizes and scores for real, prints the tables to the job log, uploads the full JSON as a `digest-<run_id>` artifact, and commits nothing.
+
+Two behaviours worth knowing:
+
+- **It only commits on the default branch.** Dispatch from a feature branch and the run still executes and uploads, but ends with a warning instead of a commit. The default branch is the only branch Vercel builds; committing anywhere else strands the report.
+- **`score_model` must name a key of `knownModels`.** It overrides the scoring model for one run — the mechanism behind scoring the same month on Haiku and on Groq for comparison — and it carries the provider and the per-token rates with it. A free-text model name is rejected at config validation rather than accepted and cost-accounted at the wrong price. The same thing works locally: `DIGEST_MODEL_SCORE=openai/gpt-oss-120b npm run digest -- --stage score --dry-run`.
+
+`.github/workflows/ci.yml` runs lint, tests and `next build` on every push.
 
 ## Architecture
 
