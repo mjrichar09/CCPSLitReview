@@ -2,7 +2,7 @@
 
 ## Next session plan
 
-**Phase 1 is complete and awaiting review.** Fetch runs end to end against all eight categories and five sources; 983 raw records in 86s on a live 35-day window (2026-07-09 → 2026-08-13), zero failed sources, 47/47 tests green, lint clean, `next build` static.
+**Phase 1 is complete and awaiting review.** Fetch runs end to end against ten categories and five sources; 1170 raw records in 111s on a live 35-day window (2026-07-09 → 2026-08-13), zero degraded sources, 47/47 tests green, lint clean, `next build` static.
 
 **Search expanded (2026-08-13).** Ten categories now: added `cell_line_dev` and `product_quality`. arXiv widened to cs.LG/math.OC (yield 2 → 4; genuinely low volume, not a config fault). Endpoints replaced with BioPharma Dive + Cell Culture Dish after its feed proved unreadable and the Google News route proved stale. Fixed a self-inflicted FDA rate-limit via a per-run feed cache. 1170 records, zero degraded.
 
