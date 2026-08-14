@@ -453,11 +453,15 @@ const config = {
       provider: 'anthropic',
       model: 'claude-opus-5',
       rates: { input: 5.0, output: 25.0 },
+      concurrency: 4,
+      rps: 0.75,
     },
     synthesize: {
       provider: 'anthropic',
       model: 'claude-opus-5',
       rates: { input: 5.0, output: 25.0 },
+      concurrency: 4,
+      rps: 0.75,
     },
   },
 
@@ -471,6 +475,16 @@ const config = {
     'openai/gpt-oss-120b': { provider: 'groq', rates: { input: 0.15, output: 0.6 } },
     'llama-3.3-70b-versatile': { provider: 'groq', rates: { input: 0.59, output: 0.79 } },
   },
+
+  // Items per summarisation call. Smaller than the scoring batch on purpose:
+  // summaries are generated text rather than a number and a line, so a large
+  // batch both risks the token ceiling and measurably flattens the later ones.
+  summarize: {
+    batchSize: 6,
+  },
+
+  // Size of the cross-category Top N.
+  top_items: 5,
 
   ledger: {
     // Past this many entries the ledger shards by year (index/articles-YYYY.json).

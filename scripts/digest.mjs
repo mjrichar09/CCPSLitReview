@@ -5,14 +5,17 @@ import { resolveWindow } from '../lib/util/window.js';
 import { fetchAll, summarize as summarizeHealth } from '../lib/pipeline/fetch.js';
 import { normalize } from '../lib/pipeline/normalize.js';
 import { score } from '../lib/pipeline/score.js';
+import { summarize } from '../lib/pipeline/summarize.js';
+import { synthesize } from '../lib/pipeline/synthesize.js';
+import { write } from '../lib/pipeline/write.js';
 import { readStage, writeStage } from '../lib/util/staging.js';
 import { createUsageLedger } from '../lib/util/usage.js';
 import { SEARCH_SOURCES } from '../lib/adapters/index.js';
 import { log, setLogLevel } from '../lib/util/log.js';
 
 const STAGES = ['fetch', 'normalize', 'score', 'summarize', 'synthesize', 'write', 'all'];
-const IMPLEMENTED = new Set(['fetch', 'normalize', 'score', 'all']); // Phases 1-2
-const ORDER = ['fetch', 'normalize', 'score'];
+const IMPLEMENTED = new Set(STAGES);
+const ORDER = ['fetch', 'normalize', 'score', 'summarize', 'synthesize', 'write'];
 
 const USAGE = `
 Usage: node scripts/digest.mjs --stage <stage> [options]
@@ -71,7 +74,6 @@ async function main() {
   setLogLevel(values['log-level']);
   const stage = values.stage;
   if (!STAGES.includes(stage)) fail(`unknown stage "${stage}" — expected one of ${STAGES.join(', ')}`);
-  if (!IMPLEMENTED.has(stage)) fail(`stage "${stage}" is not implemented yet (Phases 1-2 ship fetch, normalize, score)`);
 
   const config = loadConfig();
   const categories = selectCategories(config, values);
@@ -90,7 +92,7 @@ async function main() {
 
   const target = stage === 'all' ? ORDER[ORDER.length - 1] : stage;
   const wanted = ORDER.slice(0, ORDER.indexOf(target) + 1);
-  const ctx = { config, categories, window, month, dry, fresh: values.fresh, usage };
+  const ctx = { config, categories, window, month, dry, fresh: values.fresh, force: values.force, usage };
 
   let result = null;
   for (const step of wanted) {
@@ -134,7 +136,8 @@ function deadSources(health) {
 async function runStage(step, ctx, previous) {
   const { month, dry, fresh } = ctx;
 
-  if (!fresh) {
+  // `write` has no staging artifact of its own — its output is the month file.
+  if (!fresh && artifactFor(step)) {
     const cached = await readStage(month, artifactFor(step));
     if (cached) {
       log.info('reusing staging artifact', { stage: step, month, file: `${artifactFor(step)}.json` });
@@ -169,12 +172,38 @@ async function runStage(step, ctx, previous) {
       if (!dry) await writeStage(month, 'scored', out);
       return out;
     }
+    case 'summarize': {
+      const scored = previous ?? (await readStage(month, 'scored'));
+      if (!scored) throw new Error('summarize: nothing scored — run --stage score first');
+      const out = await summarize({ items: scored.items, config: ctx.config, usage: ctx.usage });
+      out.health = scored.health;
+      if (!dry) await writeStage(month, 'summarized', out);
+      return out;
+    }
+    case 'synthesize': {
+      const summarized = previous ?? (await readStage(month, 'summarized'));
+      if (!summarized) throw new Error('synthesize: nothing summarized — run --stage summarize first');
+      const out = await synthesize({ items: summarized.items, config: ctx.config, month, usage: ctx.usage });
+      out.items = summarized.items;
+      out.health = summarized.health;
+      if (!dry) await writeStage(month, 'synthesized', out);
+      return out;
+    }
+    case 'write': {
+      const s = previous ?? (await readStage(month, 'synthesized'));
+      if (!s) throw new Error('write: nothing synthesized — run --stage synthesize first');
+      return write({
+        items: s.items, narratives: s.narratives, top_items: s.top_items, summary: s.summary,
+        month, config: ctx.config, health: s.health, run_stats: ctx.usage.toJSON(),
+        dry, force: ctx.force,
+      });
+    }
     default:
       throw new Error(`no runner for stage "${step}"`);
   }
 }
 
-const ARTIFACTS = { fetch: 'raw', normalize: 'normalized', score: 'scored' };
+const ARTIFACTS = { fetch: 'raw', normalize: 'normalized', score: 'scored', summarize: 'summarized', synthesize: 'synthesized' };
 function artifactFor(step) {
   return ARTIFACTS[step];
 }
@@ -206,6 +235,9 @@ function report(stage, result, ctx) {
   if (stage === 'fetch') return printFetch(result, ctx);
   if (stage === 'normalize') return printNormalize(result);
   if (stage === 'score') return printScore(result, ctx);
+  if (stage === 'summarize') return printSummarize(result);
+  if (stage === 'synthesize') return printSynthesize(result);
+  if (stage === 'write') return printWrite(result);
 }
 
 function printFetch(result, ctx) {
@@ -262,6 +294,32 @@ function printScore(result, ctx) {
     for (const [id, t] of over) out.push(`  ${id}: ${t.kept} kept, cap ${cap.get(id)}`);
   }
   out.push('');
+  process.stderr.write(`${out.join('\n')}\n`);
+}
+
+function printSummarize(result) {
+  const s = result.stats;
+  process.stderr.write(`\nsummarize: ${s.scored_keeps} keeps → ${s.after_cap} after cap → ${s.distinct_papers} distinct papers in ${s.batches} calls${s.thin_abstracts ? ` (${s.thin_abstracts} thin abstracts)` : ''}\n\n`);
+}
+
+function printSynthesize(result) {
+  const s = result.stats;
+  process.stderr.write(`\nsynthesize: ${s.categories} category narratives, Top ${s.top_items}\n\n`);
+}
+
+function printWrite(result) {
+  const s = result.stats;
+  const out = [
+    '',
+    s.written ? `wrote ${s.month}.json` : `would write ${s.month}.json (dry run — nothing written, ledger untouched)`,
+    '',
+    `  papers            ${String(s.papers).padStart(5)}`,
+    `  categories        ${String(s.categories).padStart(5)}`,
+    `  category slots    ${String(s.category_slots).padStart(5)}`,
+    `  top items         ${String(s.top_items).padStart(5)}`,
+    `  ledger size       ${s.ledger_size == null ? '    -' : String(s.ledger_size).padStart(5)}`,
+    '',
+  ];
   process.stderr.write(`${out.join('\n')}\n`);
 }
 
