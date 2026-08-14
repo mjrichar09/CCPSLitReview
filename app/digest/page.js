@@ -1,18 +1,19 @@
-import { getAllMonths, getLatest } from '../../lib/digest.js';
-import Report from './Report.jsx';
+import { redirect } from 'next/navigation';
+import { getAllMonths } from '../../lib/digest.js';
 
 export const metadata = {
   title: 'Bioprocess Digest',
 };
 
 /**
- * The latest month. Static: the JSON is read at build time, and a new commit
- * from the Actions job is what triggers the rebuild that publishes a new month.
+ * `/digest` has no content of its own — it always resolves to the latest
+ * month's front page. Splitting sections and articles onto their own routes
+ * under `[month]/` means there is no single "the digest" page to render here.
  */
-export default async function DigestPage() {
-  const [report, months] = await Promise.all([getLatest(), getAllMonths()]);
+export default async function DigestIndex() {
+  const months = await getAllMonths();
 
-  if (!report) {
+  if (months.length === 0) {
     return (
       <div className="page-wide">
         <h1 className="report-title">Bioprocess Digest</h1>
@@ -24,5 +25,5 @@ export default async function DigestPage() {
     );
   }
 
-  return <Report report={report} months={months} current={report.month_of.slice(0, 7)} />;
+  redirect(`/digest/${months[0]}`);
 }

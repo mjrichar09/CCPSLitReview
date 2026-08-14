@@ -120,6 +120,13 @@ a:hover { text-decoration: underline; }
 .badge-new { background: var(--badge-new-bg); color: var(--badge-new-fg); }
 .badge-recurring { background: var(--badge-recurring-bg); color: var(--badge-recurring-fg); }
 
+/* ---- section index rows, and the article overview page ---- */
+.item-overview-link { display: inline-block; margin-top: 0.55rem; font-size: 0.85rem; font-weight: 600; }
+.back-link { display: inline-block; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--muted); }
+.article-title { font-size: 1.5rem; line-height: 1.3; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+.article-title a { color: inherit; }
+.also-in { margin-top: 1.5rem; font-size: 0.85rem; color: var(--muted); }
+
 /* ---- top 5 ---- */
 .top5 {
   border: 1px solid var(--border-strong); border-radius: 12px;

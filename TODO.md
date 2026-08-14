@@ -6,7 +6,18 @@
 
 The month cost **$2.34** — score $0.65 (Haiku), summarize $0.80 and synthesize $0.89 (Opus), 75 calls, 8m30s end to end. Against the $2.50 estimate that is within 7%, though the split was wrong: summarize and synthesize came in roughly equal rather than summarize dominating.
 
-**Phase 5 is built**: `/digest` renders the latest month and `/digest/[month]` every archived one, both prerendered from the committed JSON with `dynamicParams = false`. `/` redirects to `/digest`. No API spend. All five phases are now complete.
+**Phase 5 is built, and restructured into four route levels per your request:**
+
+- `/digest/[month]` — front page: editorial overview + Top 5, each linking to its article
+- `/digest/[month]/[category]` — a section: synthesis paragraph + a compact item index, each linking to its article overview
+- `/digest/[month]/[category]/[article]` — one paper in full: summary, why-it-matters, badges; titles link out to the source
+- `/digest` and `/` both redirect to the latest month
+
+A paper scored into more than one category gets one URL per category (write.js already duplicates the full item per category); its article page says "Also appears in: <other category>" and links across.
+
+One real bug found building this: nested `generateStaticParams` did not receive the parent `month` param from Next's parent-to-child composition on this Next.js/Turbopack build — `params.month` arrived `undefined` in the `[category]` and `[article]` segments despite `[month]/page.js` defining `generateStaticParams` for it. Worked around by making each nested `generateStaticParams` self-contained (enumerate months directly via `getAllMonths()` rather than trusting the parent-supplied param). Verified against the built output: all 11 categories and all 112 articles are prerendered HTML, `next start` smoke-tested for 200s on real routes and 404s on invalid ones, and the multi-category cross-link was checked end to end.
+
+No API spend for any of this.
 
 Two things to look at when reviewing the report:
 

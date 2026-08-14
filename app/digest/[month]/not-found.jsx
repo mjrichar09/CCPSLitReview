@@ -1,13 +1,17 @@
 import Link from 'next/link';
 
+/**
+ * Shared 404 for this segment and everything nested under it (a bad month, a
+ * bad category, a bad article slug) — wrapped by `[month]/layout.js`, which is
+ * why there is no `.page-wide` wrapper here.
+ */
 export default function NotFound() {
   return (
-    <div className="page-wide">
-      <h1 className="report-title">No digest for that month</h1>
+    <>
+      <h1 className="report-title">Not part of the digest</h1>
       <p className="report-summary">
-        Months are only published once the pipeline has run for them.{' '}
-        <Link href="/digest">See the latest month</Link>.
+        That month, section, or article was not found. <Link href="/digest">See the latest month</Link>.
       </p>
-    </div>
+    </>
   );
 }

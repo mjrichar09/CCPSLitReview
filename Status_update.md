@@ -18,6 +18,10 @@ Built the last three pipeline stages and committed the first real month, `data/d
 
 **The first month cost nothing extra to commit.** The successful dry run's artifacts were replayed through `--stage write` locally: zero API calls, same content, real cost carried forward. That is the staging layer doing exactly what it was built for.
 
+**Addendum, same session — the viewer restructured into a real hierarchy.** The original single-page `/digest` layout (everything on one long page) was replaced with four route levels on request: front page (overview + Top 5) → section pages (synthesis + item index) → article overview pages (full summary, why-it-matters, badges) → external source link. A multi-category paper gets one URL per category it survived into, and each copy's article page cross-links to the others ("Also appears in: ...").
+
+Building it surfaced a real Next.js/Turbopack finding: nested `generateStaticParams` did not receive the parent `[month]` param through Next's documented parent-to-child composition — `params.month` arrived `undefined` in both `[category]` and `[article]`, confirmed by direct instrumentation before assuming a cause. Fixed by making each nested `generateStaticParams` self-contained (walk `getAllMonths()` directly) rather than depending on composition that did not hold in practice. Verified against the actual build output, not just the build succeeding: all 11 categories and all 112 articles are prerendered HTML, and `next start` was smoke-tested for real 200s and 404s.
+
 **Also measured:** 31 of 112 slots (28%) flagged `thin_abstract`, concentrated in the RSS-fed `cmc_reg`/`industry` categories. The model is correctly declining to invent findings from headlines; whether a quarter of the digest should rest on that material is a product decision, not a bug.
 
 **Open at session end**: Phase 5 (viewer pages, no API spend). The one corrupt `cmc_reg` sentence. Whether to filter thin abstracts.
