@@ -1,5 +1,31 @@
 # Status updates
 
+## 2026-08-14 — The Groq side-by-side: not run, and why
+
+Dispatched the comparison four times. It never scored a single item, and the reason is an account limit rather than anything in this repo.
+
+**The verdict: stay on Haiku.** Groq's free (`on_demand`) tier caps `openai/gpt-oss-120b` at **8000 tokens per minute**. One scoring batch of 8 items requests 11305 tokens — prompt plus completion budget — and is rejected outright:
+
+```
+413 rate_limit_exceeded — tokens per minute (TPM): Limit 8000, Requested 11305
+```
+
+Even if a single request were squeezed under the cap, a month is ~1039 judgements and several hundred thousand prompt tokens before reasoning output. At 8000 TPM that is hours of rate-limited throughput against a 45-minute job. Scoring this workload on that tier is not a tuning problem. Revisiting it means upgrading the Groq account, which is a spending decision, not a technical one — and the prize is about $0.55 a month against Haiku's $0.64. Cost was never the reason to consider Groq.
+
+**The mechanism stays.** `score_model` and `batch_size` are workflow inputs, `DIGEST_MODEL_<STAGE>` and `DIGEST_BATCH_SIZE` are env overrides, and `lib/providers/groq.js` answers the same `complete()` contract. Pointing a stage at Groq is still one dispatch if the account changes.
+
+**Four attempts, and what each was actually worth.** Three real defects surfaced, none of them Groq's fault:
+
+1. **413 at batch 25.** I read this as a payload-size cap and added `DIGEST_BATCH_SIZE` so batch size could be overridden per run without re-batching the Anthropic baseline. The override is worth keeping, but the diagnosis was wrong — it was the TPM limit all along, and a smaller batch only changed which error came back.
+2. **An opaque `400 Bad Request`.** `HttpError` captures the response body and `scripts/digest.mjs` was logging only `err.message`, so a provider explaining itself precisely came out as a bare status line. Now logged. This is the fix that made everything after it diagnosable in one round instead of by guesswork.
+3. **`json_validate_failed` with an empty `failed_generation`.** Not a schema problem: gpt-oss spends the completion budget on reasoning before emitting content, so a budget sized for the answer alone was gone before any JSON existed, and Groq reported the truncation as a validation failure. The budget is now scaled at the provider and sent as `max_completion_tokens` rather than the superseded `max_tokens`.
+
+Fix 3 is what finally produced the TPM error: raising the budget enough for reasoning pushed the request over the cap, which is how the real constraint became visible. The two limits pull against each other on a capped account — too small a budget truncates, too large a request is refused — and that squeeze is now documented in `groq.js` so the next person does not re-derive it.
+
+**The workflow's failure path got a full live exercise.** The first failure opened issue #1; each subsequent failure **commented on it** rather than opening a new issue, which is exactly the de-duplication it was built for. Fetch and normalize completed cleanly every time (1318 raw → 766 unique), so nothing upstream of scoring was ever implicated.
+
+**One process note worth keeping.** Twice I reported elapsed run times inferred from my own `sleep` calls rather than from GitHub's `started_at`, and twice that was wrong — once concluding Groq was "slow" when two minutes had passed. This container suspends between turns, so sleeps do not track wall clock. Read `started_at`.
+
 ## 2026-08-13 (Phase 4, out of order) — The Actions workflow, and the first live scoring run
 
 The API keys turned out to live in **GitHub Actions secrets**, which a dev container cannot read by design. Rather than move a key, Phase 4 was brought forward: build the workflow first, and let scoring run where the keys already are. No key entered a session.
