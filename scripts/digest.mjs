@@ -280,7 +280,10 @@ function fail(msg) {
 }
 
 main().catch((err) => {
-  log.error('run failed', { error: err.message });
+  // An HttpError's message is only the status line; the provider's explanation
+  // is in the body. Logging just the message turns "400 Bad Request" into an
+  // undebuggable run — which is exactly what happened on the first Groq attempt.
+  log.error('run failed', { error: err.message, ...(err.body ? { body: String(err.body).slice(0, 600) } : {}) });
   if (process.env.DIGEST_TRACE) process.stderr.write(`${err.stack}\n`);
   process.exit(1);
 });
