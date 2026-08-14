@@ -1,5 +1,27 @@
 # Status updates
 
+## 2026-08-14 (Phase 3 + first committed month) — summarize, synthesize, write
+
+Built the last three pipeline stages and committed the first real month, `data/digest/2026-08.json`: 79 papers, 11 categories, 112 slots, Top 5, editorial overview, ledger seeded at 79.
+
+**What shapes the code.** `summarize` trims to `max_items` *before* summarising — the overflow has no reader, so paying for it is waste — and summarises each paper once rather than once per category (180 category keeps were 128 distinct papers; two different summaries for one paper in two sections would read as a bug). `synthesize` runs category narratives concurrently, then Top 5 and the overview, which both read the finished narratives; Top-5 ids are constrained to papers that exist and backfilled by relevance, because a hallucinated id would render as a hole in the most prominent section. `write` refuses to overwrite a month without `--force`. `lib/generate/index.js` is the seam PLAN §7 describes, so summarisation can later move off the metered API.
+
+**Cost, measured: $2.34/month.** Score $0.6478 (Haiku, 48 calls), summarize $0.7961 (Opus, 14), synthesize $0.8925 (Opus, 13). 75 calls, 476k in, 103k out, 8m30s. The $2.50 estimate held to 7%, but its internals were wrong — summarize was predicted to dominate at $1.50 and instead roughly tied synthesize.
+
+**Three defects found, two of them mine:**
+
+- **A fabricated measurement, corrected.** The concurrency change in the previous entry was justified with "sequential scoring took 41 minutes and did not fit an Actions job". It did not: the step started 19:53:13 and was cancelled at 19:57:55, i.e. **4m42s**. The 41 minutes came from summing my own `sleep` calls instead of reading GitHub's `started_at`. Measured properly, sequential is ~11 minutes of scoring and fits fine; concurrency takes it to ~3. The speed-up is real, the rescue was not, and an invariant resting on an invented number is worse than no invariant. CLAUDE.md now states the measurement.
+- **`--dry-run` discarded paid work.** It skipped every staging write, so when synthesize threw, a completed scoring *and* summarising pass — already billed — could not be reused. Dry-run means "do not publish", not "throw the work away". Staging is now written on every run.
+- **Resumed runs under-reported their own cost.** Only `scored.json` carried `run_stats`, so a run resumed from staging recorded what *that process* spent. This month would have been filed as costing $0.89 instead of $2.34. Every artifact now persists its usage rows and `usage.restore()` sums them on resume — proven end to end by this month, which was written from artifacts and still reports the full $2.34.
+
+**A defect in the output itself, only partly fixable.** Writing long prose under a JSON schema, the model emitted dashes as broken escapes. Most cases lost only punctuation (a bare newline mid-sentence, repairable). One did worse: `"goal date \to you gets filed"` in the `cmc_reg` synthesis, where a tab arrived and the surrounding words were destroyed. Whitespace can be smoothed; deleted text cannot be recovered. So `tidyStrings` now repairs *and warns* rather than silently smoothing, the prompts ask for plain ASCII, and this month ships with one visibly broken sentence rather than a quietly plausible one.
+
+**The first month cost nothing extra to commit.** The successful dry run's artifacts were replayed through `--stage write` locally: zero API calls, same content, real cost carried forward. That is the staging layer doing exactly what it was built for.
+
+**Also measured:** 31 of 112 slots (28%) flagged `thin_abstract`, concentrated in the RSS-fed `cmc_reg`/`industry` categories. The model is correctly declining to invent findings from headlines; whether a quarter of the digest should rest on that material is a product decision, not a bug.
+
+**Open at session end**: Phase 5 (viewer pages, no API spend). The one corrupt `cmc_reg` sentence. Whether to filter thin abstracts.
+
 ## 2026-08-14 — The Groq side-by-side: not run, and why
 
 Dispatched the comparison four times. It never scored a single item, and the reason is an account limit rather than anything in this repo.

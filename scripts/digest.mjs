@@ -152,6 +152,9 @@ async function runStage(step, ctx, previous) {
     const cached = await readStage(month, artifactFor(step));
     if (cached) {
       log.info('reusing staging artifact', { stage: step, month, file: `${artifactFor(step)}.json` });
+      // Carry the spend that produced this artifact, or the resumed run reports
+      // only what it spent itself and the month's run_stats understate the cost.
+      ctx.usage.restore(cached.usage);
       return cached;
     }
   }
@@ -160,6 +163,7 @@ async function runStage(step, ctx, previous) {
     case 'fetch': {
       const { records, health } = await fetchAll({ config: ctx.config, window: ctx.window, categories: ctx.categories });
       const out = { month, window: { from: ctx.window.from, to: ctx.window.to }, records, health };
+      out.usage = ctx.usage.rows();
       await writeStage(month, 'raw', out);
       return out;
     }
@@ -168,6 +172,7 @@ async function runStage(step, ctx, previous) {
       if (!raw) throw new Error('normalize: no raw records — run --stage fetch first');
       const out = await normalize({ records: raw.records, month, config: ctx.config });
       out.health = raw.health;
+      out.usage = ctx.usage.rows();
       await writeStage(month, 'normalized', out);
       return out;
     }
@@ -180,6 +185,7 @@ async function runStage(step, ctx, previous) {
       out.run_stats = ctx.usage.toJSON({ stage: 'score' });
       // scored.json is committed even on a normal run: a future routine-based
       // generator reads it out of the repo (PLAN.md §7).
+      out.usage = ctx.usage.rows();
       await writeStage(month, 'scored', out);
       return out;
     }
@@ -188,6 +194,7 @@ async function runStage(step, ctx, previous) {
       if (!scored) throw new Error('summarize: nothing scored — run --stage score first');
       const out = await summarize({ items: scored.items, config: ctx.config, usage: ctx.usage });
       out.health = scored.health;
+      out.usage = ctx.usage.rows();
       await writeStage(month, 'summarized', out);
       return out;
     }
@@ -197,6 +204,7 @@ async function runStage(step, ctx, previous) {
       const out = await synthesize({ items: summarized.items, config: ctx.config, month, usage: ctx.usage });
       out.items = summarized.items;
       out.health = summarized.health;
+      out.usage = ctx.usage.rows();
       await writeStage(month, 'synthesized', out);
       return out;
     }

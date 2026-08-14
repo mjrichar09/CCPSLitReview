@@ -39,3 +39,8 @@ next-env.d.ts
 # has to read it from the repo), so it is deliberately NOT ignored here.
 /data/digest/staging/**/raw.json
 /data/digest/staging/**/normalized.json
+# summarized/synthesized hold the generated prose, which is already the month
+# file's content verbatim. Committing them would double the repo's growth every
+# month to store the same text twice.
+/data/digest/staging/**/summarized.json
+/data/digest/staging/**/synthesized.json

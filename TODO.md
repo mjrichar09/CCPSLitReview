@@ -2,17 +2,18 @@
 
 ## Next session plan
 
-**Phase 2 and Phase 4 are done and verified against a live run.** The scoring gate has now executed for real in Actions: 1298 raw → 754 unique → 1039 judgements → 180 kept, in 4m57s for $0.64. See Status_update.md for the per-category table and the verdict spot-check. 87 tests green, lint clean.
+**Phases 1–4 are done and the first month is committed.** `data/digest/2026-08.json` holds 79 papers across 11 categories (112 slots), a Top 5, and an editorial overview, with the ledger seeded at 79 entries. 112 tests, lint clean.
 
-**Phase 3 is next**: summarize, synthesize, and the month writer. The inputs are settled — `staging/<month>/scored.json` is the contract, `max_items` trims 180 keeps down to 111 category slots (128 distinct papers), and `is_recurring` is already defined in `lib/util/ledger.js`.
+The month cost **$2.34** — score $0.65 (Haiku), summarize $0.80 and synthesize $0.89 (Opus), 75 calls, 8m30s end to end. Against the $2.50 estimate that is within 7%, though the split was wrong: summarize and synthesize came in roughly equal rather than summarize dominating.
 
-**Scoring provider is settled: Haiku.** The Groq side-by-side could not be run — the free-tier account caps `gpt-oss-120b` at 8000 TPM and one batch needs 11305. Not a tuning problem; revisiting means upgrading the Groq plan, for a saving of roughly $0.55/month. The `score_model` / `batch_size` inputs remain if that changes.
+**Phase 5 is next**: `/digest` and `/digest/[month]`. No API spend at all — the pages read the committed JSON at build time.
 
-**Caps are settled** — reviewed against the live numbers and kept as they are. Six of eleven categories score over cap (`cmc_reg` 31 vs 10, `industry` 28 vs 10, `upstream_pd` 23 vs 12, `product_quality` 23 vs 12, `modeling_ml` 22 vs 15, `harvest_dsp` 11 vs 10); the write stage trims to the cap by relevance, which is the intended behaviour rather than a problem to fix.
+Two things to look at when reviewing the report:
 
-One one-click item still outstanding:
+1. **One corrupt sentence in `cmc_reg`.** The synthesis reads "…20.3-day average approval ahead of goal date o you gets filed for a soft sensor…". A dash escape ate the surrounding words; whitespace was repairable, the words were not. The cause is fixed for future months (prompts ask for plain ASCII, `tidyStrings` repairs and now warns), but this month's sentence can only be corrected by regenerating that one narrative.
+2. **31 of 112 slots (28%) are flagged `thin_abstract`** — mostly RSS-fed `cmc_reg`/`industry`, where items are headlines rather than abstracts. The model is correctly refusing to invent findings. Decide whether to surface the flag in the UI, drop thin items below a length threshold before summarising, or accept it as the cost of trade-press coverage.
 
-- **Set the repo default branch to `main`** (Settings → General → Default branch). `main` and `claude/plan-review-repo-setup-8ikgmv` now point at the same commit, so this is a no-op switch — but until it is made, the workflow runs and uploads without ever committing a report, by design.
+Output tweaks can be tried against the committed month cheaply: the staging artifacts make `--stage synthesize --fresh` a synthesis-only re-run, no re-fetch and no re-score.
 
 ## Backlog
 

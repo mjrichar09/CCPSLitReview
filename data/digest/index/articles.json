@@ -1,0 +1,667 @@
+{
+  "doi:10.1007/s00449-026-03394-8": {
+    "title": "Limits and benefits of unsupervised transfer learning for Raman spectroscopy-based bioprocess monitoring.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42517906/"
+  },
+  "doi:10.1007/s11095-026-04154-9": {
+    "title": "Raman Spectroscopy for Characterizing Monoclonal Antibody Reduction: A Process Analytical Technology Approach for Antibody-Drug Conjugation Process Development.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42449032/"
+  },
+  "doi:10.1007/s00449-026-03402-x": {
+    "title": "Raman-guided sample subset selection for cost-efficient offline calibration in bioprocesses.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42584694/"
+  },
+  "doi:10.1016/j.biotechadv.2026.108986": {
+    "title": "Advancing process control toward intelligent continuous biopharmaceutical manufacturing: Challenges, strategies, and future directions.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control",
+      "upstream_pd",
+      "intensification",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42472568/"
+  },
+  "doi:10.1007/s00449-026-03369-9": {
+    "title": "Operationalizing digital twins in biomanufacturing through interoperable process analytical technology.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control",
+      "modeling_ml",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42461386/"
+  },
+  "doi:10.1039/d6ay00795c": {
+    "title": "Effect of pH variation on Raman-based quantification of active pharmaceutical ingredients: implications for model accuracy and robustness.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://doi.org/10.1039/d6ay00795c"
+  },
+  "doi:10.1002/btpr.88548": {
+    "title": "Infrared spectroscopy-based chemometric modeling for monitoring mesenchymal stem cell functional decline across donors.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control",
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.1002/btpr.88548"
+  },
+  "doi:10.5731/pdajpst.2026-000011.1": {
+    "title": "From Traditional Statistics to Adaptive Multivariate Models: Exploring the Role of AI in Modern Pharmaceutical Manufacturing.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "pat_control",
+      "cmc_reg"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42538294/"
+  },
+  "doi:10.1002/bit.70335": {
+    "title": "A General Workflow for Tangential Flow Filtration Perfusion Scale-Up.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "harvest_dsp",
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42581564/"
+  },
+  "doi:10.1002/bit.70339": {
+    "title": "Hybrid Dynamic Modelling With Gaussian Process Regression for Intensified Fed-Batch CHO Cell Culture Processes.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "intensification",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42574548/"
+  },
+  "doi:10.1002/btpr.88550": {
+    "title": "Regenerative perfusion bioreactor for biologics production with lower COGs.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42557226/"
+  },
+  "doi:10.1007/s10616-026-01036-1": {
+    "title": "Evaluation of a prototype bioreactor based on slowly rotating drum.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42471956/"
+  },
+  "doi:10.1002/btpr.88536": {
+    "title": "Targeting Warburg effect in Chinese hamster ovary cell culture with pyruvate dehydrogenase kinase inhibitors.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "media_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42420770/"
+  },
+  "title:9422f3cd338b6e70": {
+    "title": "Process Intensification Enables 21 g/L Monoclonal Antibody Production via Intensified Fed-Batch (IFB)",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "intensification",
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-processing/process-intensification-enables-21-g-l-monoclonal-antibody-production-via-intensified-fed-batch-ifb-"
+  },
+  "doi:10.1002/bit.70317": {
+    "title": "High Cell Density Cultivation of HEK293 Cells Using a 2L Membrane-Stirred Bioreactor.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42502896/"
+  },
+  "doi:10.1080/19420862.2026.2706886": {
+    "title": "Optimization strategies for monoclonal antibody production: advances in simulation and artificial intelligence in bioprocessing.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "harvest_dsp",
+      "intensification",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42496057/"
+  },
+  "doi:10.20944/preprints202607.1628.v1": {
+    "title": "Host-Derived BiP Overexpression Prolongs Productive Secretion and Enhances GLP-1–Fc Titer in CHO Cells",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.20944/preprints202607.1628.v1"
+  },
+  "doi:10.1016/j.mec.2026.e00285": {
+    "title": "Experimental and computational analysis of glycan processing at increased monoclonal antibody productivities.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "cell_line_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42571449/"
+  },
+  "doi:10.1016/j.ymben.2026.102501": {
+    "title": "13C metabolic flux analysis and gene expression analysis of perfusion culture reveal metabolic bottlenecks for stable glycosylation profiles of biologics.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "upstream_pd",
+      "media_dev",
+      "intensification",
+      "modeling_ml",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42448261/"
+  },
+  "doi:10.1002/btpr.88544": {
+    "title": "An empirical single-breakthrough curve workflow for rapid early-phase development of continuous capture chromatography for monoclonal antibodies and mAb-derived proteins.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42563142/"
+  },
+  "doi:10.1039/d6nr01765g": {
+    "title": "Tangential flow filtration for isolating exomeres and other nanoscale extracellular particles.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://doi.org/10.1039/d6nr01765g"
+  },
+  "title:5cc214fd93b0d541": {
+    "title": "Trehalose Reduces Host Cell-Derived Impurities During Harvesting Process Using Chromatographic Clarifier Device",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-processing/trehalose-reduces-host-cell-derived-impurities-during-harvesting-process-using-chromatographic-clarifier-device"
+  },
+  "title:68cd36da866e9154": {
+    "title": "Retain in the membrane? WuXi Biologics claims continuous throughput from batch equipment",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-downstream-processing/retain-in-the-membrane-wuxi-biologics-claims-continuous-throughput-from-batch-equipment"
+  },
+  "doi:10.1002/bit.70310": {
+    "title": "Purification of Advanced Therapeutics by Flow-Through Pseudo-Affinity Chromatography: Bi-Specific mABs, Fc Fusion Proteins, and Adeno-Associated Viruses.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42460543/"
+  },
+  "doi:10.3389/fbioe.2026.1886078": {
+    "title": "A quality evaluation strategy for residual host cell proteins based on orthogonal analysis.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42523743/"
+  },
+  "doi:10.20517/evcna.2025.177": {
+    "title": "Molecular profiling and functional analyses of umbilical cord mesenchymal stem cell-derived extracellular vesicles for dry eye diseases.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42459926/"
+  },
+  "title:ead28b7db7495545": {
+    "title": "Register Now: Countercurrent Tangential Flow Filtration: Enabling Simultaneous Concentration and Buffer Exchange for Efficient UF/DF Processing",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://bpi.bioprocessintl.com/countercurrent-tangential-flow-filtration-enabling-simultaneous-concentration-and-buffer-exchange-for-efficient-uf/df-processing"
+  },
+  "doi:10.1007/s00204-026-04502-z": {
+    "title": "Cell line identity rather than medium composition determines transcriptomic profiles of HepaRG and HuH7 cells cultured in chemically defined or serum-based media: comparison with primary human hepatocytes.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "media_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42446672/"
+  },
+  "doi:10.1002/bit.70324": {
+    "title": "Synthetic Alternatives to Fetal Bovine Serum: Platforms, Technologies, and Prospects for Industrial Vaccine Production.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "media_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42535392/"
+  },
+  "doi:10.1016/j.jpba.2026.117662": {
+    "title": "Site-specific N-glycosylation differences between two recombinant human hyaluronan and proteoglycan link protein 1 forms with distinct hyaluronan-proteoglycan linking activity.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "media_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42475804/"
+  },
+  "doi:10.1016/j.ijpharm.2026.127192": {
+    "title": "Lysine as a multifunctional excipient for protein-based biopharmaceutical formulations.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "media_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42462918/"
+  },
+  "doi:10.64898/2026.08.08.743657": {
+    "title": "ContiDesigner: Bioprocess Intensification through System-Level Design of Continuous Fermentation Cascades",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "intensification"
+    ],
+    "url": "https://doi.org/10.64898/2026.08.08.743657"
+  },
+  "doi:10.1002/advs.202523846": {
+    "title": "Sustainable Fabrication of Tailored Bone Substitutes: From High-Throughput Scaffold Manufacturing, Scaled-Up HMSC Expansion to Dynamic Cultivation in a Perfusion Bioreactor.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42490685/"
+  },
+  "title:4fed5bbed8aa2a7f": {
+    "title": "Scalable Bioprocessing Strategies for Intensified Viral Vector Production in HEK293 Cell Culture",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "intensification"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-processing/scalable-bioprocessing-strategies-for-intensified-viral-vector-production-in-hek293-cell-culture"
+  },
+  "doi:10.1002/bit.70313": {
+    "title": "Development and Optimization of a Hollow Fiber-Based Countercurrent Dialysis Process for Continuous Manufacturing of Monoclonal Antibodies.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42460570/"
+  },
+  "doi:10.1002/bit.70328": {
+    "title": "Automated Data-Efficient Symbolic Regression for Interpretable Bioprocess Model Development.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42574547/"
+  },
+  "title:3ef75ffbeae549f1": {
+    "title": "DASyR-LLM: Domain-Aware Symbolic Regression with LLMs for Kinetic Model Discovery",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://arxiv.org/abs/2608.05120v1"
+  },
+  "doi:10.3389/fbioe.2026.1849836": {
+    "title": "Impact of CPPs on primary human NK cell CQAs during cell expansion - an experimental study using design of experiments.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42577276/"
+  },
+  "doi:10.1007/s00449-026-03382-y": {
+    "title": "Overcoming the limits of traditional rate calculations from sparse concentration data: a probabilistic framework for bioprocess modeling.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42440131/"
+  },
+  "doi:10.1002/bit.70302": {
+    "title": "Machine Learning-Based PAT Tool for Real-Time Residual Moisture Monitoring in Lyophilized Biopharmaceuticals Using NIR Spectroscopy.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.1002/bit.70302"
+  },
+  "doi:10.1016/j.ejpb.2026.115177": {
+    "title": "Formulation and stability design spaces for a new yellow fever vaccine.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.1016/j.ejpb.2026.115177"
+  },
+  "title:b5dc409b87dff809": {
+    "title": "Leveraging Biokinetic Knowledge Priors for Data-Scarce Bioprocess Modeling",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://arxiv.org/abs/2607.20539v1"
+  },
+  "doi:10.3390/pharmaceutics18070814": {
+    "title": "Backbone-Minimised Nanoplasmid DNA Systems Enable High-Titre AAV Production in Suspension HEK293 Platforms.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42514892/"
+  },
+  "doi:10.1016/j.chroma.2026.467325": {
+    "title": "A modeling framework for uncertainty quantification in filter-plate-based high-throughput screening of the chromatography partition coefficient.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "modeling_ml",
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42570623/"
+  },
+  "doi:10.64898/2026.08.04.742784": {
+    "title": "Exhaustive Isotope Tracing Reveals the Butterfly Effect of Mammalian Producer Cell Line Selection for Biomanufacturing",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.64898/2026.08.04.742784"
+  },
+  "doi:10.21203/rs.3.rs-10265462/v1": {
+    "title": "Base Editing-Mediated Exon-Specific Knockout 1 of Glutamine Synthetase Generates a High-Productivity CHO Cell Line for Antibody Manufacturing",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.21203/rs.3.rs-10265462/v1"
+  },
+  "doi:10.1002/btpr.88539": {
+    "title": "Screening of bispecific antibodies during single cell cloning of recombinant Chinese hamster ovary cell lines to improve titer and product quality.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cell_line_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42458707/"
+  },
+  "doi:10.1016/j.antiviral.2026.106486": {
+    "title": "Recombinant polyclonal antibody GIGA-2339 potently and pan-genotypically neutralizes hepatitis B virus.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42442613/"
+  },
+  "title:df88672b3aee60d1": {
+    "title": "Fully Automated High Throughput Perfusion Screening to Accelerate J.Media™ Optimization and Clone Selection for Biologics Development",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cell_line_dev",
+      "htpd_automation"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-processing/fully-automated-high-throughput-perfusion-screening-to-accelerate-j-media-optimization-and-clone-selection-for-biologics-development"
+  },
+  "doi:10.1016/j.tibtech.2026.07.004": {
+    "title": "A rapid and high-throughput biotechnology quantifies major glycoforms of human IgG1 mAb drugs.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42509127/"
+  },
+  "doi:10.64898/2026.07.15.738750": {
+    "title": "Validation of a high-throughput fluorescent Capillary Electrophoresis Sodium Dodecyl Sulfate method for monoclonal antibody size heterogeneity assessment",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://doi.org/10.64898/2026.07.15.738750"
+  },
+  "doi:10.1039/d6ay00620e": {
+    "title": "Application of FT-IR spectroscopy as a non-invasive multi-attribute monitoring platform for critical quality attributes in monoclonal antibodies.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42429162/"
+  },
+  "doi:10.64898/2026.08.03.742557": {
+    "title": "Directed Evolution in Codon Space",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://doi.org/10.64898/2026.08.03.742557"
+  },
+  "doi:10.3390/vaccines14070644": {
+    "title": "Site-Specific Glycosylation Profiling of Protein Subunit and Inactivated Virus Vaccines.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42506681/"
+  },
+  "doi:10.1007/s10534-026-00862-2": {
+    "title": "Functional characterization of a novel ZIP8 variant causing impaired manganese homeostasis and congenital disorders of glycosylation.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://doi.org/10.1007/s10534-026-00862-2"
+  },
+  "doi:10.1016/j.chroma.2026.467347": {
+    "title": "High-throughput microscale chromatography for process characterization and control strategy development in biologics manufacturing.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42594632/"
+  },
+  "doi:10.1002/bit.70322": {
+    "title": "Expanding Metabolic Online Monitoring Capabilities in 96-Deepwell Microtiter Plates by Combining Optoelectronic O2 and CO2 Sensors.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42523000/"
+  },
+  "title:fb972ef822596a1b": {
+    "title": "Multi-cycle high-throughput growth media optimization using batch Bayesian optimization",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-processing/multi-cycle-high-throughput-growth-media-optimization-using-batch-bayesian-optimization"
+  },
+  "doi:10.1038/s41598-026-58939-4": {
+    "title": "Automation of 3D liver spheroid generation and acetaminophen dose-response on the MO:BOT enhances assay robustness and precision.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42481604/"
+  },
+  "doi:10.64898/2026.07.08.737360": {
+    "title": "Fabrication and Use of a 32-Well LED-Embedded Microplate for Optogenetic Dynamic Control",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.64898/2026.07.08.737360"
+  },
+  "doi:10.20944/preprints202608.0745.v1": {
+    "title": "A Novel Anti-CXCR5 Monoclonal Antibody (Cx 5 Mab-6) for Versatile Applications",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.20944/preprints202608.0745.v1"
+  },
+  "doi:10.1039/d6an00591h": {
+    "title": "High-throughput microwell array integrated with track-etched membrane for fed-batch cell culture and assay.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42484518/"
+  },
+  "doi:10.1186/s12915-026-02691-8": {
+    "title": "Rhobot-Screen: an integrated robotic platform for functional screening of rhodopsin variants.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42557568/"
+  },
+  "doi:10.1016/j.ijpharm.2026.127249": {
+    "title": "FDA regulatory experience with drug manufacturing process models in approved applications.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.ijpharm.2026.127249"
+  },
+  "doi:10.1007/s43441-026-01023-w": {
+    "title": "Quality by Design to Mitigate Aggregation: Mechanistic Insights and Analytical Strategies for Biopharmaceutical Manufacturing.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1007/s43441-026-01023-w"
+  },
+  "title:e85d8573d9695e52": {
+    "title": "Commissioner's National Priority Voucher (CNPV) Pilot Program",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "http://www.fda.gov/industry/commissioners-national-priority-voucher-cnpv-pilot-program"
+  },
+  "doi:10.1016/j.xphs.2026.104456": {
+    "title": "Implementing scientifically sound practices during drug development: An industry perspective from analytical development.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.xphs.2026.104456"
+  },
+  "doi:10.1007/s40259-026-00800-1": {
+    "title": "Population Pharmacokinetic Comparability of CT-P16 Versus EU-Avastin<sup>®</sup> and US-Avastin<sup>®</sup> in Healthy Subjects and Patients with Non-Squamous Non-Small Cell Lung Cancer.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1007/s40259-026-00800-1"
+  },
+  "doi:10.1007/s00216-026-06689-7": {
+    "title": "The development and use of isotope dilution mass spectrometry methods for the quantification of target proteins in certified reference materials.",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1007/s00216-026-06689-7"
+  },
+  "title:520186a692a2802f": {
+    "title": "Paradigm Shift in Chemistry, Manufacturing, and Controls: The FDA’s Finalized Flexible Framework for Cell and Gene Therapy Approvals",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg",
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/cell-therapies/paradigm-shift-in-chemistry-manufacturing-and-controls-the-fda-s-finalized-flexible-framework-for-cell-and-gene-therapy-approvals"
+  },
+  "title:9f1013c882c78203": {
+    "title": "Audit Trails, System Validation, and Regulatory Warning Trends in the Biotech and Pharmaceutical Industries",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg",
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/information-technology/audit-trails-system-validation-and-regulatory-warning-trends-in-the-biotech-and-pharmaceutical-industries"
+  },
+  "title:d55e066cc2505897": {
+    "title": "Artificial Intelligence in Good Manufacturing Practices: Governing the Emerging Challenge of Algorithmic Control",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://www.bioprocessintl.com/information-technology/artificial-intelligence-in-good-manufacturing-practices-governing-the-emerging-challenge-of-algorithmic-control"
+  },
+  "title:d2a375e0b1cbae0a": {
+    "title": "BMS’s New Facility, Recursion–Genentech Partnership, Long-COVID and Persistent C. auris",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.genengnews.com/topics/infectious-diseases/bmss-new-facility-recursion-genentech-partnership-long-covid-and-persistent-c-auris/"
+  },
+  "title:7341126e9ac9074a": {
+    "title": "Bristol Myers Squibb picks Houston for multi-modality $2.3bn manufacturing campus",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/manufacturing/bristol-myers-squibb-picks-houston-for-multi-modality-2-3bn-manufacturing-campus"
+  },
+  "title:7fa4397c68ccdd58": {
+    "title": "Sterilization as a Design Decision for Chemistry, Manufacturing, and Controls: Why Method Selection Must Be Integrated Early in Drug and Device Development",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/qa-qc/sterilization-as-a-design-decision-for-chemistry-manufacturing-and-controls-why-method-selection-must-be-integrated-early-in-drug-and-device-development"
+  },
+  "title:23a41b0d7a1dc11a": {
+    "title": "Enhancing CHO Cell Culture Productivity and Quality with Gibco™ Efficient-Pro™ Medium and Feeds",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/upstream-processing/enhancing-cho-cell-culture-productivity-and-quality-with-gibco-efficient-pro-medium-and-feeds"
+  },
+  "title:98e54b0b573c4a65": {
+    "title": "Forge Bio partners with Restore Vision to advance AAV therapies for retinal disorders",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/business/forge-bio-partners-with-restore-vision-to-advance-aav-therapies-for-retinal-disorders"
+  },
+  "title:6a82afc56822662e": {
+    "title": "Cellares and Papillon Therapeutics partner to scale orphan drug production",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/emerging-therapeutics-manufacturing/cellares-and-papillon-therapeutics-partner-to-scale-orphan-drug-production"
+  },
+  "title:499c634c96e9aefa": {
+    "title": "Reducing the Guesswork: Increasing Predictability in CHO Cell Line Development",
+    "first_seen_month": "2026-08",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/cell-line-development/reducing-the-guesswork-increasing-predictability-in-cho-cell-line-development"
+  }
+}
