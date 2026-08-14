@@ -2,7 +2,7 @@
 
 A monthly automated research digest for upstream CHO process development and CMC. A scheduled GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eleven bioprocessing topics, filters for relevance, summarises what survives, and commits one JSON report per month. A read-only Next.js viewer renders it.
 
-**Status: fetch, normalize, score and the Actions workflow are built.** Summarisation, the month writer, and the viewer pages are not — see [PLAN.md](PLAN.md) for the phase plan.
+**Status: all five phases are built.** The pipeline runs end to end in Actions, `data/digest/2026-08.json` is the first committed month, and the viewer renders it at `/digest`.
 
 ## Setup
 
@@ -114,6 +114,14 @@ Two behaviours worth knowing:
 - **`score_model` must name a key of `knownModels`.** It overrides the scoring model for one run — the mechanism behind scoring the same month on Haiku and on Groq for comparison — and it carries the provider and the per-token rates with it. A free-text model name is rejected at config validation rather than accepted and cost-accounted at the wrong price. The same thing works locally: `DIGEST_MODEL_SCORE=openai/gpt-oss-120b npm run digest -- --stage score --dry-run`.
 
 `.github/workflows/ci.yml` runs lint, tests and `next build` on every push.
+
+### View it locally
+
+```bash
+npm run dev     # http://localhost:3000 redirects to /digest
+```
+
+`/digest` is the latest committed month; `/digest/YYYY-MM` is a specific one. Both are prerendered at build time from `data/digest/*.json`, and `dynamicParams = false` means a month that was never committed is a build-time 404 rather than a runtime read — Vercel's runtime filesystem is read-only, so a runtime read could not work anyway.
 
 ## Architecture
 

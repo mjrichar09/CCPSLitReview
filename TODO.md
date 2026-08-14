@@ -6,7 +6,7 @@
 
 The month cost **$2.34** — score $0.65 (Haiku), summarize $0.80 and synthesize $0.89 (Opus), 75 calls, 8m30s end to end. Against the $2.50 estimate that is within 7%, though the split was wrong: summarize and synthesize came in roughly equal rather than summarize dominating.
 
-**Phase 5 is next**: `/digest` and `/digest/[month]`. No API spend at all — the pages read the committed JSON at build time.
+**Phase 5 is built**: `/digest` renders the latest month and `/digest/[month]` every archived one, both prerendered from the committed JSON with `dynamicParams = false`. `/` redirects to `/digest`. No API spend. All five phases are now complete.
 
 Two things to look at when reviewing the report:
 
@@ -18,7 +18,6 @@ Output tweaks can be tried against the committed month cheaply: the staging arti
 ## Backlog
 
 - [ ] **Phase 3** — summarize, synthesize, write month JSON + ledger + `run_stats`
-- [ ] **Phase 5** — `/digest` and `/digest/[month]` pages, README how-tos
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
 - [ ] Optional: a `STYLE_GUIDE.md` for the token set in `app/globals.css`, once a real design pass happens
@@ -26,6 +25,7 @@ Output tweaks can be tried against the committed month cheaply: the staging arti
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
 
+- [x] Phase 5: /digest and /digest/[month], Top 5, per-category sections, source-health footer (2026-08-14)
 - [x] Groq side-by-side attempted and closed out — blocked by an 8000 TPM account cap, not by code (2026-08-14)
 - [x] Three defects found via the Groq attempts: batch-size override, HTTP error bodies now logged, reasoning-token budget at the provider (2026-08-14)
 - [x] Phase 4: Actions workflow (schedule + dispatch, default-branch commit guard, failure issue) and CI (2026-08-13)
