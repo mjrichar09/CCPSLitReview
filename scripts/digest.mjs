@@ -37,7 +37,9 @@ Options
   --since YYYY-MM-DD  override the window start
   --category <id>     restrict to one category (repeatable)
   --source <id>       restrict to one source (repeatable)
-  --dry-run           write nothing; print the result to stdout
+  --dry-run           do not publish: no month file, no ledger advance.
+                      Staging artifacts are still written, so a re-run after a
+                      failure costs no re-fetching, re-scoring or re-summarising.
   --fresh             ignore existing staging artifacts and re-run from fetch
   --force             allow overwriting an already-written month
   --log-level <lvl>   debug | info | warn | error   (default: info)
@@ -133,6 +135,15 @@ function deadSources(health) {
     .map(([source]) => source);
 }
 
+/**
+ * Staging artifacts are written on every run, dry ones included.
+ *
+ * `--dry-run` means "do not publish": no month file, no ledger advance. It does
+ * NOT mean "discard the work". A dry run that failed in synthesize used to throw
+ * away a completed scoring and summarising pass — real money, already spent —
+ * because the artifacts behind them were never persisted. Caching them is the
+ * entire point of the staging layer; `--fresh` is how you ask for a rebuild.
+ */
 async function runStage(step, ctx, previous) {
   const { month, dry, fresh } = ctx;
 
@@ -149,7 +160,7 @@ async function runStage(step, ctx, previous) {
     case 'fetch': {
       const { records, health } = await fetchAll({ config: ctx.config, window: ctx.window, categories: ctx.categories });
       const out = { month, window: { from: ctx.window.from, to: ctx.window.to }, records, health };
-      if (!dry) await writeStage(month, 'raw', out);
+      await writeStage(month, 'raw', out);
       return out;
     }
     case 'normalize': {
@@ -157,7 +168,7 @@ async function runStage(step, ctx, previous) {
       if (!raw) throw new Error('normalize: no raw records — run --stage fetch first');
       const out = await normalize({ records: raw.records, month, config: ctx.config });
       out.health = raw.health;
-      if (!dry) await writeStage(month, 'normalized', out);
+      await writeStage(month, 'normalized', out);
       return out;
     }
     case 'score': {
@@ -169,7 +180,7 @@ async function runStage(step, ctx, previous) {
       out.run_stats = ctx.usage.toJSON({ stage: 'score' });
       // scored.json is committed even on a normal run: a future routine-based
       // generator reads it out of the repo (PLAN.md §7).
-      if (!dry) await writeStage(month, 'scored', out);
+      await writeStage(month, 'scored', out);
       return out;
     }
     case 'summarize': {
@@ -177,7 +188,7 @@ async function runStage(step, ctx, previous) {
       if (!scored) throw new Error('summarize: nothing scored — run --stage score first');
       const out = await summarize({ items: scored.items, config: ctx.config, usage: ctx.usage });
       out.health = scored.health;
-      if (!dry) await writeStage(month, 'summarized', out);
+      await writeStage(month, 'summarized', out);
       return out;
     }
     case 'synthesize': {
@@ -186,7 +197,7 @@ async function runStage(step, ctx, previous) {
       const out = await synthesize({ items: summarized.items, config: ctx.config, month, usage: ctx.usage });
       out.items = summarized.items;
       out.health = summarized.health;
-      if (!dry) await writeStage(month, 'synthesized', out);
+      await writeStage(month, 'synthesized', out);
       return out;
     }
     case 'write': {
