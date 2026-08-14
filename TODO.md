@@ -6,12 +6,9 @@
 
 **Phase 3 is next**: summarize, synthesize, and the month writer. The inputs are settled — `staging/<month>/scored.json` is the contract, `max_items` trims 180 keeps down to 111 category slots (128 distinct papers), and `is_recurring` is already defined in `lib/util/ledger.js`.
 
-Two things need a decision from you, neither blocking:
+**Caps are settled** — reviewed against the live numbers and kept as they are. Six of eleven categories score over cap (`cmc_reg` 31 vs 10, `industry` 28 vs 10, `upstream_pd` 23 vs 12, `product_quality` 23 vs 12, `modeling_ml` 22 vs 15, `harvest_dsp` 11 vs 10); the write stage trims to the cap by relevance, which is the intended behaviour rather than a problem to fix.
 
-1. **Six categories score over their cap** — `cmc_reg` 31 vs 10, `industry` 28 vs 10, `upstream_pd` 23 vs 12, `product_quality` 23 vs 12, `modeling_ml` 22 vs 15, `harvest_dsp` 11 vs 10. The write stage will trim to the cap by relevance, so nothing breaks; the question is whether those caps are the right size for what you actually want to read each month.
-2. **The Groq side-by-side has not been run.** It is one dispatch — `score_model: openai/gpt-oss-120b` — and would cost about $0.09 against Haiku's $0.64. Worth doing before Phase 3 fixes the shape of scored.json, or not at all if $0.64/month is simply fine.
-
-And one one-click item still outstanding:
+One one-click item still outstanding:
 
 - **Set the repo default branch to `main`** (Settings → General → Default branch). `main` and `claude/plan-review-repo-setup-8ikgmv` now point at the same commit, so this is a no-op switch — but until it is made, the workflow runs and uploads without ever committing a report, by design.
 
@@ -19,7 +16,6 @@ And one one-click item still outstanding:
 
 - [ ] **Phase 3** — summarize, synthesize, write month JSON + ledger + `run_stats`
 - [ ] Run the Haiku-vs-Groq side-by-side (`score_model: openai/gpt-oss-120b`) and decide the scoring provider on quality, not cost
-- [ ] Revisit `max_items` — six of eleven categories score over cap
 - [ ] **Phase 5** — `/digest` and `/digest/[month]` pages, README how-tos
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)

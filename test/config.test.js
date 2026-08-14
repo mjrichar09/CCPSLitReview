@@ -167,3 +167,17 @@ test('no override leaves the configured models untouched', () => {
   const config = loadConfig(realConfig, { env: {} });
   assert.equal(config.models.score.model, 'claude-haiku-4-5');
 });
+
+test('DIGEST_BATCH_SIZE overrides the scoring batch size', () => {
+  // Batch size is a provider constraint, not a preference: Groq answers a
+  // 25-item batch with 413.
+  const config = loadConfig(realConfig, { env: { DIGEST_BATCH_SIZE: '8' } });
+  assert.equal(config.relevance.batchSize, 8);
+});
+
+test('a non-integer batch size is rejected rather than coerced', () => {
+  assert.throws(
+    () => loadConfig(realConfig, { env: { DIGEST_BATCH_SIZE: '0' } }),
+    /DIGEST_BATCH_SIZE.*positive integer/s,
+  );
+});
