@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllMonths, getReport } from '../../../../lib/digest.js';
-import { itemSlug, monthLabel } from '../../shared.js';
+import { itemSlug, otherAppearances, monthLabel } from '../../shared.js';
 import ItemRow from '../../ItemRow.jsx';
 
 /** Every category of every committed month, and only those. */
@@ -35,10 +35,9 @@ export async function generateMetadata({ params }) {
 }
 
 /**
- * A section page: the category's synthesis paragraph, then an index of its
- * items. Each item links to its own article overview — the full summary and
- * why-it-matters live there, not here, so this page reads as a table of
- * contents rather than a rerun of the article page.
+ * A section page: the category's synthesis paragraph, then every item as a
+ * collapsible `<details>` — the full summary and why-it-matters expand in
+ * place. There is no separate article page; this IS the overview.
  */
 export default async function CategoryPage({ params }) {
   const { month, category } = await params;
@@ -63,7 +62,8 @@ export default async function CategoryPage({ params }) {
           <ItemRow
             key={item.id}
             item={item}
-            overviewHref={`/digest/${month}/${category}/${itemSlug(item.id)}`}
+            id={itemSlug(item.id)}
+            also={otherAppearances(month, report, item.id, category)}
           />
         ))}
       </ul>

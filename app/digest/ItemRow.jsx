@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { formatAuthors } from './shared.js';
 
-export function Meta({ item }) {
+function Meta({ item }) {
   const authors = formatAuthors(item.authors);
   return (
     <>
@@ -12,7 +12,7 @@ export function Meta({ item }) {
   );
 }
 
-export function Badges({ item }) {
+function Badges({ item }) {
   return (
     <>
       {item.is_recurring ? (
@@ -31,36 +31,53 @@ export function Badges({ item }) {
   );
 }
 
-function TitleLink({ item }) {
-  if (!item.url) return item.title;
-  return (
-    <a href={item.url} target="_blank" rel="noopener noreferrer">
-      {item.title}
-    </a>
-  );
-}
-
 /**
- * One paper as it appears on a section (category) page: title (links straight
- * to the source), meta, badges, and a link through to the full overview page.
- * Summary and why-it-matters live on the overview, not here — a section page
- * is an index, not a rerun of the article page.
+ * One paper on a section page: a native `<details>` disclosure. Collapsed, it
+ * shows title/meta/badges; expanded, the full summary and why-it-matters.
+ * There is no separate article page for these to link to, so the source link
+ * lives inside the expanded body rather than on the title — an `<a>` nested
+ * inside `<summary>` fights the browser's own click-to-toggle handling (both
+ * can fire), so the title stays plain text and "View source" is its own link.
  */
-export default function ItemRow({ item, overviewHref }) {
+export default function ItemRow({ item, id, also = [] }) {
   return (
-    <li className="item">
-      <h3 className="item-title">
-        <TitleLink item={item} />
-      </h3>
-      <div className="item-meta">
-        <Meta item={item} />
-      </div>
-      <div className="item-tags">
-        <Badges item={item} />
-      </div>
-      <Link href={overviewHref} className="item-overview-link">
-        Full overview &rarr;
-      </Link>
+    <li>
+      <details className="item" id={id}>
+        <summary>
+          <h3 className="item-title">{item.title}</h3>
+          <div className="item-meta">
+            <Meta item={item} />
+          </div>
+          <div className="item-tags">
+            <Badges item={item} />
+          </div>
+        </summary>
+        <div className="item-body">
+          <p className="item-summary">{item.summary}</p>
+          <p className="item-why">
+            <span className="item-why-label">Why it matters: </span>
+            {item.why_it_matters}
+          </p>
+          {item.url && (
+            <p className="item-source">
+              <a href={item.url} target="_blank" rel="noopener noreferrer">
+                View source &#8599;
+              </a>
+            </p>
+          )}
+          {also.length > 0 && (
+            <p className="also-in">
+              Also appears in:{' '}
+              {also.map((a, i) => (
+                <span key={a.category.id}>
+                  {i > 0 && ', '}
+                  <Link href={a.href}>{a.category.name}</Link>
+                </span>
+              ))}
+            </p>
+          )}
+        </div>
+      </details>
     </li>
   );
 }

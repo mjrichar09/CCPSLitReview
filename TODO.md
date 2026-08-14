@@ -6,16 +6,15 @@
 
 The month cost **$2.34** — score $0.65 (Haiku), summarize $0.80 and synthesize $0.89 (Opus), 75 calls, 8m30s end to end. Against the $2.50 estimate that is within 7%, though the split was wrong: summarize and synthesize came in roughly equal rather than summarize dominating.
 
-**Phase 5 is built, and restructured into four route levels per your request:**
+**Phase 5 is built, in two route levels — collapsed from an earlier three-level design per your request that full overviews not be separate pages:**
 
-- `/digest/[month]` — front page: editorial overview + Top 5, each linking to its article
-- `/digest/[month]/[category]` — a section: synthesis paragraph + a compact item index, each linking to its article overview
-- `/digest/[month]/[category]/[article]` — one paper in full: summary, why-it-matters, badges; titles link out to the source
+- `/digest/[month]` — front page: editorial overview + Top 5, each linking to `[category]#item-id`
+- `/digest/[month]/[category]` — a section: synthesis paragraph + every item as a collapsible `<details>` — title/meta/badges collapsed, full summary + why-it-matters + source link + cross-category "Also appears in" expanded in place
 - `/digest` and `/` both redirect to the latest month
 
-A paper scored into more than one category gets one URL per category (write.js already duplicates the full item per category); its article page says "Also appears in: <other category>" and links across.
+A paper scored into more than one category still gets one anchor per category (write.js duplicates the full item per category); each copy's expanded body says "Also appears in: <other category>" and links to that category page's anchor for the same item. Deep links to `#item-id` force the `<details>` open via a `:target` CSS override, since the native `open` attribute doesn't respond to `:target` on its own.
 
-One real bug found building this: nested `generateStaticParams` did not receive the parent `month` param from Next's parent-to-child composition on this Next.js/Turbopack build — `params.month` arrived `undefined` in the `[category]` and `[article]` segments despite `[month]/page.js` defining `generateStaticParams` for it. Worked around by making each nested `generateStaticParams` self-contained (enumerate months directly via `getAllMonths()` rather than trusting the parent-supplied param). Verified against the built output: all 11 categories and all 112 articles are prerendered HTML, `next start` smoke-tested for 200s on real routes and 404s on invalid ones, and the multi-category cross-link was checked end to end.
+One real bug found building the (now-removed) three-level version: nested `generateStaticParams` did not receive the parent `month` param from Next's parent-to-child composition on this Next.js/Turbopack build — confirmed by direct instrumentation. Worked around by making `[category]/page.js`'s `generateStaticParams` self-contained (enumerate months directly via `getAllMonths()`); that fix stayed relevant after the article level was removed and is still what makes the section pages build correctly. Verified against the built output at each step: 11 categories prerendered, `next start` smoke-tested for 200s/404s, and the multi-category cross-link checked end to end both before and after the collapse.
 
 No API spend for any of this.
 
@@ -28,7 +27,7 @@ Output tweaks can be tried against the committed month cheaply: the staging arti
 
 ## Backlog
 
-- [ ] **Inline reference links in prose.** The overview and section synthesis paragraphs mention specific papers by finding but don't link to them — deliberately skipped rather than done with fragile text-matching (see Status_update.md, "restructured into front / section / article pages"). The real fix is upstream: have `synthesize.js` ask the model to tag each reference with the item's id/index as it writes (e.g. inline `[[doi:...]]` markers, or a structured `references: [{ span, id }]` array alongside the prose), then render those as links client-side. Needs a prompt/schema change and a render-time parser; worth a dedicated pass rather than bolting on.
+- [ ] **Inline reference links in prose.** The overview and section synthesis paragraphs mention specific papers by finding but don't link to them — deliberately skipped rather than done with fragile text-matching (see Status_update.md, "restructured into front / section / article pages"). The real fix is upstream: have `synthesize.js` ask the model to tag each reference with the item's id/index as it writes (e.g. inline `[[doi:...]]` markers, or a structured `references: [{ span, id }]` array alongside the prose), then render those as links to the item's `#item-id` anchor on its section page (see the collapsible-item design above — there's no separate article page to link to anymore, just the anchor). Needs a prompt/schema change and a render-time parser; worth a dedicated pass rather than bolting on.
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
 - [ ] Optional: a `STYLE_GUIDE.md` for the token set in `app/globals.css`, once a real design pass happens
