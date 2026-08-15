@@ -85,6 +85,25 @@ a:hover { text-decoration: underline; }
 .report-title { font-size: 2rem; line-height: 1.15; margin-bottom: 0.35rem; letter-spacing: -0.02em; }
 .report-summary { color: var(--muted); font-size: 1.05rem; margin-bottom: 1.75rem; }
 
+/* ---- section banner: shown on the front page and every section page ---- */
+.section-nav {
+  display: flex; flex-wrap: wrap; gap: 0.5rem;
+  padding: 0.85rem; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  margin: 1rem 0 1.75rem;
+}
+.section-nav-link {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.35rem 0.8rem; border-radius: 999px;
+  font-size: 0.85rem; font-weight: 600; text-decoration: none;
+  color: var(--foreground); background: var(--background); border: 1px solid var(--border-strong);
+}
+.section-nav-link:hover { border-color: var(--accent); color: var(--accent); }
+.section-nav-link.active {
+  background: var(--accent); border-color: var(--accent); color: var(--surface);
+}
+.section-nav-count { font-size: 0.72rem; font-variant-numeric: tabular-nums; opacity: 0.7; }
+
 .side-head { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-bottom: 0.75rem; }
 .side-list { list-style: none; padding: 0; display: grid; gap: 0.85rem; }
 .side-summary { font-size: 0.85rem; color: var(--muted); margin-top: 0.15rem; }

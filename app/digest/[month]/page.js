@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllMonths, getReport } from '../../../lib/digest.js';
 import { resolveItem, monthLabel } from '../shared.js';
+import CategoryNav from '../CategoryNav.jsx';
 import Health from '../Health.jsx';
 
 /**
@@ -25,9 +26,10 @@ export async function generateMetadata({ params }) {
 
 /**
  * The front page: the editorial overview and the Top 5, nothing else. Each
- * category's synthesis and item list moved to its own page under
- * `[category]/`, so this is an index — every Top-5 entry links straight to its
- * full article overview, and the section list below it links to the rest.
+ * category's synthesis and item list lives on its own page under
+ * `[category]/`, reached via the section banner right below the title — the
+ * same banner appears on every section page too, so lateral navigation never
+ * requires a trip back through the month page.
  */
 export default async function MonthPage({ params }) {
   const { month } = await params;
@@ -37,6 +39,7 @@ export default async function MonthPage({ params }) {
   return (
     <>
       <h1 className="report-title">{monthLabel(report.month_of)}</h1>
+      <CategoryNav month={month} categories={report.categories} />
       <p className="report-summary">{report.summary}</p>
 
       {report.top_items?.length > 0 && (
@@ -67,18 +70,6 @@ export default async function MonthPage({ params }) {
           </ol>
         </section>
       )}
-
-      <section>
-        <h2 className="side-head">Sections</h2>
-        <ul className="side-list">
-          {report.categories.map((c) => (
-            <li key={c.id}>
-              <Link href={`/digest/${month}/${c.id}`}>{c.name}</Link>
-              <span className="cat-count"> · {c.items.length} {c.items.length === 1 ? 'item' : 'items'}</span>
-            </li>
-          ))}
-        </ul>
-      </section>
 
       <Health report={report} />
     </>

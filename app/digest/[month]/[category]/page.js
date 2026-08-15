@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllMonths, getReport } from '../../../../lib/digest.js';
 import { itemSlug, otherAppearances, monthLabel } from '../../shared.js';
+import CategoryNav from '../../CategoryNav.jsx';
 import ItemRow from '../../ItemRow.jsx';
 
 /** Every category of every committed month, and only those. */
@@ -37,7 +38,9 @@ export async function generateMetadata({ params }) {
 /**
  * A section page: the category's synthesis paragraph, then every item as a
  * collapsible `<details>` — the full summary and why-it-matters expand in
- * place. There is no separate article page; this IS the overview.
+ * place. There is no separate article page; this IS the overview. The same
+ * section banner as the front page sits right below the title, with this
+ * section highlighted, so jumping to another one is one click.
  */
 export default async function CategoryPage({ params }) {
   const { month, category } = await params;
@@ -56,6 +59,7 @@ export default async function CategoryPage({ params }) {
           {cat.items.length} {cat.items.length === 1 ? 'item' : 'items'}
         </span>
       </div>
+      <CategoryNav month={month} categories={report.categories} current={category} />
       <p className="cat-synthesis">{cat.synthesis}</p>
       <ul className="item-list">
         {cat.items.map((item) => (

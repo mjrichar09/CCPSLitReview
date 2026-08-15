@@ -23,6 +23,8 @@ Two things to look at when reviewing the report:
 1. **One corrupt sentence in `cmc_reg`.** The synthesis reads "…20.3-day average approval ahead of goal date o you gets filed for a soft sensor…". A dash escape ate the surrounding words; whitespace was repairable, the words were not. The cause is fixed for future months (prompts ask for plain ASCII, `tidyStrings` repairs and now warns), but this month's sentence can only be corrected by regenerating that one narrative.
 2. **31 of 112 slots (28%) are flagged `thin_abstract`** — mostly RSS-fed `cmc_reg`/`industry`, where items are headlines rather than abstracts. The model is correctly refusing to invent findings. Decide whether to surface the flag in the UI, drop thin items below a length threshold before summarising, or accept it as the cost of trade-press coverage.
 
+A section-banner nav (all 11 categories as pills, active one highlighted) now sits below the title on both the front page and every section page — `app/digest/CategoryNav.jsx`, shared by both. Front page dropped its old plain vertical "Sections" list in favour of it.
+
 Output tweaks can be tried against the committed month cheaply: the staging artifacts make `--stage synthesize --fresh` a synthesis-only re-run, no re-fetch and no re-score.
 
 ## Backlog
