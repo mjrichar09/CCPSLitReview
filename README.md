@@ -138,3 +138,9 @@ Such a generator would need credentials for whatever surface it runs on in place
 ## Conventions
 
 See [CLAUDE.md](CLAUDE.md) for the full set. The load-bearing ones: months are append-only; adapters fail soft and everything else halts; pages are static and never read the filesystem at runtime; and only title, abstract, metadata, and links are stored — no article bodies, no paywall circumvention.
+
+## License
+
+Proprietary — see [LICENSE](LICENSE). The source is public for reading and
+evaluation; commercial use, modification, distribution and sublicensing all
+require written permission.
