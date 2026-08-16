@@ -491,6 +491,14 @@ const config = {
     shardAfter: 5000,
   },
 
+  history: {
+    // How many previous months of narratives the synthesize stage may see, so a
+    // category can say "this reverses July" rather than starting cold each month.
+    // A quarter is enough for a trend and short enough to stay cheap; 0 disables
+    // cross-month context entirely and restores the memoryless behaviour.
+    back: 3,
+  },
+
   sources,
   categories,
 };

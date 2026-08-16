@@ -11,6 +11,7 @@ function baseConfig() {
     relevance: { threshold: 3, batchSize: 25 },
     window: { defaultDays: 35 },
     ledger: { shardAfter: 5000 },
+    history: { back: 3 },
     models: {
       score: { provider: 'anthropic', model: 'm', rates: { input: 1, output: 5 } },
       summarize: { provider: 'anthropic', model: 'm', rates: { input: 5, output: 25 } },
@@ -70,6 +71,16 @@ test('rejects a threshold outside 0-5', () => {
   const c = baseConfig();
   c.relevance.threshold = 9;
   assert.throws(() => loadConfig(c), /relevance\.threshold/);
+});
+
+test('rejects a negative history lookback but allows 0', () => {
+  const c = baseConfig();
+  c.history.back = -1;
+  assert.throws(() => loadConfig(c), /history\.back/);
+
+  const off = baseConfig();
+  off.history.back = 0; // 0 is the documented "no cross-month context" setting
+  assert.doesNotThrow(() => loadConfig(off));
 });
 
 test('rejects a missing model rate', () => {
