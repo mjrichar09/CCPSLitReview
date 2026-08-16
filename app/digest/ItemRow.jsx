@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { formatAuthors } from './shared.js';
+import VoteButtons from './VoteButtons.jsx';
+import Comments from './Comments.jsx';
 
 function Meta({ item }) {
   const authors = formatAuthors(item.authors);
@@ -31,6 +33,7 @@ function Badges({ item }) {
   );
 }
 
+
 /**
  * One paper on a section page: a native `<details>` disclosure. Collapsed, it
  * shows title/meta/badges; expanded, the full summary and why-it-matters.
@@ -50,6 +53,13 @@ export default function ItemRow({ item, id, also = [] }) {
           </div>
           <div className="item-tags">
             <Badges item={item} />
+            {/* Inside `<summary>` on purpose, so the reader's rating sits beside
+                the model's score on the collapsed row: `relevance 4/5` is what
+                the model thought, the thumbs are what the readers thought, and
+                the gap between them is what the scoring feedback loop closes.
+                VoteButtons suppresses the click so voting does not also toggle
+                the disclosure. */}
+            <VoteButtons itemId={item.id} />
           </div>
         </summary>
         <div className="item-body">
@@ -76,6 +86,7 @@ export default function ItemRow({ item, id, also = [] }) {
               ))}
             </p>
           )}
+          <Comments itemId={item.id} />
         </div>
       </details>
     </li>

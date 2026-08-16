@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Bioprocess Digest",
+  title: "Cell Culture Literature Review",
   description:
     "Monthly digest of bioprocessing literature, preprints, regulatory sources, and trade press.",
 };

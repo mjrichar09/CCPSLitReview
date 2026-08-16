@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllMonths, getReport } from '../../../lib/digest.js';
 import { resolveItem, monthLabel } from '../shared.js';
-import CategoryNav from '../CategoryNav.jsx';
 import Health from '../Health.jsx';
 
 /**
@@ -21,15 +20,14 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }) {
   const { month } = await params;
-  return { title: `Bioprocess Digest — ${month}` };
+  return { title: `Cell Culture Literature Review — ${month}` };
 }
 
 /**
  * The front page: the editorial overview and the Top 5, nothing else. Each
  * category's synthesis and item list lives on its own page under
- * `[category]/`, reached via the section banner right below the title — the
- * same banner appears on every section page too, so lateral navigation never
- * requires a trip back through the month page.
+ * `[category]/`, reached via the section banner in the sticky site header —
+ * which is why this page no longer renders one of its own.
  */
 export default async function MonthPage({ params }) {
   const { month } = await params;
@@ -39,7 +37,6 @@ export default async function MonthPage({ params }) {
   return (
     <>
       <h1 className="report-title">{monthLabel(report.month_of)}</h1>
-      <CategoryNav month={month} categories={report.categories} />
       <p className="report-summary">{report.summary}</p>
 
       {report.top_items?.length > 0 && (

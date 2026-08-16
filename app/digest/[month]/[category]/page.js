@@ -2,8 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getAllMonths, getReport } from '../../../../lib/digest.js';
 import { itemSlug, otherAppearances, monthLabel } from '../../shared.js';
-import CategoryNav from '../../CategoryNav.jsx';
 import ItemRow from '../../ItemRow.jsx';
+import Engagement from '../../Engagement.jsx';
 
 /** Every category of every committed month, and only those. */
 export const dynamicParams = false;
@@ -32,7 +32,7 @@ export async function generateMetadata({ params }) {
   const { month, category } = await params;
   const report = await getReport(month);
   const cat = report?.categories.find((c) => c.id === category);
-  return { title: cat ? `${cat.name} — Bioprocess Digest` : 'Bioprocess Digest' };
+  return { title: cat ? `${cat.name} — Cell Culture Literature Review` : 'Cell Culture Literature Review' };
 }
 
 /**
@@ -59,18 +59,22 @@ export default async function CategoryPage({ params }) {
           {cat.items.length} {cat.items.length === 1 ? 'item' : 'items'}
         </span>
       </div>
-      <CategoryNav month={month} categories={report.categories} current={category} />
       <p className="cat-synthesis">{cat.synthesis}</p>
-      <ul className="item-list">
-        {cat.items.map((item) => (
-          <ItemRow
-            key={item.id}
-            item={item}
-            id={itemSlug(item.id)}
-            also={otherAppearances(month, report, item.id, category)}
-          />
-        ))}
-      </ul>
+      {/* One provider for the whole section: tallies and comment counts for
+          every paper here arrive in two queries, not two per paper. The list
+          below stays server-rendered inside it. */}
+      <Engagement month={month} itemIds={cat.items.map((i) => i.id)}>
+        <ul className="item-list">
+          {cat.items.map((item) => (
+            <ItemRow
+              key={item.id}
+              item={item}
+              id={itemSlug(item.id)}
+              also={otherAppearances(month, report, item.id, category)}
+            />
+          ))}
+        </ul>
+      </Engagement>
     </>
   );
 }

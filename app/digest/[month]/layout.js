@@ -1,21 +1,47 @@
-import { getAllMonths } from '../../../lib/digest.js';
-import Sidebar from '../Sidebar.jsx';
+import Link from 'next/link';
+import { getAllMonths, getReport } from '../../../lib/digest.js';
+import ArchiveNav from '../ArchiveNav.jsx';
+import CategoryNav from '../CategoryNav.jsx';
+import SessionProvider from '../SessionProvider.jsx';
+import SignIn from '../SignIn.jsx';
 
 /**
- * Shared chrome for one month: the two-column layout and the archive sidebar,
- * wrapping the front page and every section/article page nested under it.
- * `getAllMonths()` is fetched once per request here rather than duplicated in
- * every leaf page.
+ * Shared chrome for one month.
+ *
+ * The header is sticky and full-bleed, and carries everything a reader needs to
+ * orient themselves: the site title, which month they are in, every section,
+ * and their account. All of it was previously scattered — the section banner
+ * was re-rendered by each page and the archive sat in a sidebar column that
+ * scrolled away — which meant that partway down a long section page there was
+ * no way to change section or check the month without scrolling back up.
+ *
+ * `SessionProvider` wraps the whole month so a sign-in survives navigation
+ * between sections. It is a client component with server-rendered children,
+ * which keeps every page below it static.
  */
 export default async function MonthLayout({ children, params }) {
   const { month } = await params;
-  const months = await getAllMonths();
+  const [months, report] = await Promise.all([getAllMonths(), getReport(month)]);
+  // An unknown month still renders this layout around not-found.jsx.
+  const categories = report?.categories ?? [];
+
   return (
-    <div className="page-wide">
+    <SessionProvider>
+      <header className="site-header">
+        <div className="site-header-top">
+          <Link href="/digest" className="site-title">
+            Cell Culture Literature Review
+          </Link>
+          <ArchiveNav months={months} current={month} />
+          <div className="site-header-account">
+            <SignIn />
+          </div>
+        </div>
+        <CategoryNav month={month} categories={categories} />
+      </header>
       <div className="layout">
         <main className="col-main">{children}</main>
-        <Sidebar months={months} current={month} />
       </div>
-    </div>
+    </SessionProvider>
   );
 }

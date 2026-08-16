@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation';
 import { getAllMonths } from '../../lib/digest.js';
 
 export const metadata = {
-  title: 'Bioprocess Digest',
+  title: 'Cell Culture Literature Review',
 };
 
 /**
@@ -16,7 +16,7 @@ export default async function DigestIndex() {
   if (months.length === 0) {
     return (
       <div className="page-wide">
-        <h1 className="report-title">Bioprocess Digest</h1>
+        <h1 className="report-title">Cell Culture Literature Review</h1>
         <p className="report-summary">
           No months have been published yet. The digest is generated on the 2nd of each month by the
           GitHub Actions job, which commits the report and triggers a rebuild.
