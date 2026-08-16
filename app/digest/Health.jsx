@@ -32,10 +32,13 @@ export default function Health({ report }) {
           </span>
         ))}
       </div>
+      {/* Generation date and call count stay — they say how fresh the month is
+          and how much work produced it. The dollar figure is removed: it is an
+          operating cost of running the digest, not something a reader of it
+          needs. It remains in the committed report's `run_stats` either way. */}
       {stats && (
         <p className="run-stats">
-          Generated {report.generated_at?.slice(0, 10)} · {stats.calls} model calls · $
-          {Number(stats.total_cost_usd).toFixed(2)}
+          Generated {report.generated_at?.slice(0, 10)} · {stats.calls} model calls
         </p>
       )}
     </footer>

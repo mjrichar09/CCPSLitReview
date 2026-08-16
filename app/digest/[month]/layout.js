@@ -45,6 +45,9 @@ export default async function MonthLayout({ children, params }) {
       </header>
       <div className="layout">
         <main className="col-main">{children}</main>
+        {/* In the layout rather than the front page's Health footer, so the
+            credit appears on section pages too. */}
+        <footer className="site-credit">Created by Mark Richards. All Rights Reserved.</footer>
       </div>
     </SessionProvider>
   );
