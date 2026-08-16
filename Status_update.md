@@ -26,6 +26,12 @@ Three lint errors from React's `set-state-in-effect` rule were real. Both the pr
 
 **Repo is public** under a proprietary LICENSE (all rights reserved; source visible for evaluation only). Pre-flight was clean: `.env*` gitignored with only the valueless example tracked, and no key-shaped strings anywhere in the 26-commit history.
 
+**Logo and favicon.** The supplied art needed three changes rather than a copy: it was JPEG (`.jfif`, 358-414 KB), which browsers do not want as a favicon; it carried a white background that would have shown as a white plate around the mark under the dark theme, since JPEG cannot be transparent; and the mark sat in a wide dead margin that would have shrunk it to nothing at header size. So it is trimmed to its bounding box, keyed to alpha with a soft band so the anti-aliased edges do not fringe, and emitted as `app/icon.png` (256), `app/apple-icon.png` (180) and `public/logo.png` (96, served at 3x its 32px rendered size). Checked composited over the dark background, not just on white. Originals are committed under `assets/`.
+
+**The sticky header was never sticky, and the cause was not in the header.** `overflow-x: hidden` on html/body makes them a scroll container, and a sticky element positions against its nearest *scrolling* ancestor rather than the viewport - so `position: sticky` was set correctly and silently inert. `overflow-x: clip` contains overflow the same way without establishing that container. Confirmed in the browser rather than by reading CSS: scrolled 615px, header top stays 0. Two lessons worth keeping: a sticky failure is usually an ancestor's overflow, and this class of bug cannot be verified from markup - it needs a real scroll.
+
+**Footer.** The dollar figure is gone from the page (it is an operating cost of producing the digest, not a reader's concern; still in each report's `run_stats`), the generation date and call count stay, and "Created by Mark Richards. All Rights Reserved." sits in the month layout rather than the front page's Health footer - Health returns null when a month has no source data, which would have taken the credit with it. `.item` scroll-margin-top now clears the 120px header with a gap; flush against the bar read as clipped.
+
 ## 2026-08-14 (Phase 3 + first committed month) — summarize, synthesize, write
 
 Built the last three pipeline stages and committed the first real month, `data/digest/2026-08.json`: 79 papers, 11 categories, 112 slots, Top 5, editorial overview, ledger seeded at 79.

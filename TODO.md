@@ -6,7 +6,7 @@
 
 - `lib/util/history.js` feeds the last `config.history.back` (default 3) months of narratives into all three synthesize prompts, fenced by `CONTINUITY_GUARD`. Untested against real history - no second month exists yet.
 - Votes and comments are live on Supabase project `cxghyhwovgbqaljmpahz` (CCPSLitReview). Sign-in is Google + GitHub; `profiles.approved` gates all writing and is flipped by hand in the Supabase table editor.
-- Site title, sticky full-width header (title / archive / account / section banner), single-column layout.
+- Site title, logo and favicon, sticky full-width header (title / archive / account / section banner), single-column layout. Footer carries the credit line; the cost figure is no longer shown.
 - Repo public, proprietary LICENSE.
 
 **Open items before this is finished:**
