@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { getAllMonths, getReport } from '../../../lib/digest.js';
 import ArchiveNav from '../ArchiveNav.jsx';
@@ -30,6 +31,9 @@ export default async function MonthLayout({ children, params }) {
       <header className="site-header">
         <div className="site-header-top">
           <Link href="/digest" className="site-title">
+            {/* Served at 3x its rendered size, and keyed to transparency so it
+                sits on either theme without a white plate behind it. */}
+            <Image src="/logo.png" alt="" width={32} height={32} className="site-logo" priority />
             Cell Culture Literature Review
           </Link>
           <ArchiveNav months={months} current={month} />
