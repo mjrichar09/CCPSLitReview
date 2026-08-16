@@ -1,10 +1,10 @@
 # CCPSLitReview — Monthly Biopharma Literature & News Digest
 
-A monthly research digest for one expert reader (upstream CHO process development / CMC). A GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eight bioprocessing topics, filters for relevance with an LLM, summarises what survives, and commits one JSON report per month. A read-only Next.js viewer renders the latest month and an archive of past ones.
+A monthly research digest for one expert reader (upstream CHO process development / CMC). A GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eight bioprocessing topics, filters for relevance with an LLM, summarises what survives, and commits one JSON report per month. A Next.js viewer renders the latest month and an archive of past ones; it is read-only for content, and approved readers can rate and comment on papers.
 
-- Repo: https://github.com/mjrichar09/CCPSLitReview (private)
+- Repo: https://github.com/mjrichar09/CCPSLitReview (public, proprietary LICENSE)
 - Reference implementation this repo's patterns came from: [TrendTracker](https://github.com/mjrichar09/TrendTracker) — its read/write layer, page structure, and scaffolding were ported; its finance domain code was not.
-- **Status: Phases 1, 2 and 4 complete.** Fetch, normalize/dedupe and the scoring gate run end to end in the Actions workflow, verified on a live month. Summarisation, the month writer, and the viewer pages are not built yet. See PLAN.md for the phase plan and TODO.md for what's next.
+- **Status: Phases 1-6 complete.** The full pipeline runs in Actions and one month is committed; the viewer renders it; synthesize carries cross-month memory; readers with an approved account can rate and comment. The repo is public under a proprietary LICENSE. Feeding votes back into scoring is designed but not built. See PLAN.md for the phase plan and TODO.md for what's next.
 
 ## Document map — what to read when, what to update when
 
@@ -49,11 +49,16 @@ scripts/
   digest.mjs          CLI: --stage --month --since --category --source --dry-run --force
 test/                 node:test over recorded fixtures; no network, no LLM calls
 app/
-  digest/             (Phase 5) viewer pages
+  digest/             viewer pages + feedback client islands
+    SessionProvider/SignIn/SignInButtons   auth state and sign-in (Google, GitHub)
+    Engagement/VoteButtons/Comments        votes and comments, per page and per item
+    ArchiveNav/CategoryNav                 the sticky header's two navs
 data/digest/          (Phase 3) one YYYY-MM.json per month, plus index/ and staging/
 ```
 
-Plain JavaScript (no TypeScript), ESM (`"type": "module"` so plain Node scripts import lib modules directly), App Router, server components only.
+Plain JavaScript (no TypeScript), ESM (`"type": "module"` so plain Node scripts import lib modules directly), App Router. Server components by default; the only client components are the reader-feedback islands and the two navs, and they are deliberately leaves - no page or layout becomes dynamic because of them.
+
+`supabase/migrations/` holds the votes/comments schema; `lib/supabase/client.js` is the browser client, which returns null rather than throwing when unconfigured so a build without the env vars still ships the digest.
 
 ## Storage layer — build everything against this
 
@@ -80,7 +85,9 @@ data/digest/
 - **Each stage reads its predecessor's staging artifact when one exists.** That is what makes re-runs cheap — a re-run after a mid-pipeline failure costs no re-fetching and no re-scoring. `--fresh` forces a rebuild from fetch.
 - **Scoring batches run concurrently, in two waves: the first batch of every category, then all the rest.** Measured: 48 calls at ~14s each, so ~11 minutes sequential against ~3 minutes at concurrency 4. Sequential *did* fit the 45-minute job — this is a speed-up, not a rescue. The wave split is not cosmetic — a flat pool fires same-category batches together, and each then misses and re-writes the rubric cache. Verdicts are applied in batch order, never completion order, so concurrency cannot change the report.
 - **Provider is per stage, not global** (`models.<stage>.provider`). Scoring is high-volume bounded judgement; generation is the product. Both answer the same `complete({ system, user, schema })`.
-- **Pages are static/SSG — never add `force-dynamic` or runtime filesystem reads.** Vercel's runtime fs is read-only and ephemeral; the write path is exclusively Actions → commit → push. There are no API routes at all, unlike TrendTracker.
+- **Pages are static/SSG — never add `force-dynamic` or runtime filesystem reads.** Vercel's runtime fs is read-only and ephemeral; the *content* write path is exclusively Actions → commit → push. There are still no API routes at all, unlike TrendTracker.
+- **Reader feedback is the one exception, and it does not touch that path.** Votes and comments go browser → Supabase → Postgres, under row-level security, from client islands. No server, no API route, no fs. The consequence to remember: tallies are absent from the prerendered HTML and arrive after hydration.
+- **`profiles.approved` is enforced in Postgres, never in the UI.** A hidden button proves nothing; the policies re-check every insert, so revoking approval stops writing immediately even on a live session. Test it as `anon` / unapproved / approved with SQL, not by clicking.
 - **The Actions job commits to the default branch.** TrendTracker's routine committed to `claude/*` session branches and Vercel only builds `main`, which stranded two weekly reports invisibly. Committing straight to the default branch is why this design can't repeat that.
 - **Never unref a timer in `lib/util/throttle.js`.** The refill timer is the only thing holding the event loop open while jobs wait on tokens; unref'ing it lets Node exit mid-run with code 0 and partial results. `test/throttle.test.js` guards this.
 - **Strip inline tags before XML parsing, not after.** PubMed embeds `<i>`, `<sub>` etc. inside titles and abstracts; fast-xml-parser splits mixed content into `#text` plus siblings and loses the ordering, silently dropping words. `pubmed.js` strips them from the raw string first.

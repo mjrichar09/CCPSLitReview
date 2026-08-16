@@ -2,33 +2,24 @@
 
 ## Next session plan
 
-**Phases 1–4 are done and the first month is committed.** `data/digest/2026-08.json` holds 79 papers across 11 categories (112 slots), a Top 5, and an editorial overview, with the ledger seeded at 79 entries. 112 tests, lint clean.
+**Phase 6 landed: cross-month memory, reader feedback, and a public repo.** See Status_update.md 2026-08-16 for the full account. State of play:
 
-The month cost **$2.34** — score $0.65 (Haiku), summarize $0.80 and synthesize $0.89 (Opus), 75 calls, 8m30s end to end. Against the $2.50 estimate that is within 7%, though the split was wrong: summarize and synthesize came in roughly equal rather than summarize dominating.
+- `lib/util/history.js` feeds the last `config.history.back` (default 3) months of narratives into all three synthesize prompts, fenced by `CONTINUITY_GUARD`. Untested against real history - no second month exists yet.
+- Votes and comments are live on Supabase project `cxghyhwovgbqaljmpahz` (CCPSLitReview). Sign-in is Google + GitHub; `profiles.approved` gates all writing and is flipped by hand in the Supabase table editor.
+- Site title, sticky full-width header (title / archive / account / section banner), single-column layout.
+- Repo public, proprietary LICENSE.
 
-**Phase 5 is built, in two route levels — collapsed from an earlier three-level design per your request that full overviews not be separate pages:**
+**Open items before this is finished:**
 
-- `/digest/[month]` — front page: editorial overview + Top 5, each linking to `[category]#item-id`
-- `/digest/[month]/[category]` — a section: synthesis paragraph + every item as a collapsible `<details>` — title/meta/badges collapsed, full summary + why-it-matters + source link + cross-category "Also appears in" expanded in place
-- `/digest` and `/` both redirect to the latest month
-
-A paper scored into more than one category still gets one anchor per category (write.js duplicates the full item per category); each copy's expanded body says "Also appears in: <other category>" and links to that category page's anchor for the same item. Deep links to `#item-id` force the `<details>` open via a `:target` CSS override, since the native `open` attribute doesn't respond to `:target` on its own.
-
-One real bug found building the (now-removed) three-level version: nested `generateStaticParams` did not receive the parent `month` param from Next's parent-to-child composition on this Next.js/Turbopack build — confirmed by direct instrumentation. Worked around by making `[category]/page.js`'s `generateStaticParams` self-contained (enumerate months directly via `getAllMonths()`); that fix stayed relevant after the article level was removed and is still what makes the section pages build correctly. Verified against the built output at each step: 11 categories prerendered, `next start` smoke-tested for 200s/404s, and the multi-category cross-link checked end to end both before and after the collapse.
-
-No API spend for any of this.
-
-Two things to look at when reviewing the report:
-
-1. **One corrupt sentence in `cmc_reg`.** The synthesis reads "…20.3-day average approval ahead of goal date o you gets filed for a soft sensor…". A dash escape ate the surrounding words; whitespace was repairable, the words were not. The cause is fixed for future months (prompts ask for plain ASCII, `tidyStrings` repairs and now warns), but this month's sentence can only be corrected by regenerating that one narrative.
-2. **31 of 112 slots (28%) are flagged `thin_abstract`** — mostly RSS-fed `cmc_reg`/`industry`, where items are headlines rather than abstracts. The model is correctly refusing to invent findings. Decide whether to surface the flag in the UI, drop thin items below a length threshold before summarising, or accept it as the cost of trade-press coverage.
-
-A section-banner nav (all 11 categories as pills, active one highlighted) now sits below the title on both the front page and every section page — `app/digest/CategoryNav.jsx`, shared by both. Front page dropped its old plain vertical "Sections" list in favour of it.
-
-Output tweaks can be tried against the committed month cheaply: the staging artifacts make `--stage synthesize --fresh` a synthesis-only re-run, no re-fetch and no re-score.
+1. **Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel.** Without them the deployed site builds and renders fine but shows no feedback widgets at all - the failure is silent by design, so it will not announce itself.
+2. **Add the production URL to Supabase Auth -> URL Configuration** (Site URL + `https://<project>.vercel.app/**` in Redirect URLs). Only `http://localhost:3000/**` has been exercised; sign-in on the deployed site is unverified.
+3. **Phase C of the feedback plan is not built:** votes do not yet reach `score.js`. Design is in the approved plan - `lib/feedback.js` loads votes, `buildSystem` gains a READER FEEDBACK block built like `historyBlock`, loaded once per run so the rubric cache stays warm, disabled when the Supabase env vars are absent and halting when they are present but unreadable (no new fail-soft category).
+4. **Read the first month that actually has history behind it for invented continuity.** That is the one failure mode of the memory work that tests cannot catch.
 
 ## Backlog
 
+- [ ] Optional: an owner-only `/digest/admin` page listing pending readers with an Approve button, gated by an `is_owner` flag and its own RLS policy. The Supabase table editor covers this until the list gets long.
+- [ ] Optional: a Supabase database webhook on insert into `profiles`, so a new sign-up notifies you rather than waiting to be noticed.
 - [ ] **Inline reference links in prose.** The overview and section synthesis paragraphs mention specific papers by finding but don't link to them — deliberately skipped rather than done with fragile text-matching (see Status_update.md, "restructured into front / section / article pages"). The real fix is upstream: have `synthesize.js` ask the model to tag each reference with the item's id/index as it writes (e.g. inline `[[doi:...]]` markers, or a structured `references: [{ span, id }]` array alongside the prose), then render those as links to the item's `#item-id` anchor on its section page (see the collapsible-item design above — there's no separate article page to link to anymore, just the anchor). Needs a prompt/schema change and a render-time parser; worth a dedicated pass rather than bolting on.
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
@@ -37,6 +28,7 @@ Output tweaks can be tried against the committed month cheaply: the staging arti
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
 
+- [x] Phase 6: cross-month memory in synthesize, reader votes + comments on Supabase, sticky site header, public repo + LICENSE (2026-08-16)
 - [x] Phase 5: /digest and /digest/[month], Top 5, per-category sections, source-health footer (2026-08-14)
 - [x] Groq side-by-side attempted and closed out — blocked by an 8000 TPM account cap, not by code (2026-08-14)
 - [x] Three defects found via the Groq attempts: batch-size override, HTTP error bodies now logged, reasoning-token budget at the provider (2026-08-14)

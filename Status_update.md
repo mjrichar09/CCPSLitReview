@@ -1,5 +1,31 @@
 # Status updates
 
+## 2026-08-16 (Phase 6) - cross-month memory, reader feedback, public repo
+
+Three things landed: the synthesize stage gained a memory, the site gained approved-account voting and comments, and the repo went public under a proprietary licence.
+
+**Cross-month memory in synthesize.** `lib/util/history.js` reads the last N committed months back through `lib/digest.js` - no new storage, no schema change, months still append-only - and `synthesize.js` threads them into all three prompts: prior narratives per category (oldest first), prior Top-item titles as a tiebreaker, prior overviews so "quieter than last month" has a basis. `config.history.back` defaults to 3; 0 restores the memoryless behaviour exactly.
+
+The substance of that change is the fence, not the plumbing. Given last month's prose a model will manufacture continuity, so every prompt carrying history also carries `CONTINUITY_GUARD`, in the same register as summarize's `thin_abstract` rule. Verified against the committed month: a September run inherits history for all 11 categories, and re-synthesising August sees nothing of itself.
+
+Two corrections to what the plan and TODO claimed:
+- **`--fresh` is not synthesis-only.** It bypasses the staging cache for *every* stage in the chain, so `--stage synthesize --fresh` re-fetches and re-scores. The cheap re-run is `--stage synthesize` with `staging/<month>/synthesized.json` removed.
+- **The added prompt cost is ~6.2k input tokens per run, not "a few hundred"** (~560 per narrative call across 11, plus ~760 for Top-N and overview), rising to roughly 3x once three months have accumulated. Around $0.03-0.10 at the $5/M Opus input rate - small against $2.34, but not nothing.
+
+The live paid re-run was **not** performed: no API key is present locally and only `scored.json` is committed, so a local re-run would have to re-summarise (~$0.80) as well. The empty-history path is covered by tests; the false-continuity read still needs a human eye on the first month that actually has history behind it.
+
+**Reader feedback, on Supabase.** Thumbs up/down and comments per paper, readable by everyone, writable only by approved accounts. The architectural point: this keeps every existing invariant. Pages stay static, there are still no API routes, and the Actions -> commit -> push path is untouched; the interactive parts are client islands talking to Postgres directly under row-level security. The cost is that tallies are not in the prerendered HTML - they arrive after hydration.
+
+`approved` defaults false and is enforced in Postgres, never in the UI. Verified as three roles by direct SQL, because a UI that hides a button proves nothing: anon insert rejected; unapproved insert rejected; self-promotion to `approved` rejected; voting in another user's name rejected; approved user succeeds. Supabase's advisor found three real issues (a mutable `search_path`, two trigger functions callable as SECURITY DEFINER RPCs). **The first fix did not work**: Postgres grants EXECUTE to PUBLIC by default and the roles inherit it, so revoking from `anon, authenticated` changed nothing and the advisor still flagged all three. Revoking from PUBLIC fixed it.
+
+**Auth is Google + GitHub, deliberately not email/password.** GitHub alone was wrong for a readership that mostly has no GitHub account; email/password would have meant confirmation mail, password resets and an SMTP provider to keep alive, all to arrive at the same `auth.uid()`. Google costs the reader nothing they do not already have. Approval is flipped in the Supabase table editor; there is no admin UI, and no notification when someone signs up.
+
+Three lint errors from React's `set-state-in-effect` rule were real. Both the profile and the per-reader vote map are now stored *with* the user id they were fetched for and derived, rather than cleared by an effect - which also closes a window where one reader's votes could flash under another's session.
+
+**Chrome restructured.** Site title "Cell Culture Literature Review", and a sticky full-bleed header carrying title, archive, account and the section banner. Previously the banner was re-rendered by each page and the archive sat in a sidebar column that scrolled away, so partway down a long section page there was no way to change section or check which month you were in. The banner now derives its active pill from the pathname rather than a prop, since the layout that renders it does not know the category segment. `.item` gained `scroll-margin-top` so a paper deep-linked from the Top 5 does not land underneath the header.
+
+**Repo is public** under a proprietary LICENSE (all rights reserved; source visible for evaluation only). Pre-flight was clean: `.env*` gitignored with only the valueless example tracked, and no key-shaped strings anywhere in the 26-commit history.
+
 ## 2026-08-14 (Phase 3 + first committed month) — summarize, synthesize, write
 
 Built the last three pipeline stages and committed the first real month, `data/digest/2026-08.json`: 79 papers, 11 categories, 112 slots, Top 5, editorial overview, ledger seeded at 79.
