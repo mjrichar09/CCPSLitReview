@@ -4,6 +4,7 @@ import { getAllMonths, getReport } from '../../../../lib/digest.js';
 import { itemSlug, otherAppearances, monthLabel } from '../../shared.js';
 import ItemRow from '../../ItemRow.jsx';
 import Engagement from '../../Engagement.jsx';
+import SortableItemList from '../../SortableItemList.jsx';
 
 /** Every category of every committed month, and only those. */
 export const dynamicParams = false;
@@ -64,16 +65,20 @@ export default async function CategoryPage({ params }) {
           every paper here arrive in two queries, not two per paper. The list
           below stays server-rendered inside it. */}
       <Engagement month={month} itemIds={cat.items.map((i) => i.id)}>
-        <ul className="item-list">
+        {/* Server-rendered in relevance order; SortableItemList re-sorts the
+            elements it is handed by net votes as tallies load, without
+            importing or rendering ItemRow itself. */}
+        <SortableItemList>
           {cat.items.map((item) => (
             <ItemRow
               key={item.id}
               item={item}
               id={itemSlug(item.id)}
+              categoryId={category}
               also={otherAppearances(month, report, item.id, category)}
             />
           ))}
-        </ul>
+        </SortableItemList>
       </Engagement>
     </>
   );

@@ -29,6 +29,7 @@ export default function Engagement({ month, itemIds, children }) {
   const [tallies, setTallies] = useState(() => new Map());
   const [counts, setCounts] = useState(() => new Map());
   const [mineFor, setMine] = useState({ id: null, map: EMPTY });
+  const [mentionable, setMentionable] = useState(() => []);
 
   // itemIds is a fresh array each render; join it so the effects below key on
   // the contents rather than the identity and do not refetch on every render.
@@ -60,6 +61,29 @@ export default function Engagement({ month, itemIds, children }) {
       alive = false;
     };
   }, [supabase, key]);
+
+  /**
+   * Every approved reader's display name, for the @mention picker.
+   *
+   * Fetched once per page mount rather than keyed to `itemIds`: unlike
+   * tallies and counts, this list does not vary per paper, so there is
+   * nothing to refetch as the page's item set changes. Reuses the existing
+   * `profiles_select_approved` read policy — no new policy needed.
+   */
+  useEffect(() => {
+    if (!supabase) return undefined;
+    let alive = true;
+    supabase
+      .from('profiles')
+      .select('id, display_name')
+      .eq('approved', true)
+      .then(({ data }) => {
+        if (alive && data) setMentionable(data);
+      });
+    return () => {
+      alive = false;
+    };
+  }, [supabase]);
 
   /**
    * Which of these papers the current reader has already voted on.
@@ -148,8 +172,8 @@ export default function Engagement({ month, itemIds, children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ month, tallies, counts, mine, castVote, adjustCommentCount }),
-    [month, tallies, counts, mine, castVote, adjustCommentCount],
+    () => ({ month, tallies, counts, mine, castVote, adjustCommentCount, mentionable }),
+    [month, tallies, counts, mine, castVote, adjustCommentCount, mentionable],
   );
 
   return <EngagementContext.Provider value={value}>{children}</EngagementContext.Provider>;

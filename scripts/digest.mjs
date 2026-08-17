@@ -179,7 +179,7 @@ async function runStage(step, ctx, previous) {
     case 'score': {
       const normalized = previous ?? (await readStage(month, 'normalized'));
       if (!normalized) throw new Error('score: nothing normalized — run --stage normalize first');
-      const out = await score({ items: normalized.items, config: ctx.config, usage: ctx.usage });
+      const out = await score({ items: normalized.items, config: ctx.config, usage: ctx.usage, month });
       out.month = month;
       out.health = normalized.health;
       out.run_stats = ctx.usage.toJSON({ stage: 'score' });

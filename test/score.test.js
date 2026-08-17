@@ -113,6 +113,31 @@ test('records token usage per call into the ledger', async () => {
   assert.equal(totals.output, 40);
 });
 
+test('reader feedback appears in the system prompt for its category when injected', async () => {
+  const provider = stubProvider(allScored(4));
+  const feedback = {
+    enabled: true,
+    byCategory: new Map([
+      ['upstream_pd', [{ title: 'Paper Z', up: 5, down: 0, net: 5 }]],
+      // modeling_ml deliberately has no entries.
+    ]),
+  };
+  const mixed = [...items(1, 'upstream_pd'), ...items(1, 'modeling_ml')];
+  await score({ items: mixed, config, provider, feedback });
+
+  const upstreamCall = provider.calls.find((c) => c.system.includes('CATEGORY: Upstream'));
+  const modelingCall = provider.calls.find((c) => c.system.includes('CATEGORY: Modeling'));
+  assert.match(upstreamCall.system, /READER FEEDBACK/);
+  assert.match(upstreamCall.system, /Paper Z/);
+  assert.doesNotMatch(modelingCall.system, /READER FEEDBACK/, 'a category with no feedback entries gets no block');
+});
+
+test('no feedback block when feedback is absent or disabled', async () => {
+  const provider = stubProvider(allScored(4));
+  await score({ items: items(1), config, provider, feedback: { enabled: false, byCategory: new Map() } });
+  assert.doesNotMatch(provider.calls[0].system, /READER FEEDBACK/);
+});
+
 test('the rubric is sent as a cacheable system prompt, not repeated in the user turn', async () => {
   const provider = stubProvider(allScored(4));
   await score({ items: items(2), config, provider });

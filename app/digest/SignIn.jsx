@@ -2,6 +2,7 @@
 
 import { useSession } from './SessionProvider.jsx';
 import SignInButtons from './SignInButtons.jsx';
+import Notifications from './Notifications.jsx';
 
 /**
  * The account control in the page chrome.
@@ -20,6 +21,7 @@ export default function SignIn() {
 
   return (
     <span className="signin-state">
+      <Notifications />
       <span className="signin-name">{name}</span>
       {!approved && <span className="badge badge-recurring">Awaiting approval</span>}
       <button type="button" className="link-button" onClick={signOut}>

@@ -24,6 +24,8 @@ const SessionContext = createContext({
   user: null,
   profile: null,
   approved: false,
+  categoryOrder: null,
+  setCategoryOrder: () => {},
   signIn: () => {},
   signOut: () => {},
 });
@@ -69,7 +71,7 @@ export default function SessionProvider({ children }) {
     let alive = true;
     supabase
       .from('profiles')
-      .select('display_name, approved')
+      .select('display_name, approved, category_order')
       .eq('id', user.id)
       .maybeSingle()
       .then(({ data }) => {
@@ -109,6 +111,24 @@ export default function SessionProvider({ children }) {
     supabase?.auth.signOut();
   }, [supabase]);
 
+  /**
+   * Save a reader's category pill order.
+   *
+   * Any signed-in user may set this, approved or not — it is a personal
+   * display preference, not content, so it is not gated behind `approved`
+   * the way votes and comments are. Optimistic, same shape as `castVote`:
+   * update local state immediately, and let a failed write simply not
+   * persist rather than rolling back a visible reorder.
+   */
+  const setCategoryOrder = useCallback(
+    async (order) => {
+      if (!supabase || !user) return;
+      setProfile((p) => ({ id: user.id, data: { ...(p?.id === user.id ? p.data : null), category_order: order } }));
+      await supabase.from('profiles').update({ category_order: order }).eq('id', user.id);
+    },
+    [supabase, user],
+  );
+
   const value = useMemo(
     () => ({
       enabled: Boolean(supabase),
@@ -116,10 +136,12 @@ export default function SessionProvider({ children }) {
       user,
       profile: currentProfile,
       approved: Boolean(currentProfile?.approved),
+      categoryOrder: currentProfile?.category_order ?? null,
+      setCategoryOrder,
       signIn,
       signOut,
     }),
-    [supabase, ready, user, currentProfile, signIn, signOut],
+    [supabase, ready, user, currentProfile, setCategoryOrder, signIn, signOut],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;
