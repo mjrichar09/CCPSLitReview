@@ -2,19 +2,16 @@
 
 ## Next session plan
 
-**Phase 6 landed: cross-month memory, reader feedback, and a public repo.** See Status_update.md 2026-08-16 for the full account. State of play:
+**UX improvements landed on `claude/ux-improvements-cn248b`: pill reordering, vote-sorted lists, votes into scoring, @mentions/notifications, comment badges, dark mode.** Not yet merged or deployed. See Status_update.md 2026-08-17 for the full account.
 
-- `lib/util/history.js` feeds the last `config.history.back` (default 3) months of narratives into all three synthesize prompts, fenced by `CONTINUITY_GUARD`. Untested against real history - no second month exists yet.
-- Votes and comments are live on Supabase project `cxghyhwovgbqaljmpahz` (CCPSLitReview). Sign-in is Google + GitHub; `profiles.approved` gates all writing and is flipped by hand in the Supabase table editor.
-- Site title, logo and favicon, sticky full-width header (title / archive / account / section banner), single-column layout. Footer carries the credit line; the cost figure is no longer shown.
-- Repo public, proprietary LICENSE.
+**Before this branch is fully live, in order:**
 
-**Open items before this is finished:**
-
-1. **Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel.** Without them the deployed site builds and renders fine but shows no feedback widgets at all - the failure is silent by design, so it will not announce itself.
-2. **Add the production URL to Supabase Auth -> URL Configuration** (Site URL + `https://<project>.vercel.app/**` in Redirect URLs). Only `http://localhost:3000/**` has been exercised; sign-in on the deployed site is unverified.
-3. **Phase C of the feedback plan is not built:** votes do not yet reach `score.js`. Design is in the approved plan - `lib/feedback.js` loads votes, `buildSystem` gains a READER FEEDBACK block built like `historyBlock`, loaded once per run so the rubric cache stays warm, disabled when the Supabase env vars are absent and halting when they are present but unreadable (no new fail-soft category).
-4. **Read the first month that actually has history behind it for invented continuity.** That is the one failure mode of the memory work that tests cannot catch.
+1. **Apply the four new migrations** to the Supabase project (`category_order`, `comments.category_id`, unique `display_name` + collision-safe `handle_new_user`, `notifications` + its mention trigger). The unique-display-name index will fail to create if any two existing approved readers already share a display name case-insensitively — check for that first and rename one by hand if so.
+2. **Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` to Actions secrets** (same project URL/anon key as the `NEXT_PUBLIC_` ones, just under non-`NEXT_PUBLIC_` names) so `lib/feedback.js` can read `vote_tallies` during the pipeline run. Absent, the feature disables itself rather than failing.
+3. **Merge and deploy**, then verify votes/comments/mentions/notifications end to end against the real Supabase project — this session verified against a local build with no Supabase configured (dark mode, pill drag+persist via localStorage, comment badges, and the full test/lint/build suite all passed; nothing that talks to Postgres could be exercised without credentials).
+4. **Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel**, still open from Phase 6. Without them the deployed site builds and renders fine but shows no feedback widgets at all — the failure is silent by design.
+5. **Add the production URL to Supabase Auth -> URL Configuration** (Site URL + `https://<project>.vercel.app/**` in Redirect URLs), still open from Phase 6. Only `http://localhost:3000/**` has been exercised.
+6. **Read the first month that actually has history behind it for invented continuity** (Phase 6 carryover) — the one failure mode neither the history nor the new feedback context can be tested against until a second real month exists.
 
 ## Backlog
 
@@ -28,6 +25,7 @@
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
 
+- [x] Five reader UX improvements: draggable per-reader category order, live vote-sorted item lists, votes feeding score.js (Phase C of the feedback plan), @mentions with a notification bell, comment-count badges, manual dark/light toggle (2026-08-17)
 - [x] Phase 6: cross-month memory in synthesize, reader votes + comments on Supabase, sticky site header, public repo + LICENSE (2026-08-16)
 - [x] Phase 5: /digest and /digest/[month], Top 5, per-category sections, source-health footer (2026-08-14)
 - [x] Groq side-by-side attempted and closed out — blocked by an 8000 TPM account cap, not by code (2026-08-14)
