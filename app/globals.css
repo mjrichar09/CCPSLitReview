@@ -347,7 +347,11 @@ a:hover { text-decoration: underline; }
   display: flex; gap: 0.5rem; font-size: 0.78rem; color: var(--muted); margin-bottom: 0.2rem;
 }
 .comment-author { font-weight: 600; color: var(--foreground); }
+.comment-edited { font-style: italic; }
+.comment-owner-actions { margin-left: auto; display: inline-flex; gap: 0.5rem; }
 .comment-body { font-size: 0.9rem; white-space: pre-wrap; }
+
+.comment-edit-form { margin-top: 0.35rem; }
 
 .comment-form { display: grid; gap: 0.4rem; }
 .comment-form-field { position: relative; }
