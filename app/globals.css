@@ -412,3 +412,25 @@ a:hover { text-decoration: underline; }
 /* Inline in a sentence (the comment CTA), so it must not push the text down. */
 .signin-group-compact { vertical-align: middle; margin-right: 0.25rem; }
 .signin-group-compact .signin { padding: 0.2rem 0.6rem; font-size: 0.8rem; }
+
+/* ---- landing page: the front door, gated by middleware.js ---- */
+.landing {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 2rem 1.25rem; position: relative;
+}
+.landing-theme { position: absolute; top: 1.25rem; right: 1.25rem; }
+.landing-card {
+  width: 100%; max-width: 26rem; text-align: center;
+  padding: 2.5rem 2rem; border-radius: 16px;
+  background: var(--surface); border: 1px solid var(--border);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+.landing-logo { border-radius: 18px; margin-bottom: 1.25rem; }
+.landing-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; }
+.landing-tagline { color: var(--muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.75rem; }
+.landing-note { color: var(--muted); font-size: 0.85rem; }
+.landing-signin { display: flex; justify-content: center; }
+.landing-signin .signin-group { gap: 0.6rem; }
+.landing-signin .signin { padding: 0.55rem 1.2rem; font-size: 0.9rem; }
+.landing-pending { display: grid; gap: 0.7rem; justify-items: center; }
+.landing-pending p { color: var(--muted); font-size: 0.9rem; line-height: 1.55; }
