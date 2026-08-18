@@ -20,8 +20,16 @@
   --badge-failed-bg: #fdeeea; --badge-failed-fg: #c0392b;
 }
 
+/* Dark tokens apply either from the OS preference, or from an explicit
+   `data-theme="dark"` set by ThemeToggle (and applied pre-hydration by the
+   inline script in app/layout.js). `:not([data-theme="light"])` is what lets
+   a "force light" override win even while the OS is set to dark; the bare
+   `[data-theme="dark"]` block below is what lets "force dark" win over a
+   light OS. The token values are intentionally duplicated rather than
+   shared — plain CSS has no mixins, and this file already favors hand-rolled
+   rules over abstraction for a token set this size. */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --background: #0d0f12;
     --foreground: #e8eaed;
     --muted: #9aa4b2;
@@ -37,8 +45,27 @@
     --badge-degraded-bg: #3a2f14; --badge-degraded-fg: #f0cf8a;
     --badge-failed-bg: #3a1f1b; --badge-failed-fg: #ffb3a8;
   }
-  html { color-scheme: dark; }
+  html:not([data-theme="light"]) { color-scheme: dark; }
 }
+
+:root[data-theme="dark"] {
+  --background: #0d0f12;
+  --foreground: #e8eaed;
+  --muted: #9aa4b2;
+  --surface: #16191d;
+  --border: #262b31;
+  --border-strong: #3a4048;
+  --accent: #6ea0ff;
+  --link: #85acff;
+
+  --badge-new-bg: #16305e; --badge-new-fg: #bcd4ff;
+  --badge-recurring-bg: #24262a; --badge-recurring-fg: #b7bdc7;
+  --badge-ok-bg: #123522; --badge-ok-fg: #7ee2a1;
+  --badge-degraded-bg: #3a2f14; --badge-degraded-fg: #f0cf8a;
+  --badge-failed-bg: #3a1f1b; --badge-failed-fg: #ffb3a8;
+}
+html[data-theme="dark"] { color-scheme: dark; }
+html[data-theme="light"] { color-scheme: light; }
 
 html { height: 100%; }
 html, body { max-width: 100vw; overflow-x: clip; }
@@ -96,7 +123,7 @@ a:hover { text-decoration: underline; }
 }
 .site-logo { width: 32px; height: 32px; flex-shrink: 0; }
 .site-title:hover { color: var(--accent); text-decoration: none; }
-.site-header-account { margin-left: auto; }
+.site-header-account { display: inline-flex; align-items: center; gap: 0.6rem; margin-left: auto; }
 
 .archive-nav { display: flex; align-items: center; gap: 0.85rem; flex-wrap: wrap; }
 .archive-label {
@@ -147,6 +174,10 @@ a:hover { text-decoration: underline; }
   background: var(--accent); border-color: var(--accent); color: var(--surface);
 }
 .section-nav-count { font-size: 0.72rem; font-variant-numeric: tabular-nums; opacity: 0.7; }
+
+.section-nav-link { cursor: grab; }
+.section-nav-link.dragging { opacity: 0.5; cursor: grabbing; }
+.section-nav-link.drag-over { border-color: var(--accent); box-shadow: inset 2px 0 0 var(--accent); }
 
 
 .badge { border-radius: 999px; padding: 0.25rem 0.75rem; font-size: 0.8rem; font-weight: 500; }
@@ -234,6 +265,42 @@ a:hover { text-decoration: underline; }
 
 /* --- reader feedback: ratings and comments -------------------------------- */
 
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 1.9rem; height: 1.9rem; border-radius: 999px; cursor: pointer;
+  font-size: 0.95rem; line-height: 1;
+  color: var(--foreground); background: var(--surface); border: 1px solid var(--border-strong);
+}
+.theme-toggle:hover { border-color: var(--accent); }
+
+.notif { position: relative; display: inline-flex; }
+.notif-bell {
+  position: relative; display: inline-flex; align-items: center; justify-content: center;
+  width: 1.9rem; height: 1.9rem; border-radius: 999px; cursor: pointer;
+  font-size: 0.95rem; color: var(--foreground); background: var(--surface); border: 1px solid var(--border-strong);
+}
+.notif-bell:hover { border-color: var(--accent); }
+.notif-badge {
+  position: absolute; top: -0.25rem; right: -0.25rem; min-width: 1.05rem; height: 1.05rem;
+  padding: 0 0.2rem; border-radius: 999px; background: var(--accent); color: var(--surface);
+  font-size: 0.65rem; font-weight: 700; line-height: 1.05rem; text-align: center;
+}
+.notif-panel {
+  position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 60;
+  width: 20rem; max-width: 85vw; max-height: 22rem; overflow-y: auto;
+  border-radius: 12px; background: var(--surface); border: 1px solid var(--border-strong);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); padding: 0.5rem;
+}
+.notif-empty { font-size: 0.85rem; color: var(--muted); padding: 0.4rem; }
+.notif-list { list-style: none; display: grid; gap: 0.15rem; }
+.notif-item a {
+  display: block; padding: 0.5rem 0.55rem; border-radius: 8px;
+  color: var(--foreground); font-size: 0.85rem; line-height: 1.4;
+}
+.notif-item a:hover { background: var(--background); text-decoration: none; }
+.notif-item time { color: var(--muted); font-size: 0.78rem; }
+.notif-unread a { background: var(--badge-new-bg); }
+
 .signin, .signin-state { display: inline-flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; }
 .signin {
   padding: 0.3rem 0.8rem; border-radius: 999px; cursor: pointer;
@@ -250,6 +317,11 @@ a:hover { text-decoration: underline; }
 /* Sits in .item-tags beside the model's relevance score. `margin-left: auto`
    pushes it to the trailing edge so the reader's rating and the model's score
    read as two separate columns rather than one run-on row of badges. */
+.comment-badge {
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  font-size: 0.78rem; color: var(--muted); font-variant-numeric: tabular-nums;
+}
+
 .vote { display: inline-flex; gap: 0.3rem; margin-left: auto; }
 .vote-btn {
   display: inline-flex; align-items: center; gap: 0.3rem;
@@ -278,6 +350,7 @@ a:hover { text-decoration: underline; }
 .comment-body { font-size: 0.9rem; white-space: pre-wrap; }
 
 .comment-form { display: grid; gap: 0.4rem; }
+.comment-form-field { position: relative; }
 .comment-form textarea {
   width: 100%; padding: 0.55rem 0.7rem; border-radius: 8px; resize: vertical;
   font: inherit; font-size: 0.9rem;
@@ -291,6 +364,20 @@ a:hover { text-decoration: underline; }
   color: var(--surface); background: var(--accent); border: 1px solid var(--accent);
 }
 .comment-form button:disabled { cursor: not-allowed; opacity: 0.5; }
+
+.mention-picker {
+  position: absolute; left: 0; top: 100%; z-index: 10; margin-top: 0.25rem;
+  min-width: 12rem; max-height: 10rem; overflow-y: auto;
+  list-style: none; padding: 0.3rem; border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--border-strong);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+.mention-picker-item {
+  display: block; width: 100%; text-align: left; padding: 0.3rem 0.5rem;
+  border: none; border-radius: 6px; cursor: pointer; font: inherit; font-size: 0.85rem;
+  color: var(--foreground); background: none;
+}
+.mention-picker-item:hover, .mention-picker-item:focus { background: var(--background); color: var(--accent); }
 
 .signin-group { display: inline-flex; gap: 0.4rem; align-items: center; }
 /* Inline in a sentence (the comment CTA), so it must not push the text down. */

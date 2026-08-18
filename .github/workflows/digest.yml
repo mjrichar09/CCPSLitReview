@@ -110,6 +110,13 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
           NCBI_API_KEY: ${{ secrets.NCBI_API_KEY }}
+          # Reader votes feeding the score stage's rubric prompt (lib/feedback.js).
+          # Same project URL/anon key as NEXT_PUBLIC_SUPABASE_URL /
+          # NEXT_PUBLIC_SUPABASE_ANON_KEY, under non-NEXT_PUBLIC_ names so the
+          # Actions secret and the browser-inlined one stay separate. Absent
+          # entirely, the feature disables rather than failing the run.
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
           DIGEST_MODEL_SCORE: ${{ inputs.score_model }}
           DIGEST_BATCH_SIZE: ${{ inputs.batch_size }}
           IN_MONTH: ${{ inputs.month }}

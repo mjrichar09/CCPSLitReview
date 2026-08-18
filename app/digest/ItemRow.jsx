@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { formatAuthors } from './shared.js';
 import VoteButtons from './VoteButtons.jsx';
+import CommentBadge from './CommentBadge.jsx';
 import Comments from './Comments.jsx';
 
 function Meta({ item }) {
@@ -42,7 +43,7 @@ function Badges({ item }) {
  * inside `<summary>` fights the browser's own click-to-toggle handling (both
  * can fire), so the title stays plain text and "View source" is its own link.
  */
-export default function ItemRow({ item, id, also = [] }) {
+export default function ItemRow({ item, id, also = [], categoryId }) {
   return (
     <li>
       <details className="item" id={id}>
@@ -53,6 +54,7 @@ export default function ItemRow({ item, id, also = [] }) {
           </div>
           <div className="item-tags">
             <Badges item={item} />
+            <CommentBadge itemId={item.id} />
             {/* Inside `<summary>` on purpose, so the reader's rating sits beside
                 the model's score on the collapsed row: `relevance 4/5` is what
                 the model thought, the thumbs are what the readers thought, and
@@ -86,7 +88,7 @@ export default function ItemRow({ item, id, also = [] }) {
               ))}
             </p>
           )}
-          <Comments itemId={item.id} />
+          <Comments itemId={item.id} categoryId={categoryId} />
         </div>
       </details>
     </li>

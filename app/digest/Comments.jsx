@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { getSupabase } from '../../lib/supabase/client.js';
 import { useEngagement } from './Engagement.jsx';
 import { useSession } from './SessionProvider.jsx';
+import { activeMentionQuery, applyMention } from './mentions.js';
+import MentionPicker from './MentionPicker.jsx';
 import SignInButtons from './SignInButtons.jsx';
 
 const MAX_BODY = 2000;
@@ -17,18 +19,20 @@ const MAX_BODY = 2000;
  * keeps owning the disclosure behaviour, including the `:target` deep-link
  * override that opens a paper linked from the Top 5.
  */
-export default function Comments({ itemId }) {
+export default function Comments({ itemId, categoryId }) {
   const supabase = useMemo(() => getSupabase(), []);
   const engagement = useEngagement();
   const { enabled, user, approved } = useSession();
 
   const anchor = useRef(null);
+  const textareaRef = useRef(null);
   const requested = useRef(false);
   const [comments, setComments] = useState(null); // null = not loaded yet
   const [loading, setLoading] = useState(false);
   const [draft, setDraft] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
+  const [mentionQuery, setMentionQuery] = useState(null);
 
   /** Fetch the thread once, whenever the paper is first opened. */
   const load = useCallback(async () => {
@@ -49,19 +53,50 @@ export default function Comments({ itemId }) {
    * The disclosure is the browser's, not React's: this subscribes to the parent
    * `<details>` toggle rather than mirroring open/closed into state. That keeps
    * ItemRow a server component and leaves the `:target` deep-link override
-   * working — which is also why the initial check matters, since a paper linked
-   * from the Top 5 arrives already open.
+   * working — which is also why the initial check also tests `:target`
+   * directly: that override forces the body visible with a CSS rule alone, it
+   * never sets the native `open` attribute or fires a `toggle` event, so a
+   * paper reached via a notification link (or the Top 5, or "Also appears
+   * in") would otherwise show an already-open-looking card whose thread never
+   * actually loads.
    */
   useEffect(() => {
     const details = anchor.current?.closest('details');
     if (!details) return undefined;
-    if (details.open) load();
+    if (details.open || details.matches(':target')) load();
     const onToggle = () => {
       if (details.open) load();
     };
     details.addEventListener('toggle', onToggle);
     return () => details.removeEventListener('toggle', onToggle);
   }, [load]);
+
+  const onDraftChange = useCallback((event) => {
+    const value = event.target.value.slice(0, MAX_BODY);
+    setDraft(value);
+    setMentionQuery(activeMentionQuery(value, event.target.selectionStart ?? value.length));
+  }, []);
+
+  const onSelectMention = useCallback(
+    (displayName) => {
+      const caret = textareaRef.current?.selectionStart ?? draft.length;
+      const { text, caretIndex } = applyMention(draft, caret, displayName);
+      const next = text.slice(0, MAX_BODY);
+      setDraft(next);
+      setMentionQuery(null);
+      // Put the caret back where the replacement left off, and keep focus in
+      // the textarea rather than losing it to the picker button that was
+      // just clicked. Runs after the value has actually committed to the DOM.
+      requestAnimationFrame(() => {
+        const el = textareaRef.current;
+        if (!el) return;
+        el.focus();
+        const pos = Math.min(caretIndex, next.length);
+        el.setSelectionRange(pos, pos);
+      });
+    },
+    [draft],
+  );
 
   const post = useCallback(
     async (event) => {
@@ -73,7 +108,7 @@ export default function Comments({ itemId }) {
       setError(null);
       const { data, error: err } = await supabase
         .from('comments')
-        .insert({ user_id: user.id, item_id: itemId, month: engagement?.month, body })
+        .insert({ user_id: user.id, item_id: itemId, category_id: categoryId, month: engagement?.month, body })
         .select('id, body, created_at, user_id, profiles(display_name)')
         .single();
       setBusy(false);
@@ -90,9 +125,10 @@ export default function Comments({ itemId }) {
       }
       setComments((list) => [...(list ?? []), data]);
       setDraft('');
+      setMentionQuery(null);
       engagement?.adjustCommentCount(itemId, 1);
     },
-    [supabase, user, approved, draft, itemId, engagement],
+    [supabase, user, approved, draft, itemId, categoryId, engagement],
   );
 
   if (!enabled) return null;
@@ -132,13 +168,17 @@ export default function Comments({ itemId }) {
 
       {user && approved && (
         <form className="comment-form" onSubmit={post}>
-          <textarea
-            value={draft}
-            onChange={(e) => setDraft(e.target.value.slice(0, MAX_BODY))}
-            placeholder="Add a comment"
-            rows={3}
-            maxLength={MAX_BODY}
-          />
+          <div className="comment-form-field">
+            <textarea
+              ref={textareaRef}
+              value={draft}
+              onChange={onDraftChange}
+              placeholder="Add a comment — @ to mention a reader"
+              rows={3}
+              maxLength={MAX_BODY}
+            />
+            <MentionPicker query={mentionQuery} candidates={engagement?.mentionable ?? []} onSelect={onSelectMention} />
+          </div>
           <div className="comment-form-foot">
             <span className="comment-count-left">
               {MAX_BODY - draft.length} characters left

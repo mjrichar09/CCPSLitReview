@@ -5,6 +5,7 @@ import ArchiveNav from '../ArchiveNav.jsx';
 import CategoryNav from '../CategoryNav.jsx';
 import SessionProvider from '../SessionProvider.jsx';
 import SignIn from '../SignIn.jsx';
+import ThemeToggle from '../ThemeToggle.jsx';
 
 /**
  * Shared chrome for one month.
@@ -38,6 +39,7 @@ export default async function MonthLayout({ children, params }) {
           </Link>
           <ArchiveNav months={months} current={month} />
           <div className="site-header-account">
+            <ThemeToggle />
             <SignIn />
           </div>
         </div>
