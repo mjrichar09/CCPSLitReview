@@ -16,7 +16,6 @@
 ## Backlog
 
 - [ ] Optional: an owner-only `/digest/admin` page listing pending readers with an Approve button, gated by an `is_owner` flag and its own RLS policy. The Supabase table editor covers this until the list gets long.
-- [ ] Optional: a Supabase database webhook on insert into `profiles`, so a new sign-up notifies you rather than waiting to be noticed.
 - [ ] **Inline reference links in prose.** The overview and section synthesis paragraphs mention specific papers by finding but don't link to them — deliberately skipped rather than done with fragile text-matching (see Status_update.md, "restructured into front / section / article pages"). The real fix is upstream: have `synthesize.js` ask the model to tag each reference with the item's id/index as it writes (e.g. inline `[[doi:...]]` markers, or a structured `references: [{ span, id }]` array alongside the prose), then render those as links to the item's `#item-id` anchor on its section page (see the collapsible-item design above — there's no separate article page to link to anymore, just the anchor). Needs a prompt/schema change and a render-time parser; worth a dedicated pass rather than bolting on.
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
@@ -25,6 +24,11 @@
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
 
+- [x] Push notification on new sign-up via a `pg_net` trigger on `profiles` insert -> ntfy.sh, so a pending approval doesn't wait to be noticed (2026-08-19)
+- [x] Real sign-in gate: `proxy.js` (Next 16's renamed Middleware) blocks every `/digest/**` request unless signed in and approved, landing page at `/` (2026-08-18)
+- [x] Per-reader read marks, favorites + `/digest/favorites`, cross-month discussion board at `/digest/discussion` (2026-08-18)
+- [x] Fixed @mention notifications (the matching regex never actually matched a real display name) and added comment edit/delete (2026-08-18)
+- [x] Fixed vote-based sorting (two layered bugs: `Children.toArray` key mangling, then `ItemRow` being a Server Component so `item` never reached the client as a prop) (2026-08-18)
 - [x] Five reader UX improvements: draggable per-reader category order, live vote-sorted item lists, votes feeding score.js (Phase C of the feedback plan), @mentions with a notification bell, comment-count badges, manual dark/light toggle (2026-08-17)
 - [x] Phase 6: cross-month memory in synthesize, reader votes + comments on Supabase, sticky site header, public repo + LICENSE (2026-08-16)
 - [x] Phase 5: /digest and /digest/[month], Top 5, per-category sections, source-health footer (2026-08-14)
