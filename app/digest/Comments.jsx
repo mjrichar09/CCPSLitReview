@@ -116,7 +116,13 @@ export default function Comments({ itemId, categoryId }) {
       setError(null);
       const { data, error: err } = await supabase
         .from('comments')
-        .insert({ user_id: user.id, item_id: itemId, category_id: categoryId, month: engagement?.month, body })
+        .insert({
+          user_id: user.id,
+          item_id: itemId,
+          category_id: categoryId,
+          month: engagement?.itemMonths?.[itemId],
+          body,
+        })
         .select('id, body, created_at, edited_at, user_id, profiles(display_name)')
         .single();
       setBusy(false);

@@ -18,18 +18,21 @@ import { useSession } from './SessionProvider.jsx';
 
 const EngagementContext = createContext(null);
 
-/** Stable empty map, so a signed-out render does not churn a new one each time. */
+/** Stable empty map/set, so a signed-out render does not churn a new one each time. */
 const EMPTY = new Map();
+const EMPTY_SET = new Set();
 
 export const useEngagement = () => useContext(EngagementContext);
 
-export default function Engagement({ month, itemIds, children }) {
+export default function Engagement({ itemMonths, itemIds, children }) {
   const supabase = useMemo(() => getSupabase(), []);
   const { user, approved } = useSession();
   const [tallies, setTallies] = useState(() => new Map());
   const [counts, setCounts] = useState(() => new Map());
   const [mineFor, setMine] = useState({ id: null, map: EMPTY });
   const [mentionable, setMentionable] = useState(() => []);
+  const [readFor, setRead] = useState({ id: null, set: EMPTY_SET });
+  const [favoriteFor, setFavorite] = useState({ id: null, set: EMPTY_SET });
 
   // itemIds is a fresh array each render; join it so the effects below key on
   // the contents rather than the identity and do not refetch on every render.
@@ -112,7 +115,54 @@ export default function Engagement({ month, itemIds, children }) {
     };
   }, [supabase, user, key]);
 
+  /**
+   * Which of these papers the current reader has marked read or favorited.
+   *
+   * Same id-paired shape as `mine` above, and for the same reason: derived
+   * rather than cleared on sign-out, so one reader's marks never flash under
+   * another's session. Two separate queries/effects (not combined into one)
+   * for the same reason tallies and counts are separate — each is its own
+   * table with its own shape.
+   */
+  useEffect(() => {
+    if (!supabase || !user) return undefined;
+    const ids = key ? key.split(' ') : [];
+    if (ids.length === 0) return undefined;
+    let alive = true;
+    supabase
+      .from('reads')
+      .select('item_id')
+      .eq('user_id', user.id)
+      .in('item_id', ids)
+      .then(({ data }) => {
+        if (alive && data) setRead({ id: user.id, set: new Set(data.map((r) => r.item_id)) });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [supabase, user, key]);
+
+  useEffect(() => {
+    if (!supabase || !user) return undefined;
+    const ids = key ? key.split(' ') : [];
+    if (ids.length === 0) return undefined;
+    let alive = true;
+    supabase
+      .from('favorites')
+      .select('item_id')
+      .eq('user_id', user.id)
+      .in('item_id', ids)
+      .then(({ data }) => {
+        if (alive && data) setFavorite({ id: user.id, set: new Set(data.map((r) => r.item_id)) });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [supabase, user, key]);
+
   const mine = user && mineFor.id === user.id ? mineFor.map : EMPTY;
+  const readIds = user && readFor.id === user.id ? readFor.set : EMPTY_SET;
+  const favoriteIds = user && favoriteFor.id === user.id ? favoriteFor.set : EMPTY_SET;
 
   /**
    * Cast, change, or retract a vote. Clicking the button you already chose
@@ -155,11 +205,14 @@ export default function Engagement({ month, itemIds, children }) {
           ? await supabase.from('votes').delete().eq('user_id', user.id).eq('item_id', itemId)
           : await supabase
               .from('votes')
-              .upsert({ user_id: user.id, item_id: itemId, month, value: next }, { onConflict: 'user_id,item_id' });
+              .upsert(
+                { user_id: user.id, item_id: itemId, month: itemMonths[itemId], value: next },
+                { onConflict: 'user_id,item_id' },
+              );
 
       if (error) applyLocal(next, previous);
     },
-    [supabase, user, approved, mine, month],
+    [supabase, user, approved, mine, itemMonths],
   );
 
   /** Keep the collapsed row's count in step when a thread gains or loses one. */
@@ -171,9 +224,81 @@ export default function Engagement({ month, itemIds, children }) {
     });
   }, []);
 
+  /**
+   * Toggle read/favorite are a simple presence flip each — no value to
+   * change, unlike a vote, so unmark is always just "the mark I already had."
+   * Manual only (not set automatically on expand): a reader who opens a card
+   * to skim it has not necessarily read it.
+   */
+  const toggleRead = useCallback(
+    async (itemId) => {
+      if (!supabase || !user || !approved) return;
+      const wasRead = readIds.has(itemId);
+      const applyLocal = (mark) => {
+        setRead((r) => {
+          const copy = new Set(r.set);
+          if (mark) copy.add(itemId);
+          else copy.delete(itemId);
+          return { id: user.id, set: copy };
+        });
+      };
+      applyLocal(!wasRead);
+      const { error } = wasRead
+        ? await supabase.from('reads').delete().eq('user_id', user.id).eq('item_id', itemId)
+        : await supabase.from('reads').insert({ user_id: user.id, item_id: itemId });
+      if (error) applyLocal(wasRead);
+    },
+    [supabase, user, approved, readIds],
+  );
+
+  const toggleFavorite = useCallback(
+    async (itemId) => {
+      if (!supabase || !user || !approved) return;
+      const wasFavorite = favoriteIds.has(itemId);
+      const applyLocal = (mark) => {
+        setFavorite((f) => {
+          const copy = new Set(f.set);
+          if (mark) copy.add(itemId);
+          else copy.delete(itemId);
+          return { id: user.id, set: copy };
+        });
+      };
+      applyLocal(!wasFavorite);
+      const { error } = wasFavorite
+        ? await supabase.from('favorites').delete().eq('user_id', user.id).eq('item_id', itemId)
+        : await supabase.from('favorites').insert({ user_id: user.id, item_id: itemId });
+      if (error) applyLocal(wasFavorite);
+    },
+    [supabase, user, approved, favoriteIds],
+  );
+
   const value = useMemo(
-    () => ({ month, tallies, counts, mine, castVote, adjustCommentCount, mentionable }),
-    [month, tallies, counts, mine, castVote, adjustCommentCount, mentionable],
+    () => ({
+      itemMonths,
+      tallies,
+      counts,
+      mine,
+      castVote,
+      adjustCommentCount,
+      mentionable,
+      readIds,
+      favoriteIds,
+      toggleRead,
+      toggleFavorite,
+    }),
+    [
+      itemMonths,
+      tallies,
+      counts,
+      mine,
+      castVote,
+      adjustCommentCount,
+      mentionable,
+      readIds,
+      favoriteIds,
+      toggleRead,
+      toggleFavorite,
+    ],
   );
 
   return <EngagementContext.Provider value={value}>{children}</EngagementContext.Provider>;
