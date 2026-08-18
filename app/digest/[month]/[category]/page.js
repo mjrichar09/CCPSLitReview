@@ -67,8 +67,13 @@ export default async function CategoryPage({ params }) {
       <Engagement month={month} itemIds={cat.items.map((i) => i.id)}>
         {/* Server-rendered in relevance order; SortableItemList re-sorts the
             elements it is handed by net votes as tallies load, without
-            importing or rendering ItemRow itself. */}
-        <SortableItemList>
+            importing or rendering ItemRow itself. `itemIds` is passed
+            separately and index-aligned with the children below, rather than
+            read off each child's props: ItemRow is a Server Component, so
+            what actually crosses into this Client Component as `children` is
+            its already-rendered output (<li><details>...), not a
+            `<ItemRow item={...}>` element with `item` still attached. */}
+        <SortableItemList itemIds={cat.items.map((i) => i.id)}>
           {cat.items.map((item) => (
             <ItemRow
               key={item.id}
