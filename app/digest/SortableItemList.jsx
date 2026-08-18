@@ -19,22 +19,32 @@ function net(tallies, itemId) {
  * "client wrapper around server content" shape `Engagement` already uses, so
  * `CategoryPage` and `ItemRow` both stay server components.
  *
+ * `itemIds` is a separate, plain prop rather than something read off each
+ * child's props — `ItemRow` is itself a Server Component, so what actually
+ * reaches this Client Component as `children` is its already-rendered host
+ * output (`<li><details>...`), not a `<ItemRow item={...}>` element with
+ * `item` still attached; the RSC boundary strips it. `itemIds` is
+ * index-aligned with `children` (both come from the same `cat.items` array
+ * in `CategoryPage`), which is what lets each rendered element be paired back
+ * up with the real id its votes are stored under.
+ *
  * `tallies` is an empty Map on the server and on first paint (Engagement's
  * fetch has not resolved yet), so the initial order is always the server's
  * relevance order — no hydration mismatch — and papers slide into vote order,
  * via a small FLIP animation rather than a jump, once tallies load or change.
  */
-export default function SortableItemList({ children }) {
+export default function SortableItemList({ itemIds, children }) {
   const engagement = useEngagement();
   const tallies = engagement?.tallies;
   const containerRef = useRef(null);
   const rectsRef = useRef(new Map());
 
   const items = Children.toArray(children);
-  const sorted = useMemo(
-    () => [...items].sort((a, b) => net(tallies, b.key) - net(tallies, a.key)),
-    [items, tallies],
-  );
+  const sorted = useMemo(() => {
+    const paired = items.map((el, i) => ({ el, id: itemIds[i] }));
+    paired.sort((a, b) => net(tallies, b.id) - net(tallies, a.id));
+    return paired.map((p) => p.el);
+  }, [items, itemIds, tallies]);
 
   // FLIP: capture each item's position from the previous render (keyed by the
   // stable slug id on ItemRow's <details>, not DOM order, since that is what
