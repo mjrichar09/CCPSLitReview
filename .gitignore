@@ -33,6 +33,12 @@ yarn-debug.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# Generated at build time by scripts/build-search-index.mjs (predev/prebuild
+# hooks run it before either dev or build ever serves this file) — a stale
+# committed copy would never be the one users actually see, so it's free to
+# regenerate and not worth the monthly diff noise.
+/public/search-index.json
+
 # Pipeline staging artifacts.
 # raw.json and normalized.json are large and free to regenerate — no LLM spend
 # sits behind them. scored.json IS committed (a future routine-based generator
