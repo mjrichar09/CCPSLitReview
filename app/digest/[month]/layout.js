@@ -1,11 +1,7 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import { getAllMonths, getReport } from '../../../lib/digest.js';
 import ArchiveNav from '../ArchiveNav.jsx';
 import CategoryNav from '../CategoryNav.jsx';
-import SessionProvider from '../SessionProvider.jsx';
-import SignIn from '../SignIn.jsx';
-import ThemeToggle from '../ThemeToggle.jsx';
+import SiteHeader from '../SiteHeader.jsx';
 
 /**
  * Shared chrome for one month.
@@ -17,9 +13,8 @@ import ThemeToggle from '../ThemeToggle.jsx';
  * scrolled away — which meant that partway down a long section page there was
  * no way to change section or check the month without scrolling back up.
  *
- * `SessionProvider` wraps the whole month so a sign-in survives navigation
- * between sections. It is a client component with server-rendered children,
- * which keeps every page below it static.
+ * `SessionProvider` lives in the parent `app/digest/layout.js` now, shared
+ * with the favorites and discussion pages rather than re-wrapped here.
  */
 export default async function MonthLayout({ children, params }) {
   const { month } = await params;
@@ -28,29 +23,17 @@ export default async function MonthLayout({ children, params }) {
   const categories = report?.categories ?? [];
 
   return (
-    <SessionProvider>
-      <header className="site-header">
-        <div className="site-header-top">
-          <Link href="/digest" className="site-title">
-            {/* Served at 3x its rendered size, and keyed to transparency so it
-                sits on either theme without a white plate behind it. */}
-            <Image src="/logo.png" alt="" width={32} height={32} className="site-logo" priority />
-            Cell Culture Literature Review
-          </Link>
-          <ArchiveNav months={months} current={month} />
-          <div className="site-header-account">
-            <ThemeToggle />
-            <SignIn />
-          </div>
-        </div>
-        <CategoryNav month={month} categories={categories} />
-      </header>
+    <>
+      <SiteHeader
+        archive={<ArchiveNav months={months} current={month} />}
+        categories={<CategoryNav month={month} categories={categories} />}
+      />
       <div className="layout">
         <main className="col-main">{children}</main>
         {/* In the layout rather than the front page's Health footer, so the
             credit appears on section pages too. */}
         <footer className="site-credit">Created by Mark Richards. All Rights Reserved.</footer>
       </div>
-    </SessionProvider>
+    </>
   );
 }

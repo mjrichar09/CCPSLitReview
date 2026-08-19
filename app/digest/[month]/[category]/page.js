@@ -64,7 +64,10 @@ export default async function CategoryPage({ params }) {
       {/* One provider for the whole section: tallies and comment counts for
           every paper here arrive in two queries, not two per paper. The list
           below stays server-rendered inside it. */}
-      <Engagement month={month} itemIds={cat.items.map((i) => i.id)}>
+      <Engagement
+        itemMonths={Object.fromEntries(cat.items.map((i) => [i.id, month]))}
+        itemIds={cat.items.map((i) => i.id)}
+      >
         {/* Server-rendered in relevance order; SortableItemList re-sorts the
             elements it is handed by net votes as tallies load, without
             importing or rendering ItemRow itself. `itemIds` is passed

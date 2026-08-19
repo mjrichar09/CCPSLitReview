@@ -34,6 +34,14 @@ export default function Comments({ itemId, categoryId }) {
   const [error, setError] = useState(null);
   const [mentionQuery, setMentionQuery] = useState(null);
 
+  // Edit-in-place state for one comment at a time — id of the comment
+  // currently being edited, and its own draft/busy/error, separate from the
+  // new-comment form above.
+  const [editingId, setEditingId] = useState(null);
+  const [editDraft, setEditDraft] = useState('');
+  const [editBusy, setEditBusy] = useState(false);
+  const [editError, setEditError] = useState(null);
+
   /** Fetch the thread once, whenever the paper is first opened. */
   const load = useCallback(async () => {
     if (!supabase || requested.current) return;
@@ -41,7 +49,7 @@ export default function Comments({ itemId, categoryId }) {
     setLoading(true);
     const { data, error: err } = await supabase
       .from('comments')
-      .select('id, body, created_at, user_id, profiles(display_name)')
+      .select('id, body, created_at, edited_at, user_id, profiles(display_name)')
       .eq('item_id', itemId)
       .order('created_at', { ascending: true });
     setLoading(false);
@@ -108,8 +116,14 @@ export default function Comments({ itemId, categoryId }) {
       setError(null);
       const { data, error: err } = await supabase
         .from('comments')
-        .insert({ user_id: user.id, item_id: itemId, category_id: categoryId, month: engagement?.month, body })
-        .select('id, body, created_at, user_id, profiles(display_name)')
+        .insert({
+          user_id: user.id,
+          item_id: itemId,
+          category_id: categoryId,
+          month: engagement?.itemMonths?.[itemId],
+          body,
+        })
+        .select('id, body, created_at, edited_at, user_id, profiles(display_name)')
         .single();
       setBusy(false);
 
@@ -131,6 +145,65 @@ export default function Comments({ itemId, categoryId }) {
     [supabase, user, approved, draft, itemId, categoryId, engagement],
   );
 
+  const startEdit = useCallback((c) => {
+    setEditingId(c.id);
+    setEditDraft(c.body);
+    setEditError(null);
+  }, []);
+
+  const cancelEdit = useCallback(() => {
+    setEditingId(null);
+    setEditDraft('');
+    setEditError(null);
+  }, []);
+
+  const saveEdit = useCallback(
+    async (event) => {
+      event.preventDefault();
+      const body = editDraft.trim();
+      if (!supabase || !body) return;
+
+      setEditBusy(true);
+      setEditError(null);
+      const { data, error: err } = await supabase
+        .from('comments')
+        .update({ body, edited_at: new Date().toISOString() })
+        .eq('id', editingId)
+        .select('id, body, created_at, edited_at, user_id, profiles(display_name)')
+        .single();
+      setEditBusy(false);
+
+      if (err) {
+        setEditError('Could not save that edit.');
+        return;
+      }
+      setComments((list) => list.map((c) => (c.id === data.id ? data : c)));
+      setEditingId(null);
+      setEditDraft('');
+    },
+    [supabase, editingId, editDraft],
+  );
+
+  const deleteComment = useCallback(
+    async (c) => {
+      if (!supabase) return;
+      if (!window.confirm('Delete this comment? This cannot be undone.')) return;
+
+      const { error: err } = await supabase
+        .from('comments')
+        .update({ deleted_at: new Date().toISOString() })
+        .eq('id', c.id);
+
+      if (err) {
+        setError('Could not delete that comment.');
+        return;
+      }
+      setComments((list) => list.filter((x) => x.id !== c.id));
+      engagement?.adjustCommentCount(itemId, -1);
+    },
+    [supabase, itemId, engagement],
+  );
+
   if (!enabled) return null;
 
   return (
@@ -144,15 +217,55 @@ export default function Comments({ itemId, categoryId }) {
 
       {comments !== null && comments.length > 0 && (
         <ul className="comment-list">
-          {comments.map((c) => (
-            <li key={c.id} className="comment">
-              <div className="comment-meta">
-                <span className="comment-author">{c.profiles?.display_name ?? 'Unknown'}</span>
-                <time dateTime={c.created_at}>{new Date(c.created_at).toLocaleDateString()}</time>
-              </div>
-              <p className="comment-body">{c.body}</p>
-            </li>
-          ))}
+          {comments.map((c) => {
+            const mine = user && c.user_id === user.id;
+            const editingThis = editingId === c.id;
+            return (
+              <li key={c.id} className="comment">
+                <div className="comment-meta">
+                  <span className="comment-author">{c.profiles?.display_name ?? 'Unknown'}</span>
+                  <time dateTime={c.created_at}>{new Date(c.created_at).toLocaleDateString()}</time>
+                  {c.edited_at && <span className="comment-edited">(edited)</span>}
+                  {mine && approved && !editingThis && (
+                    <span className="comment-owner-actions">
+                      <button type="button" className="link-button" onClick={() => startEdit(c)}>
+                        Edit
+                      </button>
+                      <button type="button" className="link-button" onClick={() => deleteComment(c)}>
+                        Delete
+                      </button>
+                    </span>
+                  )}
+                </div>
+
+                {editingThis ? (
+                  <form className="comment-form comment-edit-form" onSubmit={saveEdit}>
+                    <textarea
+                      value={editDraft}
+                      onChange={(e) => setEditDraft(e.target.value.slice(0, MAX_BODY))}
+                      rows={3}
+                      maxLength={MAX_BODY}
+                      autoFocus
+                    />
+                    <div className="comment-form-foot">
+                      <span className="comment-count-left">{MAX_BODY - editDraft.length} characters left</span>
+                      <span>
+                        <button type="button" className="link-button" onClick={cancelEdit}>
+                          Cancel
+                        </button>{' '}
+                        <button type="submit" disabled={editBusy || editDraft.trim().length === 0}>
+                          {editBusy ? 'Saving…' : 'Save'}
+                        </button>
+                      </span>
+                    </div>
+                    {editError && <p className="comments-error">{editError}</p>}
+                  </form>
+                ) : (
+                  <p className="comment-body">{c.body}</p>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
 

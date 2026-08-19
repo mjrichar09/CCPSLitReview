@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { formatAuthors } from './shared.js';
 import VoteButtons from './VoteButtons.jsx';
+import ReadToggle from './ReadToggle.jsx';
+import FavoriteButton from './FavoriteButton.jsx';
 import CommentBadge from './CommentBadge.jsx';
 import Comments from './Comments.jsx';
 
@@ -42,11 +44,14 @@ function Badges({ item }) {
  * lives inside the expanded body rather than on the title — an `<a>` nested
  * inside `<summary>` fights the browser's own click-to-toggle handling (both
  * can fire), so the title stays plain text and "View source" is its own link.
+ *
+ * `defaultOpen` renders the card pre-expanded — used by the discussion board,
+ * which shows a paper's full content and thread without requiring a click.
  */
-export default function ItemRow({ item, id, also = [], categoryId }) {
+export default function ItemRow({ item, id, also = [], categoryId, defaultOpen = false }) {
   return (
     <li>
-      <details className="item" id={id}>
+      <details className="item" id={id} open={defaultOpen}>
         <summary>
           <h3 className="item-title">{item.title}</h3>
           <div className="item-meta">
@@ -59,9 +64,13 @@ export default function ItemRow({ item, id, also = [], categoryId }) {
                 the model's score on the collapsed row: `relevance 4/5` is what
                 the model thought, the thumbs are what the readers thought, and
                 the gap between them is what the scoring feedback loop closes.
-                VoteButtons suppresses the click so voting does not also toggle
-                the disclosure. */}
-            <VoteButtons itemId={item.id} />
+                Each control suppresses its own click so using it does not also
+                toggle the disclosure. */}
+            <span className="reader-controls">
+              <ReadToggle itemId={item.id} />
+              <FavoriteButton itemId={item.id} />
+              <VoteButtons itemId={item.id} />
+            </span>
           </div>
         </summary>
         <div className="item-body">
