@@ -5,7 +5,7 @@ import { getSupabase } from '../../lib/supabase/client.js';
 
 /**
  * Filters the full, server-rendered archive down to papers that have at
- * least one comment, sorted most-discussed first.
+ * least one comment, sorted by most recent comment first.
  *
  * Same shape as `SortableItemList`/`FavoritesList`: the server renders every
  * `<ItemRow>` ever published, and this client leaf only ever hides or
@@ -14,7 +14,8 @@ import { getSupabase } from '../../lib/supabase/client.js';
  *
  * `comment_counts` is grouped by (item_id, month) — a paper that recurred
  * across two months and was commented on in both would have two rows — so
- * counts are summed per item id here rather than trusted as one row each.
+ * both the count and the latest timestamp are reduced per item id here
+ * rather than trusted as one row each.
  */
 export default function DiscussionList({ itemIds, children }) {
   const supabase = useMemo(() => getSupabase(), []);
@@ -25,12 +26,15 @@ export default function DiscussionList({ itemIds, children }) {
     let alive = true;
     supabase
       .from('comment_counts')
-      .select('item_id, total')
+      .select('item_id, total, latest')
       .then(({ data }) => {
         if (!alive || !data) return;
         const summed = new Map();
         for (const row of data) {
-          summed.set(row.item_id, (summed.get(row.item_id) ?? 0) + Number(row.total));
+          const prior = summed.get(row.item_id);
+          const total = (prior?.total ?? 0) + Number(row.total);
+          const latest = prior?.latest && prior.latest > row.latest ? prior.latest : row.latest;
+          summed.set(row.item_id, { total, latest });
         }
         setTotals(summed);
       });
@@ -43,9 +47,9 @@ export default function DiscussionList({ itemIds, children }) {
 
   const items = Children.toArray(children);
   const matched = items
-    .map((el, i) => ({ el, id: itemIds[i], total: totals.get(itemIds[i]) ?? 0 }))
+    .map((el, i) => ({ el, id: itemIds[i], ...(totals.get(itemIds[i]) ?? { total: 0, latest: null }) }))
     .filter((p) => p.total > 0)
-    .sort((a, b) => b.total - a.total);
+    .sort((a, b) => new Date(b.latest) - new Date(a.latest));
 
   if (matched.length === 0) {
     return <p className="comments-empty">No discussions yet — comment on a paper to start one.</p>;

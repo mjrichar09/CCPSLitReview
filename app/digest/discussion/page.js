@@ -26,7 +26,7 @@ export default async function DiscussionPage() {
       <div className="layout">
         <main className="col-main">
           <h1 className="report-title">Discussion</h1>
-          <p className="report-summary">Every paper with a comment thread, most-discussed first.</p>
+          <p className="report-summary">Every paper with a comment thread, most recent comment first.</p>
           <Engagement
             itemMonths={Object.fromEntries(index.map((e) => [e.item.id, e.month]))}
             itemIds={index.map((e) => e.item.id)}
