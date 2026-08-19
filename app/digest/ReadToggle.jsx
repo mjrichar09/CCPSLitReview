@@ -2,6 +2,7 @@
 
 import { useEngagement } from './Engagement.jsx';
 import { useSession } from './SessionProvider.jsx';
+import { useReaction } from './ReactionFX.jsx';
 
 /**
  * "Mark read" / "Read" toggle for one paper, on the collapsed row next to
@@ -12,6 +13,7 @@ import { useSession } from './SessionProvider.jsx';
 export default function ReadToggle({ itemId }) {
   const engagement = useEngagement();
   const { enabled, ready, user, approved } = useSession();
+  const reaction = useReaction();
 
   if (!engagement || !enabled) return null;
 
@@ -32,7 +34,9 @@ export default function ReadToggle({ itemId }) {
   const onClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (canToggle) toggleRead(itemId);
+    if (!canToggle) return;
+    if (!isRead) reaction?.fire('read', event.currentTarget);
+    toggleRead(itemId);
   };
 
   return (

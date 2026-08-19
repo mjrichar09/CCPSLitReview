@@ -2,6 +2,7 @@
 
 import { useEngagement } from './Engagement.jsx';
 import { useSession } from './SessionProvider.jsx';
+import { useReaction } from './ReactionFX.jsx';
 
 /**
  * Thumbs up / thumbs down for one paper, rendered on the collapsed row so a
@@ -15,6 +16,7 @@ import { useSession } from './SessionProvider.jsx';
 export default function VoteButtons({ itemId }) {
   const engagement = useEngagement();
   const { enabled, ready, user, approved } = useSession();
+  const reaction = useReaction();
 
   // Rendered outside a page that provides engagement, or Supabase unconfigured:
   // the digest is the product, so the widget simply is not there.
@@ -44,7 +46,11 @@ export default function VoteButtons({ itemId }) {
   const onClick = (event, value) => {
     event.preventDefault();
     event.stopPropagation();
-    if (canVote) castVote(itemId, value);
+    if (!canVote) return;
+    // Only the burst that sets a rating is worth celebrating — retracting
+    // one (clicking the button you already chose) gets no animation.
+    if (chosen !== value) reaction?.fire(value === 1 ? 'up' : 'down', event.currentTarget);
+    castVote(itemId, value);
   };
 
   return (

@@ -2,11 +2,13 @@
 
 import { useEngagement } from './Engagement.jsx';
 import { useSession } from './SessionProvider.jsx';
+import { useReaction } from './ReactionFX.jsx';
 
 /** Star toggle for one paper, on the collapsed row next to the vote buttons. */
 export default function FavoriteButton({ itemId }) {
   const engagement = useEngagement();
   const { enabled, ready, user, approved } = useSession();
+  const reaction = useReaction();
 
   if (!engagement || !enabled) return null;
 
@@ -27,7 +29,9 @@ export default function FavoriteButton({ itemId }) {
   const onClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    if (canToggle) toggleFavorite(itemId);
+    if (!canToggle) return;
+    if (!isFavorite) reaction?.fire('favorite', event.currentTarget);
+    toggleFavorite(itemId);
   };
 
   return (
