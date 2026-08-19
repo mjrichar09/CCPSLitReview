@@ -3,7 +3,7 @@
 import { Children, useLayoutEffect, useMemo, useRef } from 'react';
 import { useEngagement } from './Engagement.jsx';
 
-const TRANSITION = 'transform 0.3s ease';
+const TRANSITION = 'transform 0.6s ease';
 
 function net(tallies, itemId) {
   const t = tallies?.get(itemId);
@@ -46,10 +46,25 @@ export default function SortableItemList({ itemIds, children }) {
     return paired.map((p) => p.el);
   }, [items, itemIds, tallies]);
 
+  // The actual vote-driven order, as a plain string — stable across renders
+  // that don't change it, unlike `sorted` itself (a fresh array every
+  // render, since `items` is recomputed from `Children.toArray` every time).
+  // Marking a paper read or favoriting it changes Engagement's context value
+  // too, which re-renders this component same as a vote does; without this,
+  // the FLIP effect below re-measured and "animated" on every one of those,
+  // even though nothing had actually reordered — a stray sub-pixel reflow
+  // from a button's text changing width was enough to trigger a visible
+  // flicker across the whole list.
+  const orderKey = useMemo(
+    () => [...itemIds].sort((a, b) => net(tallies, b) - net(tallies, a)).join('|'),
+    [itemIds, tallies],
+  );
+
   // FLIP: capture each item's position from the previous render (keyed by the
   // stable slug id on ItemRow's <details>, not DOM order, since that is what
   // just changed), then after the reorder commits, slide each item from its
-  // old spot to its new one instead of letting it jump.
+  // old spot to its new one instead of letting it jump. Keyed on `orderKey`
+  // so it only runs when the order itself actually changed.
   useLayoutEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -77,7 +92,7 @@ export default function SortableItemList({ itemIds, children }) {
       node.style.transform = '';
     }
     rectsRef.current = next;
-  });
+  }, [orderKey]);
 
   return (
     <ul className="item-list" ref={containerRef}>
