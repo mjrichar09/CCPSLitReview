@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import SearchBar from './SearchBar.jsx';
 import SignIn from './SignIn.jsx';
 import ThemeToggle from './ThemeToggle.jsx';
 
@@ -28,13 +29,14 @@ export default function SiteHeader({ archive, categories }) {
         </Link>
         {archive}
         <nav className="top-nav" aria-label="More pages">
-          <Link href="/digest/favorites" className="archive-link">
+          <Link href="/digest/favorites" className="archive-link" data-reaction-target="favorites">
             Favorites
           </Link>
           <Link href="/digest/discussion" className="archive-link">
             Discussion
           </Link>
         </nav>
+        <SearchBar />
         <div className="site-header-account">
           <ThemeToggle />
           <SignIn />
