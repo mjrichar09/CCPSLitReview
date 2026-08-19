@@ -477,7 +477,7 @@ a:hover { text-decoration: underline; }
 .reaction-star-tail {
   position: absolute; top: 50%; right: 50%; width: 70px; height: 5px;
   transform-origin: 100% 50%;
-  transform: rotate(calc(var(--tail-angle) + 180deg));
+  transform: rotate(var(--tail-angle));
   background: linear-gradient(90deg, rgba(245, 180, 0, 0) 0%, rgba(245, 180, 0, 0.85) 100%);
   border-radius: 999px;
   animation: reaction-star-tail-fade 1.8s ease forwards;
