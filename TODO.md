@@ -2,16 +2,16 @@
 
 ## Next session plan
 
-**UX improvements landed on `claude/ux-improvements-cn248b`: pill reordering, vote-sorted lists, votes into scoring, @mentions/notifications, comment badges, dark mode.** Not yet merged or deployed. See Status_update.md 2026-08-17 for the full account.
+**UX improvements from `claude/ux-improvements-cn248b` are merged and live on `main`** (pill reordering, vote-sorted lists, votes into scoring, @mentions/notifications, comment badges, dark mode, reader engagement — reads/favorites/discussion board, sign-in gate, reaction animations, site search). See Status_update.md for the full account.
 
-**Before this branch is fully live, in order:**
+**Generation split off Actions onto a Claude Code routine, on `claude/routine-generation-8f3k2p`** — summarize/synthesize now run as the routine's own reasoning (billed to subscription) instead of the metered Anthropic API; Actions stops after `score` and fires the routine. Code and docs are done and verified locally; **the routine itself does not exist yet** and needs one-time manual setup before this actually runs live, in order:
 
-1. **Apply the four new migrations** to the Supabase project (`category_order`, `comments.category_id`, unique `display_name` + collision-safe `handle_new_user`, `notifications` + its mention trigger). The unique-display-name index will fail to create if any two existing approved readers already share a display name case-insensitively — check for that first and rename one by hand if so.
-2. **Add `SUPABASE_URL` and `SUPABASE_ANON_KEY` to Actions secrets** (same project URL/anon key as the `NEXT_PUBLIC_` ones, just under non-`NEXT_PUBLIC_` names) so `lib/feedback.js` can read `vote_tallies` during the pipeline run. Absent, the feature disables itself rather than failing.
-3. **Merge and deploy**, then verify votes/comments/mentions/notifications end to end against the real Supabase project — this session verified against a local build with no Supabase configured (dark mode, pill drag+persist via localStorage, comment badges, and the full test/lint/build suite all passed; nothing that talks to Postgres could be exercised without credentials).
-4. **Set `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` in Vercel**, still open from Phase 6. Without them the deployed site builds and renders fine but shows no feedback widgets at all — the failure is silent by design.
-5. **Add the production URL to Supabase Auth -> URL Configuration** (Site URL + `https://<project>.vercel.app/**` in Redirect URLs), still open from Phase 6. Only `http://localhost:3000/**` has been exercised.
-6. **Read the first month that actually has history behind it for invented continuity** (Phase 6 carryover) — the one failure mode neither the history nor the new feedback context can be tested against until a second real month exists.
+1. **Create the routine** at [claude.ai/code/routines](https://claude.ai/code/routines) — repository `mjrichar09/CCPSLitReview`, model **Opus**, default network access, no schedule trigger. Paste the exact prompt from `docs/digest-routine-prompt.md` into its Instructions box.
+2. **Add an API trigger** to the routine (Edit routine → Select a trigger → Add another trigger → API), then **Generate token** and copy it immediately — it's shown once.
+3. **Add two Actions secrets**: `DIGEST_ROUTINE_FIRE_URL` (the URL shown alongside the token) and `DIGEST_ROUTINE_FIRE_TOKEN` (the token itself). Absent, Actions still commits `scored.json` every month but warns instead of firing the routine — see the "Fire the generation routine" step in `.github/workflows/digest.yml`.
+4. **Merge `claude/routine-generation-8f3k2p` to `main`** once 1-3 are done (or first, if you'd rather verify the workflow changes are live before wiring the routine up — the fire step no-ops cleanly without the secrets either way).
+5. **Verify end to end** on the next real scheduled run (2nd of the month, 06:17 UTC): confirm Actions stops at `score` and fires the routine, the routine's run shows up at claude.ai/code/routines, and the finished month lands as a commit on `main` authored by the routine (not a stranded `claude/*` branch — check `git log origin/main` directly, don't just trust the routine's own "success").
+6. Until then, a manual `workflow_dispatch` with `stage: all` still runs the complete metered pipeline as a fallback — nothing about the split blocks that path.
 
 ## Backlog
 

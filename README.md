@@ -125,15 +125,15 @@ npm run dev     # http://localhost:3000 redirects to /digest
 
 ## Architecture
 
-The pipeline runs **only** in GitHub Actions and is the sole writer. The Next.js app deploys to Vercel, reads the committed JSON at build time, and never writes — there are no API routes and no runtime filesystem reads. A new commit from Actions triggers a redeploy, which is what makes the no-database design work.
+Fetch/normalize/score run in GitHub Actions, on schedule, and commit `data/digest/staging/<month>/scored.json` to the default branch. Summarize/synthesize/write run on a Claude Code routine instead — see "Generation runs on a routine" below — which commits the finished month, also straight to the default branch. Either way, the Next.js app deploys to Vercel, reads the committed JSON at build time, and never writes — there are no API routes and no runtime filesystem reads. A new commit on the default branch triggers a redeploy, which is what makes the no-database design work.
 
 Data lives in `data/digest/`: one `YYYY-MM.json` per month, a dedupe ledger under `index/`, and per-month staging artifacts under `staging/`. All reads go through `lib/digest.js`.
 
-### A note for a future routine-based generator
+### Generation runs on a routine, not the metered API
 
-Summarisation is the dominant cost line, so it may later move onto a Claude Code routine billed against a subscription rather than the metered API. The seam is already in place: generation sits behind `generate(items, kind)` selected by the `generator` config key, the fetch/normalize/dedupe/score stages have no dependency on how generation happens, and the scored item list is a committed on-disk artifact (`staging/<month>/scored.json`) that a routine can read from the repo.
+Summarize and synthesize — Opus, "the dominant cost line" per `config/digest.config.js` — run on a Claude Code routine billed against a subscription instead of `ANTHROPIC_API_KEY`. Actions fires it via its API trigger right after committing `scored.json` for the month; the routine reads that file (via `scripts/prep-for-routine.mjs`), writes its own reasoning to `data/digest/staging/<month>/routine-output.json`, and hands off to `scripts/finalize-routine-output.mjs` (validation + deterministic assembly into the exact `summarized.json`/`synthesized.json` shapes) and then `node scripts/digest.mjs --stage write --from-stage write` (pure assembly, no LLM) before committing straight to `main`.
 
-Such a generator would need credentials for whatever surface it runs on in place of `ANTHROPIC_API_KEY`; it would not need `NCBI_API_KEY` or any source credentials, since the deterministic stages stay in Actions. Those variables are deliberately not added yet.
+This did **not** end up going through a `generate()`-seam abstraction the way an earlier draft of this note described (`generate(items, kind)` selected by a `generator` config key) — a routine's LLM work is the routine's own reasoning, not a Node function it can call into, so `lib/generate/`, `lib/providers/`, and `score.js`/`summarize.js`/`synthesize.js` are unchanged and still the code path for local dev, `test/*.test.js`'s fixtures, and a manual full-metered `workflow_dispatch` run (`stage: all`) as a fallback. `docs/digest-routine-prompt.md` is the routine's exact prompt, versioned like any other source file since its wording is load-bearing.
 
 ## Conventions
 

@@ -46,7 +46,9 @@ lib/
     http.js           fetch with timeout, retry, polite UA
     log.js            structured stderr logging
 scripts/
-  digest.mjs          CLI: --stage --month --since --category --source --dry-run --force
+  digest.mjs          CLI: --stage --month --since --category --source --dry-run --fresh --from-stage --force
+  prep-for-routine.mjs           scored.json -> routine-input.json (deterministic prep for the routine)
+  finalize-routine-output.mjs    routine-output.json -> summarized.json + synthesized.json (validate + assemble)
 test/                 node:test over recorded fixtures; no network, no LLM calls
 app/
   digest/             viewer pages + feedback client islands
@@ -89,6 +91,7 @@ data/digest/
 - **Reader feedback is the one exception, and it does not touch that path.** Votes and comments go browser → Supabase → Postgres, under row-level security, from client islands. No server, no API route, no fs. The consequence to remember: tallies are absent from the prerendered HTML and arrive after hydration.
 - **`profiles.approved` is enforced in Postgres, never in the UI.** A hidden button proves nothing; the policies re-check every insert, so revoking approval stops writing immediately even on a live session. Test it as `anon` / unapproved / approved with SQL, not by clicking.
 - **The Actions job commits to the default branch.** TrendTracker's routine committed to `claude/*` session branches and Vercel only builds `main`, which stranded two weekly reports invisibly. Committing straight to the default branch is why this design can't repeat that.
+- **Generation runs on a routine, not the metered API — and pushes straight to `main` too.** Actions stops after `score` and fires a Claude Code routine (`docs/digest-routine-prompt.md`), which does summarize+synthesize as its own reasoning (subscription-billed) rather than an Anthropic API call, then commits the finished month directly to `main` — no PR, no `claude/*` branch. This works here specifically because `main` is unprotected and every commit on it already carries this account's identity: Claude Code checks a directed push and only redirects it to a session branch if the target is protected, has someone else's open PR, or carries a commit authored by someone else. If any of that ever stops being true (a collaborator merges under their own account, branch protection gets turned on), the routine's push would silently fall back to a `claude/*` branch and reintroduce exactly the stranded-report bug the line above describes — which is why the routine's prompt has it verify the push landed on `origin/main` rather than trusting a "success" status.
 - **Never unref a timer in `lib/util/throttle.js`.** The refill timer is the only thing holding the event loop open while jobs wait on tokens; unref'ing it lets Node exit mid-run with code 0 and partial results. `test/throttle.test.js` guards this.
 - **Strip inline tags before XML parsing, not after.** PubMed embeds `<i>`, `<sub>` etc. inside titles and abstracts; fast-xml-parser splits mixed content into `#text` plus siblings and loses the ordering, silently dropping words. `pubmed.js` strips them from the raw string first.
 - **Store title, abstract, metadata, and link only.** No article bodies, no scraping, no paywall circumvention. Sources must be official APIs or RSS.

@@ -41,8 +41,9 @@ next-env.d.ts
 
 # Pipeline staging artifacts.
 # raw.json and normalized.json are large and free to regenerate — no LLM spend
-# sits behind them. scored.json IS committed (a future routine-based generator
-# has to read it from the repo), so it is deliberately NOT ignored here.
+# sits behind them. scored.json IS committed — the generation routine reads it
+# from the repo (see CLAUDE.md, "Generation runs on a routine") — so it is
+# deliberately NOT ignored here.
 /data/digest/staging/**/raw.json
 /data/digest/staging/**/normalized.json
 # summarized/synthesized hold the generated prose, which is already the month
@@ -50,3 +51,9 @@ next-env.d.ts
 # month to store the same text twice.
 /data/digest/staging/**/summarized.json
 /data/digest/staging/**/synthesized.json
+# routine-input/routine-output are the generation routine's own scratch
+# artifacts (scripts/prep-for-routine.mjs / finalize-routine-output.mjs),
+# regenerated fresh in its ephemeral clone every run — same reasoning as
+# summarized/synthesized above.
+/data/digest/staging/**/routine-input.json
+/data/digest/staging/**/routine-output.json

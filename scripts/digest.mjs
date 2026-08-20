@@ -41,6 +41,14 @@ Options
                       Staging artifacts are still written, so a re-run after a
                       failure costs no re-fetching, re-scoring or re-summarising.
   --fresh             ignore existing staging artifacts and re-run from fetch
+  --from-stage <s>    skip iterating earlier stages entirely rather than
+                      cache-checking them; the named stage's own artifact
+                      dependency check still applies (e.g. --stage write
+                      --from-stage write reads synthesized.json directly and
+                      never touches fetch/normalize/score — used by the
+                      routine-based generator, which supplies summarized.json
+                      and synthesized.json itself and must not risk a live
+                      re-fetch just because raw.json is gitignored)
   --force             allow overwriting an already-written month
   --log-level <lvl>   debug | info | warn | error   (default: info)
   --help              this message
@@ -61,6 +69,7 @@ async function main() {
       source: { type: 'string', multiple: true },
       'dry-run': { type: 'boolean', default: false },
       fresh: { type: 'boolean', default: false },
+      'from-stage': { type: 'string' },
       force: { type: 'boolean', default: false },
       'log-level': { type: 'string', default: 'info' },
       help: { type: 'boolean', default: false },
@@ -93,7 +102,10 @@ async function main() {
   });
 
   const target = stage === 'all' ? ORDER[ORDER.length - 1] : stage;
-  const wanted = ORDER.slice(0, ORDER.indexOf(target) + 1);
+  const fromStage = values['from-stage'];
+  if (fromStage && !ORDER.includes(fromStage)) fail(`unknown --from-stage "${fromStage}" — expected one of ${ORDER.join(', ')}`);
+  const startIndex = fromStage ? ORDER.indexOf(fromStage) : 0;
+  const wanted = ORDER.slice(startIndex, ORDER.indexOf(target) + 1);
   const ctx = { config, categories, window, month, dry, fresh: values.fresh, force: values.force, usage };
 
   let result = null;
