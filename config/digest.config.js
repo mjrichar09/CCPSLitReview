@@ -75,6 +75,7 @@ const sources = {
       { id: 'bpi', name: 'BioProcess International', url: 'https://bioprocessintl.com/rss.xml', tags: ['trade', 'manufacturing'] },
       { id: 'gen', name: 'GEN', url: 'https://www.genengnews.com/feed/', tags: ['trade'] },
       { id: 'fierce-pharma', name: 'Fierce Pharma', url: 'https://www.fiercepharma.com/rss/xml', tags: ['trade', 'industry'] },
+      { id: 'fierce-biotech', name: 'Fierce Biotech', url: 'https://www.fiercebiotech.com/rss/xml', tags: ['trade', 'industry'] },
       { id: 'fda-cber', name: 'FDA biologics guidance', url: 'https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/biologics/rss.xml', tags: ['regulatory'] },
       // Added to cover what Endpoints would have. Cell Culture Dish is the most
       // upstream-specific outlet of the set; BioPharma Dive carries the

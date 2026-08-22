@@ -50,6 +50,18 @@ test('pubmed: drops untitled records rather than emitting them', () => {
   assert.ok(records.every((r) => r.title));
 });
 
+test('pubmed: links straight to PMC when a pmc id is present, not the abstract page', () => {
+  const xml = `<PubmedArticleSet><PubmedArticle>
+    <MedlineCitation><PMID>12345</PMID><Article><ArticleTitle>Open access paper.</ArticleTitle></Article></MedlineCitation>
+    <PubmedData><ArticleIdList>
+      <ArticleId IdType="pubmed">12345</ArticleId>
+      <ArticleId IdType="pmc">PMC9999999</ArticleId>
+    </ArticleIdList></PubmedData>
+  </PubmedArticle></PubmedArticleSet>`;
+  const [record] = parseArticles(xml, 'pat_control');
+  assert.equal(record.url, 'https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9999999/');
+});
+
 // --- Europe PMC -------------------------------------------------------------
 
 test('europepmc: maps a journal result and flags preprints', () => {
@@ -70,6 +82,38 @@ test('europepmc: maps a journal result and flags preprints', () => {
 test('europepmc: falls back to a europepmc article URL when there is no DOI', () => {
   const r = epmcRecord({ id: 'PPR1', source: 'PPR', title: 'No DOI here' }, 'modeling_ml');
   assert.equal(r.url, 'https://europepmc.org/article/PPR/PPR1');
+});
+
+test('europepmc: prefers the genuine open-access full-text link over the DOI landing page', () => {
+  const r = epmcRecord(
+    {
+      doi: '10.1234/x',
+      title: 'Open access paper',
+      fullTextUrlList: {
+        fullTextUrl: [
+          { availability: 'Subscription required', availabilityCode: 'S', documentStyle: 'doi', site: 'DOI', url: 'https://doi.org/10.1234/x' },
+          { availability: 'Open access', availabilityCode: 'OA', documentStyle: 'html', site: 'Europe_PMC', url: 'https://europepmc.org/articles/PMC1111111' },
+          { availability: 'Open access', availabilityCode: 'OA', documentStyle: 'pdf', site: 'Europe_PMC', url: 'https://europepmc.org/articles/PMC1111111?pdf=render' },
+        ],
+      },
+    },
+    'modeling_ml',
+  );
+  assert.equal(r.url, 'https://europepmc.org/articles/PMC1111111', 'the html view, not the DOI page or the PDF');
+});
+
+test('europepmc: a subscription-only link is not mistaken for open access', () => {
+  const r = epmcRecord(
+    {
+      doi: '10.1234/y',
+      title: 'Paywalled paper',
+      fullTextUrlList: {
+        fullTextUrl: [{ availability: 'Subscription required', availabilityCode: 'S', documentStyle: 'doi', site: 'DOI', url: 'https://doi.org/10.1234/y' }],
+      },
+    },
+    'modeling_ml',
+  );
+  assert.equal(r.url, 'https://doi.org/10.1234/y', 'falls back to the same landing page as before, no invented full text');
 });
 
 // --- bioRxiv ----------------------------------------------------------------

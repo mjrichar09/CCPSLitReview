@@ -2,7 +2,7 @@
 
 A monthly automated research digest for upstream CHO process development and CMC. A scheduled GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eleven bioprocessing topics, filters for relevance, summarises what survives, and commits one JSON report per month. A read-only Next.js viewer renders it.
 
-**Status: all five phases are built.** The pipeline runs end to end in Actions, `data/digest/2026-08.json` is the first committed month, and the viewer renders it at `/digest`.
+**Status: the full pipeline runs, split across two writers.** fetch/normalize/score run in Actions and commit `scored.json`; summarize/synthesize/write run on a Claude Code routine and commit the finished month — see "Generation runs on a routine, not the metered API" below. The viewer renders every committed month at `/digest`, and approved readers can rate, comment, mark items read, favorite them, and browse a cross-month discussion board.
 
 ## Setup
 
@@ -14,7 +14,7 @@ cp .env.local.example .env.local   # then fill in the keys you have
 | Variable | Needed for | Notes |
 |---|---|---|
 | `NCBI_API_KEY` | PubMed | Optional. Without it PubMed is throttled to 3 req/s instead of 10; the run still succeeds and notes it in `source_health`. |
-| `ANTHROPIC_API_KEY` | Scoring, summarising, synthesising | Phase 2 onward. |
+| `ANTHROPIC_API_KEY` | Scoring | Summarising and synthesising run on a Claude Code routine instead (subscription-billed, not this key) — see "Generation runs on a routine" below. |
 | `GROQ_API_KEY` | Optional alternative provider | Only if you point a stage at Groq in `config/digest.config.js`. |
 
 Secrets live in `.env.local` locally and in GitHub Actions secrets in CI. They are never committed.

@@ -1,10 +1,10 @@
 # CCPSLitReview — Monthly Biopharma Literature & News Digest
 
-A monthly research digest for one expert reader (upstream CHO process development / CMC). A GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eight bioprocessing topics, filters for relevance with an LLM, summarises what survives, and commits one JSON report per month. A Next.js viewer renders the latest month and an archive of past ones; it is read-only for content, and approved readers can rate and comment on papers.
+A monthly research digest for one expert reader (upstream CHO process development / CMC). A GitHub Actions job searches literature, preprints, regulatory sources, and trade press across eleven bioprocessing topics, filters for relevance with an LLM, summarises what survives, and commits one JSON report per month. A Next.js viewer renders the latest month and an archive of past ones; it is read-only for content, and approved readers can rate and comment on papers.
 
 - Repo: https://github.com/mjrichar09/CCPSLitReview (public, proprietary LICENSE)
 - Reference implementation this repo's patterns came from: [TrendTracker](https://github.com/mjrichar09/TrendTracker) — its read/write layer, page structure, and scaffolding were ported; its finance domain code was not.
-- **Status: Phases 1-6 complete.** The full pipeline runs in Actions and one month is committed; the viewer renders it; synthesize carries cross-month memory; readers with an approved account can rate and comment. The repo is public under a proprietary LICENSE. Feeding votes back into scoring is designed but not built. See PLAN.md for the phase plan and TODO.md for what's next.
+- **Status: Phases 1-6 complete, plus reader engagement (reads/favorites/discussion, sign-in gate, reaction animations, site search) and the routine-based generator.** fetch/normalize/score run in Actions and commit `scored.json`; summarize/synthesize/write run on a Claude Code routine (subscription-billed) and commit the finished month — see "Generation runs on a routine" below. The viewer renders it; synthesize carries cross-month memory; readers with an approved account can rate and comment, and their votes feed back into the score-stage rubric (`lib/feedback.js`). The repo is public under a proprietary LICENSE. See PLAN.md for the phase plan and TODO.md for what's next.
 
 ## Document map — what to read when, what to update when
 
@@ -95,6 +95,7 @@ data/digest/
 - **Never unref a timer in `lib/util/throttle.js`.** The refill timer is the only thing holding the event loop open while jobs wait on tokens; unref'ing it lets Node exit mid-run with code 0 and partial results. `test/throttle.test.js` guards this.
 - **Strip inline tags before XML parsing, not after.** PubMed embeds `<i>`, `<sub>` etc. inside titles and abstracts; fast-xml-parser splits mixed content into `#text` plus siblings and loses the ordering, silently dropping words. `pubmed.js` strips them from the raw string first.
 - **Store title, abstract, metadata, and link only.** No article bodies, no scraping, no paywall circumvention. Sources must be official APIs or RSS.
+- **`url` prefers a genuine open-access full-text link over the abstract page, when the source API itself says one exists.** `pubmed.js` uses a `pmc` ArticleId (NCBI is legitimately hosting the text); `europepmc.js` uses `fullTextUrlList` entries the API itself marks `availabilityCode: 'OA'`. Neither is a guess or a scrape — both come straight from the source's own metadata — and neither is the invariant above's paywall circumvention: a paywalled item still links to the same abstract/DOI landing page it always did.
 - **Redirect the CLI with `npm run --silent`.** Without `--silent`, npm prints a two-line banner to stdout ahead of the JSON and the captured artifact does not parse.
 - Secrets (`ANTHROPIC_API_KEY`, `NCBI_API_KEY`, optionally `GROQ_API_KEY`) live in Actions secrets and `.env.local` — never committed.
 
