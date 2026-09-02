@@ -232,6 +232,22 @@ jobs:
         run: |
           echo "::warning::ran on '${{ github.ref_name }}', not the default branch '${{ github.event.repository.default_branch }}' — nothing was committed. Reports are only committed to the default branch, because that is the only branch Vercel builds."
 
+      # A run that reaches here proves whatever an open failure issue was
+      # tracking no longer reproduces. Without this, a fix has to be closed by
+      # hand — which is exactly how issue #2 sat open for weeks after the
+      # token-ceiling bug it tracked was fixed the very next run.
+      - name: Close the failure issue if this run succeeded
+        if: success()
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          for n in $(gh issue list --label digest-failure --state open --json number --jq '.[].number'); do
+            gh issue comment "$n" --body "Resolved by $RUN_URL — closing."
+            gh issue close "$n" --reason completed
+          done
+
       # One open issue per outage, commented on rather than duplicated: a source
       # that stays down would otherwise open a new issue every month.
       - name: Open or update the failure issue
