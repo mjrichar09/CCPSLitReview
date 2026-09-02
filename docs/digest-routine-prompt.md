@@ -90,12 +90,18 @@ Hard rule: never invent a finding not in the abstract you were given. If the
 abstract is thin, set `thin_abstract: true`, keep the summary to what is
 actually supported, and say what is not known. A confidently wrong summary
 is far worse here than an admittedly thin one — this reader acts on these.
-Trade press and regulatory notices are not papers — summarise what was
+Trade press and regulatory notices are not papers — summarize what was
 announced or published and by whom; do not dress a press release up as a
 result.
 
-Write every summary and why_it_matters in **plain ASCII**. Use a hyphen for
-ranges (e.g. `1.6-7.4-fold`, `2012-2025`); do not use en or em dashes.
+Write every summary and why_it_matters in **plain ASCII**, using **American
+spellings**. Use a hyphen for ranges (e.g. `1.6-7.4-fold`, `2012-2025`); do
+not use en or em dashes, and use a straight apostrophe (`'`), never a curly
+one. American spelling means titer not titre, behavior not behaviour, defense
+not defence, modeling not modelling, labeled not labelled, characterized not
+characterised, analyzed not analysed, program not programme, center not
+centre, analog not analogue. This applies to your own prose only — never
+alter the wording of a paper title, an author name or a venue.
 
 You must produce exactly one summary entry for **every** paper index in
 `papers` — no skipping one because it seems marginal. A missing summary is
@@ -145,7 +151,7 @@ time — either say what moved it this month or leave it out; comparisons
 across months ("quieter than July", "the third month running without X")
 are welcome where true.
 
-Plain ASCII throughout, same rule as step 3.
+Plain ASCII and American spellings throughout, same rule as step 3.
 
 ### 5. Write and validate your output
 

@@ -1,11 +1,11 @@
 {
   "month_of": "2026-09-01",
   "generated_at": "2026-09-02T14:51:55.800Z",
-  "summary": "This month's arguments are all about where a cell's resources go, and three results partition growth, survival and productivity three different ways. TPT1 overexpression extended CHO culture and raised titres in DG44 monoclonal and bispecific platforms with cell-specific productivity and the N-glycan profile unchanged, outperforming BCL-2 and matching a BAK/BAX double knockout; an ambr250 proteomics and metabolomics preprint found that enriched feeds delay the switch into fatty acid beta-oxidation and ferroptosis-associated stress but do not raise titre proportionally, because the extra input pays for glutathione and redox defence; and a perfusion study went the other way, deliberately restraining growth with low cell-specific perfusion rate and sodium butyrate for up to 108.94% higher qP and 190.36% higher daily volumetric titer. Read against August's finding that titre gains driven by integral viable cell time strip galactosylation, the TPT1 result is a real counterexample - more culture time with no reported glycan penalty - though the glycan evidence is profile-level only. August's nucleotide-sugar precursor thread otherwise has no follow-on at all, and the sharpest quality result this month is negative: lectin surface profiling tracked product glycans for COSMC and FUT8 knockouts but failed on galactosylation and alpha2,3-sialylation, closing off a cheap clone-screening shortcut. On the regulatory side FDA issued draft guidance on the credibility of AI models used to support regulatory decisions, the first movement on exactly the gap the agency's own retrospective opened last month when every accepted process model turned out to be locked and conventional. The Raman transfer problem also got its constructive answer, with variable-specific preprocessing cutting cross-scale RMSEP by 14.0-56.1% from high-throughput mini-bioreactor calibrations - the same conclusion August's transfer-learning negative pointed at, reached from the other direction.",
+  "summary": "This month's arguments are all about where a cell's resources go, and three results partition growth, survival and productivity three different ways. TPT1 overexpression extended CHO culture and raised titers in DG44 monoclonal and bispecific platforms with cell-specific productivity and the N-glycan profile unchanged, outperforming BCL-2 and matching a BAK/BAX double knockout; an ambr250 proteomics and metabolomics preprint found that enriched feeds delay the switch into fatty acid beta-oxidation and ferroptosis-associated stress but do not raise titer proportionally, because the extra input pays for glutathione and redox defense; and a perfusion study went the other way, deliberately restraining growth with low cell-specific perfusion rate and sodium butyrate for up to 108.94% higher qP and 190.36% higher daily volumetric titer. Read against August's finding that titer gains driven by integral viable cell time strip galactosylation, the TPT1 result is a real counterexample - more culture time with no reported glycan penalty - though the glycan evidence is profile-level only. August's nucleotide-sugar precursor thread otherwise has no follow-on at all, and the sharpest quality result this month is negative: lectin surface profiling tracked product glycans for COSMC and FUT8 knockouts but failed on galactosylation and alpha2,3-sialylation, closing off a cheap clone-screening shortcut. On the regulatory side FDA issued draft guidance on the credibility of AI models used to support regulatory decisions, the first movement on exactly the gap the agency's own retrospective opened last month when every accepted process model turned out to be locked and conventional. The Raman transfer problem also got its constructive answer, with variable-specific preprocessing cutting cross-scale RMSEP by 14.0-56.1% from high-throughput mini-bioreactor calibrations - the same conclusion August's transfer-learning negative pointed at, reached from the other direction.",
   "top_items": [
     {
       "id": "doi:10.1016/j.ymben.2026.102543",
-      "reason": "A single-cassette host lever - TPT1 overexpression - that raised titres in CHO DG44 monoclonal and bispecific platforms through culture longevity alone, beating BCL-2 and matching a BAK/BAX double knockout, with cell-specific productivity and the N-glycan profile both reported unchanged."
+      "reason": "A single-cassette host lever - TPT1 overexpression - that raised titers in CHO DG44 monoclonal and bispecific platforms through culture longevity alone, beating BCL-2 and matching a BAK/BAX double knockout, with cell-specific productivity and the N-glycan profile both reported unchanged."
     },
     {
       "id": "doi:10.1002/bit.70359",
@@ -28,7 +28,7 @@
     {
       "id": "pat_control",
       "name": "PAT & Spectroscopic Process Control",
-      "synthesis": "One item survived, and it is the constructive sequel to last month's negative result on Raman transfer learning. August's benchmark found unsupervised domain adaptation helped only where across-domain variance dominated and lost to systematically optimised source preprocessing wherever within-domain variability was high; this month's study takes precisely that route and shows it works, cutting cross-scale RMSEP by 14.0-56.1% on five initially poorly transferable outputs by selecting the preprocessing pipeline per target variable instead of applying one pipeline to all, and bringing single-scale models close to combined-scale accuracy. The important detail is negative in its own way: no individual preprocessing technique won, so what transfers is the per-target selection procedure rather than any specific pipeline you could copy. The paper also names neither its cell line nor its five target outputs, which limits how directly you can reproduce the setup. Nothing appeared on dielectric spectroscopy, soft sensors, or an implemented control law for the second month running, so the closed-loop half of this category remains argument rather than bioreactor result.",
+      "synthesis": "One item survived, and it is the constructive sequel to last month's negative result on Raman transfer learning. August's benchmark found unsupervised domain adaptation helped only where across-domain variance dominated and lost to systematically optimized source preprocessing wherever within-domain variability was high; this month's study takes precisely that route and shows it works, cutting cross-scale RMSEP by 14.0-56.1% on five initially poorly transferable outputs by selecting the preprocessing pipeline per target variable instead of applying one pipeline to all, and bringing single-scale models close to combined-scale accuracy. The important detail is negative in its own way: no individual preprocessing technique won, so what transfers is the per-target selection procedure rather than any specific pipeline you could copy. The paper also names neither its cell line nor its five target outputs, which limits how directly you can reproduce the setup. Nothing appeared on dielectric spectroscopy, soft sensors, or an implemented control law for the second month running, so the closed-loop half of this category remains argument rather than bioreactor result.",
       "items": [
         {
           "id": "doi:10.1186/s40643-026-01105-5",
@@ -45,7 +45,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42667545/",
           "doi": "10.1186/s40643-026-01105-5",
           "is_preprint": false,
-          "summary": "Chemometric models calibrated on high-throughput mini-bioreactor Raman data were made to transfer to larger scale by selecting the preprocessing pipeline separately for each target variable rather than applying one pipeline to all outputs. Across five outputs that initially transferred poorly, optimized variable-specific preprocessing cut cross-scale RMSEP by 14.0-56.1% versus the standard single-scale pipeline, bringing single-scale models close to the accuracy of resource-intensive combined-scale models. The gain came from matching the technique to each target's spectral behaviour rather than from any one preprocessing method; the abstract names neither the cell line nor the five target outputs.",
+          "summary": "Chemometric models calibrated on high-throughput mini-bioreactor Raman data were made to transfer to larger scale by selecting the preprocessing pipeline separately for each target variable rather than applying one pipeline to all outputs. Across five outputs that initially transferred poorly, optimized variable-specific preprocessing cut cross-scale RMSEP by 14.0-56.1% versus the standard single-scale pipeline, bringing single-scale models close to the accuracy of resource-intensive combined-scale models. The gain came from matching the technique to each target's spectral behavior rather than from any one preprocessing method; the abstract names neither the cell line nor the five target outputs.",
           "why_it_matters": "This is the constructive counterpart to last month's transfer-learning negative result: before spending runs collecting target-scale spectra, re-tune preprocessing per analyte, because a single shared pipeline across all your targets is a plausible cause of the scale transfer you are currently failing.",
           "thin_abstract": false,
           "relevance_score": 5,
@@ -61,7 +61,7 @@
     {
       "id": "upstream_pd",
       "name": "Upstream Process Development",
-      "synthesis": "The connective tissue this month is the partition of cellular resource between staying alive and making product, and three results land on three different sides of it. TPT1 overexpression bought titre purely by extending culture longevity - cell-specific productivity and the N-glycan profile unchanged, better overall than BCL-2, and equal to a BAK/BAX double knockout on viability while exceeding it on growth and titre - which says late-stage intrinsic-pathway death was costing output outright. The ambr250 proteomics and metabolomics preprint reaches the opposite reading for feed-based longevity: enriched feeds did delay the switch into fatty acid beta-oxidation, lipid remodelling and ferroptosis-associated stress, but titre did not rise proportionally, because the extra input was spent on glutathione and redox defence rather than on product. The perfusion comparison then goes the other way entirely, deliberately restraining growth - low cell-specific perfusion rate and sodium butyrate converging on upregulated energy metabolism in genome-scale flux sampling - for up to 108.94% higher qP and 190.36% higher daily volumetric titer, so the useful test on your own late-culture intervention is whether it is buying cell-hours, redox capacity or specific productivity, since these three results show all three are separable and only two of them convert. TPT1 also extends August's BiP result (40% titre from holding late-stage qP rather than cell mass) with the piece BiP lacked, an unchanged N-glycan profile, which is a genuine counterexample to last month's adalimumab finding that titre gains driven by integral viable cell time strip galactosylation - at profile level only, so it is a lead rather than a settled point. Of the rest, the thiazolidine cysteine feed is the month's most immediately usable formulation change, and the hydrodynamic stress review is a fair challenge to most shear scale-down models, finding that sensitivity studies still apply stresses well above the ranges production bioreactors operate in, so the sublethal responses that actually matter go uncharacterised.",
+      "synthesis": "The connective tissue this month is the partition of cellular resource between staying alive and making product, and three results land on three different sides of it. TPT1 overexpression bought titer purely by extending culture longevity - cell-specific productivity and the N-glycan profile unchanged, better overall than BCL-2, and equal to a BAK/BAX double knockout on viability while exceeding it on growth and titer - which says late-stage intrinsic-pathway death was costing output outright. The ambr250 proteomics and metabolomics preprint reaches the opposite reading for feed-based longevity: enriched feeds did delay the switch into fatty acid beta-oxidation, lipid remodeling and ferroptosis-associated stress, but titer did not rise proportionally, because the extra input was spent on glutathione and redox defense rather than on product. The perfusion comparison then goes the other way entirely, deliberately restraining growth - low cell-specific perfusion rate and sodium butyrate converging on upregulated energy metabolism in genome-scale flux sampling - for up to 108.94% higher qP and 190.36% higher daily volumetric titer, so the useful test on your own late-culture intervention is whether it is buying cell-hours, redox capacity or specific productivity, since these three results show all three are separable and only two of them convert. TPT1 also extends August's BiP result (40% titer from holding late-stage qP rather than cell mass) with the piece BiP lacked, an unchanged N-glycan profile, which is a genuine counterexample to last month's adalimumab finding that titer gains driven by integral viable cell time strip galactosylation - at profile level only, so it is a lead rather than a settled point. Of the rest, the thiazolidine cysteine feed is the month's most immediately usable formulation change, and the hydrodynamic stress review is a fair challenge to most shear scale-down models, finding that sensitivity studies still apply stresses well above the ranges production bioreactors operate in, so the sublethal responses that actually matter go uncharacterized.",
       "items": [
         {
           "id": "doi:10.1016/j.ymben.2026.102543",
@@ -81,7 +81,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42674249/",
           "doi": "10.1016/j.ymben.2026.102543",
           "is_preprint": false,
-          "summary": "Apoptosis profiling across CHO fed-batch located late-culture viability loss in the intrinsic pathway, with increased cleavage of caspase-9, caspase-7 and caspase-3 and minimal caspase-8 activation. Lines overexpressing TPT1, CFLAR or BCL-2 were compared: TPT1 gave the most consistent extension of late-stage viability and culture lifespan, outperformed BCL-2 on overall process performance, held viability under chemical apoptosis induction, pro-apoptotic BAK overexpression and caspase-3 activation, and matched a BAK/BAX double knockout on viability while exceeding it on growth and titre, with no further gain from combining the two in unfed batch. Transferred into industrially relevant CHO DG44 platforms expressing a monoclonal and a bispecific antibody, TPT1 improved culture longevity and titres in both formats without altering cell-specific productivity or the N-glycan profile.",
+          "summary": "Apoptosis profiling across CHO fed-batch located late-culture viability loss in the intrinsic pathway, with increased cleavage of caspase-9, caspase-7 and caspase-3 and minimal caspase-8 activation. Lines overexpressing TPT1, CFLAR or BCL-2 were compared: TPT1 gave the most consistent extension of late-stage viability and culture lifespan, outperformed BCL-2 on overall process performance, held viability under chemical apoptosis induction, pro-apoptotic BAK overexpression and caspase-3 activation, and matched a BAK/BAX double knockout on viability while exceeding it on growth and titer, with no further gain from combining the two in unfed batch. Transferred into industrially relevant CHO DG44 platforms expressing a monoclonal and a bispecific antibody, TPT1 improved culture longevity and titers in both formats without altering cell-specific productivity or the N-glycan profile.",
           "why_it_matters": "A single-cassette host lever that buys volumetric output through culture duration rather than qP and, unusually for longevity engineering, reports the N-glycan profile alongside the titer - which makes it directly comparable against whatever apoptosis-resistance option your platform already carries.",
           "thin_abstract": false,
           "relevance_score": 5,
@@ -165,8 +165,8 @@
           "url": "https://doi.org/10.64898/2026.08.20.745185",
           "doi": "10.64898/2026.08.20.745185",
           "is_preprint": true,
-          "summary": "Longitudinal proteomics and intracellular metabolomics across differential ambr250 CHO fed-batch processes traced a conserved trajectory from proliferation through metabolic transition into terminal stress, holding across media and feed combinations and an intensified seeding regime. The high-stress state was characterised by a switch toward mitochondrial and peroxisomal fatty acid beta-oxidation, lipid remodelling, oxidative burden and activation of ferroptosis-associated pathways. Enriched feed conditions delayed that transition through enhanced redox and glutathione-linked defence but did not raise antibody titre proportionally, which the authors read as cellular resource being diverted from recombinant protein production toward survival.",
-          "why_it_matters": "It undercuts the reflex that a feed which holds viability longer must buy titer: if the extra feed is paying for glutathione and redox defence, the integral viable cell time you gain will not convert, and lipid or ferroptosis markers are what would let you tell the two cases apart in your own runs.",
+          "summary": "Longitudinal proteomics and intracellular metabolomics across differential ambr250 CHO fed-batch processes traced a conserved trajectory from proliferation through metabolic transition into terminal stress, holding across media and feed combinations and an intensified seeding regime. The high-stress state was characterized by a switch toward mitochondrial and peroxisomal fatty acid beta-oxidation, lipid remodeling, oxidative burden and activation of ferroptosis-associated pathways. Enriched feed conditions delayed that transition through enhanced redox and glutathione-linked defense but did not raise antibody titer proportionally, which the authors read as cellular resource being diverted from recombinant protein production toward survival.",
+          "why_it_matters": "It undercuts the reflex that a feed which holds viability longer must buy titer: if the extra feed is paying for glutathione and redox defense, the integral viable cell time you gain will not convert, and lipid or ferroptosis markers are what would let you tell the two cases apart in your own runs.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -181,16 +181,16 @@
           "title": "Measuring hydrodynamic stress in mammalian cell culture across five decades: Cellular responses and the need for mechanistic integration.",
           "authors": [
             "Fernando David Montalvo-Sandoval",
-            "Octavio T Ram&#xed;rez",
+            "Octavio T Ramírez",
             "Norma A Valdez-Cruz",
-            "Mauricio A Trujillo-Rold&#xe1;n"
+            "Mauricio A Trujillo-Roldán"
           ],
           "venue": "Biotechnology advances",
           "published": "2026-08-19",
           "url": "https://pubmed.ncbi.nlm.nih.gov/42617763/",
           "doi": "10.1016/j.biotechadv.2026.109009",
           "is_preprint": false,
-          "summary": "A review of five decades of hydrodynamic stress work in mammalian culture finds a consistent disparity between the stress conditions applied in sensitivity studies and the ranges industrial bioreactors actually operate in. Catastrophic cell rupture is largely mitigated in modern systems, so the authors argue the determinants that now matter are sublethal and adaptive cellular responses, which remain the least characterised. They call for standardized stress metrics and scale-down models built to represent the moderate but persistent hydrodynamic environments of contemporary bioprocessing rather than extreme challenge conditions.",
+          "summary": "A review of five decades of hydrodynamic stress work in mammalian culture finds a consistent disparity between the stress conditions applied in sensitivity studies and the ranges industrial bioreactors actually operate in. Catastrophic cell rupture is largely mitigated in modern systems, so the authors argue the determinants that now matter are sublethal and adaptive cellular responses, which remain the least characterized. They call for standardized stress metrics and scale-down models built to represent the moderate but persistent hydrodynamic environments of contemporary bioprocessing rather than extreme challenge conditions.",
           "why_it_matters": "If your shear scale-down model challenges cells at conditions your production vessel never sees, it is answering a question you do not have - the useful redesign is to sit the scale-down in the moderate operating range and look for sublethal readouts rather than viability.",
           "thin_abstract": false,
           "relevance_score": 4,
@@ -292,7 +292,7 @@
     {
       "id": "media_dev",
       "name": "Media & Feed Development",
-      "synthesis": "One usable result, and two that belong to other cell types. The cysteine-condensed thiazolidine work is the real contribution: alpha-ketoacid condensation reaching complete conversion in 1-2 hours near neutral pH, giving concentrated, storage-stable solutions that served as the sole cysteine source across multiple CHO lines in both standard and intensified fed-batch with growth, productivity and product quality comparable to conventional delivery, which is a direct answer to the solubility and oxidation problem that forces cysteine into its own feed. The algal and cyanobacterial hydrolysate screen is cultivated-meat serum reduction, and its single statistically significant effect was in an avian myoblast line rather than in CHO-K1, so it supports no hydrolysate claim for mammalian production media. The endothelial glutamine study is the wrong host but touches the right node: surplus glutamine saturated glutamate secretion above 2 mM and partitioned into glutathione, UDP-GlcNAc and amino acids while succinate and one-carbon metabolites fell, which is the precursor-versus-redox trade-off August's perfusion 13C MFA put at the centre of long-run glycan drift - a reason to look at nucleotide-sugar pools in your own high-glutamine conditions, not evidence about CHO. Nothing appeared on raw material lot-to-lot variability, trace metals or media stability this month.",
+      "synthesis": "One usable result, and two that belong to other cell types. The cysteine-condensed thiazolidine work is the real contribution: alpha-ketoacid condensation reaching complete conversion in 1-2 hours near neutral pH, giving concentrated, storage-stable solutions that served as the sole cysteine source across multiple CHO lines in both standard and intensified fed-batch with growth, productivity and product quality comparable to conventional delivery, which is a direct answer to the solubility and oxidation problem that forces cysteine into its own feed. The algal and cyanobacterial hydrolysate screen is cultivated-meat serum reduction, and its single statistically significant effect was in an avian myoblast line rather than in CHO-K1, so it supports no hydrolysate claim for mammalian production media. The endothelial glutamine study is the wrong host but touches the right node: surplus glutamine saturated glutamate secretion above 2 mM and partitioned into glutathione, UDP-GlcNAc and amino acids while succinate and one-carbon metabolites fell, which is the precursor-versus-redox trade-off August's perfusion 13C MFA put at the center of long-run glycan drift - a reason to look at nucleotide-sugar pools in your own high-glutamine conditions, not evidence about CHO. Nothing appeared on raw material lot-to-lot variability, trace metals or media stability this month.",
       "items": [
         {
           "id": "doi:10.1016/j.jbiotec.2026.08.007",
@@ -330,14 +330,14 @@
           "id": "doi:10.3390/foods15162941",
           "title": "Algal and Cyanobacterial Hydrolysates as Serum-Reducing Supplements Across Mammalian, Avian and Fish Cells with Identification of Bioactive Chromopeptides.",
           "authors": [
-            "Nikolina Sibin&#x10d;i&#x107;-Georgieva",
-            "Ljubodrag Aleksi&#x107;",
-            "Na&#x111;a Grozdani&#x107; Stanisavljevi&#x107;",
-            "Lora Tubi&#x107;",
-            "Bo&#x161;ko Tanaskovi&#x107;",
-            "Nikola Gligorijevi&#x107;",
-            "Marija Stojadinovi&#x107;",
-            "Simeon Mini&#x107;"
+            "Nikolina Sibinčić-Georgieva",
+            "Ljubodrag Aleksić",
+            "Nađa Grozdanić Stanisavljević",
+            "Lora Tubić",
+            "Boško Tanasković",
+            "Nikola Gligorijević",
+            "Marija Stojadinović",
+            "Simeon Minić"
           ],
           "venue": "Foods (Basel, Switzerland)",
           "published": "2026-08-21",
@@ -486,7 +486,7 @@
           "url": "https://www.bioprocessintl.com/perfusion-cell-culture/continuous-biomanufacturing-and-perfusion-technologies-are-finally-on-the-cusp-of-broad-adoption",
           "doi": null,
           "is_preprint": false,
-          "summary": "A BioPlan Associates analyst summarises the group's 2026 industry survey on perfusion and continuous cell culture, reporting broad agreement on the advantages alongside adoption that remains lower than expected, and discussing the factors that constrain wider uptake. What was published here is trade commentary on survey results; no adoption percentages, respondent counts or process data appear in it.",
+          "summary": "A BioPlan Associates analyst summarizes the group's 2026 industry survey on perfusion and continuous cell culture, reporting broad agreement on the advantages alongside adoption that remains lower than expected, and discussing the factors that constrain wider uptake. What was published here is trade commentary on survey results; no adoption percentages, respondent counts or process data appear in it.",
           "why_it_matters": "Directional only: intensification enthusiasm in the literature continues to outrun installed practice, which is worth remembering when you benchmark your own platform against published perfusion performance.",
           "thin_abstract": true,
           "relevance_score": 3,
@@ -564,7 +564,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42636966/",
           "doi": "10.1016/j.mbs.2026.109801",
           "is_preprint": false,
-          "summary": "A review of hybrid mechanistic-machine learning models, tracing the lineage from early bioprocess hybrids to scientific machine learning and organizing current methods into a taxonomy of coupling strategies. Its central claim is that successful hybrids share a division of labour: the mechanistic core retains interpretable states, conservation relations and intervention pathways, while learned components are confined to unresolved closures, latent drivers, observation maps and site-specific corrections. Applications span infectious disease forecasting, environmental monitoring, hydrology, systems biology and bioprocess engineering, but the worked examples are stated to be conceptual demonstrations rather than empirical benchmarks.",
+          "summary": "A review of hybrid mechanistic-machine learning models, tracing the lineage from early bioprocess hybrids to scientific machine learning and organizing current methods into a taxonomy of coupling strategies. Its central claim is that successful hybrids share a division of labor: the mechanistic core retains interpretable states, conservation relations and intervention pathways, while learned components are confined to unresolved closures, latent drivers, observation maps and site-specific corrections. Applications span infectious disease forecasting, environmental monitoring, hydrology, systems biology and bioprocess engineering, but the worked examples are stated to be conceptual demonstrations rather than empirical benchmarks.",
           "why_it_matters": "Useful as a specification rule when you commission a hybrid model - keep material balances mechanistic and let the learned component absorb only the kinetics you cannot write down - but it contains no bioprocess result you could cite in a filing.",
           "thin_abstract": false,
           "relevance_score": 4,
@@ -579,7 +579,7 @@
           "id": "doi:10.1002/bit.70354",
           "title": "Current State and Impact of Implementation of In-Silico Tools in the Biopharmaceutical Industry - Proceedings of the 6th Modeling Workshop.",
           "authors": [
-            "Andr&#xe9; Dumetz",
+            "André Dumetz",
             "Arne Staby",
             "Chris Gerberich",
             "David Roush",
@@ -611,7 +611,7 @@
         },
         {
           "id": "doi:10.21203/rs.3.rs-10680176/v1",
-          "title": "Quantitative and Comparative Analysis of mRNA Poly(A) Tail Length Distributions Using LC–MS, LC–UV, and Oxford Nanopore Sequencing with Bayesian Harmonization",
+          "title": "Quantitative and Comparative Analysis of mRNA Poly(A) Tail Length Distributions Using LC-MS, LC-UV, and Oxford Nanopore Sequencing with Bayesian Harmonization",
           "authors": [
             "Guray MZ",
             "Hughes A",
@@ -624,7 +624,7 @@
           "url": "https://doi.org/10.21203/rs.3.rs-10680176/v1",
           "doi": "10.21203/rs.3.rs-10680176/v1",
           "is_preprint": true,
-          "summary": "Three mRNA constructs with distinct encoded poly(A) lengths were analysed by LC-MS, LC-UV and Oxford Nanopore sequencing, and descriptive parameters for the most abundant, statistically minimal and maximal lengths were derived from each platform. All three techniques consistently identified the same most abundant poly(A) species, but the distribution boundaries differed between methods; a naive Bayes classifier trained on the LC-MS data and applied to the LC-UV and ONT datasets improved agreement in those boundaries.",
+          "summary": "Three mRNA constructs with distinct encoded poly(A) lengths were analyzed by LC-MS, LC-UV and Oxford Nanopore sequencing, and descriptive parameters for the most abundant, statistically minimal and maximal lengths were derived from each platform. All three techniques consistently identified the same most abundant poly(A) species, but the distribution boundaries differed between methods; a naive Bayes classifier trained on the LC-MS data and applied to the LC-UV and ONT datasets improved agreement in those boundaries.",
           "why_it_matters": "A different modality with no read-through to CHO culture, though the pattern is familiar - orthogonal methods agree on the central value of an attribute distribution and disagree at the tails, which is where comparability arguments usually come apart.",
           "thin_abstract": false,
           "relevance_score": 3,
@@ -672,7 +672,7 @@
     {
       "id": "cell_line_dev",
       "name": "Cell Line Development & Clone Selection",
-      "synthesis": "This is the month's strongest category, and its through-line is that the vector and the host, not the process, produced the concrete numbers. Two results are directly actionable: TPT1 overexpression as a single cassette extended culture and raised titres in CHO DG44 platforms for both a monoclonal and a bispecific without altering cell-specific productivity or the N-glycan profile, outperforming BCL-2 and matching a BAK/BAX double knockout; and within a piggyBac system, double human CMV promoters lifted pool productivity 2- to 2.5-fold while the light chain-selection marker-heavy chain cassette order gave 1.5- to 6-fold with better heavy-to-light transcript ratios and a top clone at 9.6 g/L. The most useful result is negative: lectin surface profiling tracked product outcomes for COSMC and FUT8 knockouts but corresponded poorly with product galactosylation and alpha2,3-sialylation, so a cell-surface assay cannot rank clones on the attributes most likely to be your CQAs, and the shortcut has to be abandoned rather than tuned. Two further papers change what a screen can see rather than what it finds - the competitive co-culture CRISPR array resolved 28 growth-enhancing knockouts invisible to viable-cell-concentration measurement across 235 single and 155 multiplex perturbations, and the droplet microfluidic FRET workflow claims image-verified monoclonal clones about five weeks from transfection, which continues August's push of clonality assurance earlier into CLD, though with no titres or generation counts attached. Set against all of it, the ambr250 ferroptosis preprint is the caution that clones and feeds selected on titre alone will not reveal whether a line is spending its resource on survival, while the transposase miRNA platform points at stable Fuk and Gmds knockdown - a dosable afucosylation phenotype without a knockout - with no product glycan data yet.",
+      "synthesis": "This is the month's strongest category, and its through-line is that the vector and the host, not the process, produced the concrete numbers. Two results are directly actionable: TPT1 overexpression as a single cassette extended culture and raised titers in CHO DG44 platforms for both a monoclonal and a bispecific without altering cell-specific productivity or the N-glycan profile, outperforming BCL-2 and matching a BAK/BAX double knockout; and within a piggyBac system, double human CMV promoters lifted pool productivity 2- to 2.5-fold while the light chain-selection marker-heavy chain cassette order gave 1.5- to 6-fold with better heavy-to-light transcript ratios and a top clone at 9.6 g/L. The most useful result is negative: lectin surface profiling tracked product outcomes for COSMC and FUT8 knockouts but corresponded poorly with product galactosylation and alpha2,3-sialylation, so a cell-surface assay cannot rank clones on the attributes most likely to be your CQAs, and the shortcut has to be abandoned rather than tuned. Two further papers change what a screen can see rather than what it finds - the competitive co-culture CRISPR array resolved 28 growth-enhancing knockouts invisible to viable-cell-concentration measurement across 235 single and 155 multiplex perturbations, and the droplet microfluidic FRET workflow claims image-verified monoclonal clones about five weeks from transfection, which continues August's push of clonality assurance earlier into CLD, though with no titers or generation counts attached. Set against all of it, the ambr250 ferroptosis preprint is the caution that clones and feeds selected on titer alone will not reveal whether a line is spending its resource on survival, while the transposase miRNA platform points at stable Fuk and Gmds knockdown - a dosable afucosylation phenotype without a knockout - with no product glycan data yet.",
       "items": [
         {
           "id": "doi:10.1016/j.ymben.2026.102543",
@@ -692,7 +692,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42674249/",
           "doi": "10.1016/j.ymben.2026.102543",
           "is_preprint": false,
-          "summary": "Apoptosis profiling across CHO fed-batch located late-culture viability loss in the intrinsic pathway, with increased cleavage of caspase-9, caspase-7 and caspase-3 and minimal caspase-8 activation. Lines overexpressing TPT1, CFLAR or BCL-2 were compared: TPT1 gave the most consistent extension of late-stage viability and culture lifespan, outperformed BCL-2 on overall process performance, held viability under chemical apoptosis induction, pro-apoptotic BAK overexpression and caspase-3 activation, and matched a BAK/BAX double knockout on viability while exceeding it on growth and titre, with no further gain from combining the two in unfed batch. Transferred into industrially relevant CHO DG44 platforms expressing a monoclonal and a bispecific antibody, TPT1 improved culture longevity and titres in both formats without altering cell-specific productivity or the N-glycan profile.",
+          "summary": "Apoptosis profiling across CHO fed-batch located late-culture viability loss in the intrinsic pathway, with increased cleavage of caspase-9, caspase-7 and caspase-3 and minimal caspase-8 activation. Lines overexpressing TPT1, CFLAR or BCL-2 were compared: TPT1 gave the most consistent extension of late-stage viability and culture lifespan, outperformed BCL-2 on overall process performance, held viability under chemical apoptosis induction, pro-apoptotic BAK overexpression and caspase-3 activation, and matched a BAK/BAX double knockout on viability while exceeding it on growth and titer, with no further gain from combining the two in unfed batch. Transferred into industrially relevant CHO DG44 platforms expressing a monoclonal and a bispecific antibody, TPT1 improved culture longevity and titers in both formats without altering cell-specific productivity or the N-glycan profile.",
           "why_it_matters": "A single-cassette host lever that buys volumetric output through culture duration rather than qP and, unusually for longevity engineering, reports the N-glycan profile alongside the titer - which makes it directly comparable against whatever apoptosis-resistance option your platform already carries.",
           "thin_abstract": false,
           "relevance_score": 5,
@@ -713,7 +713,7 @@
             "Sara Carillo",
             "Eoin Casey",
             "Jonathan Bones",
-            "Ioscani Jim&#xe9;nez Del Val"
+            "Ioscani Jiménez Del Val"
           ],
           "venue": "Biotechnology and bioengineering",
           "published": "2026-08-31",
@@ -721,7 +721,7 @@
           "doi": "10.1002/bit.70359",
           "is_preprint": false,
           "summary": "Five glycogenes (COSMC, FUT8, B4GALT1, ST3GAL4 and ST6GAL1) were knocked out in two mAb-producing CHO cell lines, and released product glycan analysis was compared against lectin-based cell-surface profiling. Product glycan effects were consistent and gene-specific across both hosts, including loss of core fucosylation and tunable galactosylation and sialylation. Lectin surface profiling reliably reflected product outcomes for the COSMC and FUT8 modifications but showed limited correspondence with product galactosylation and alpha2,3-sialylation phenotypes, which the authors attribute to glycosylation pathway redundancy and context dependence.",
-          "why_it_matters": "A clean negative result on a shortcut worth wanting: a surface lectin readout can screen fucosylation knockouts during cell line development, but you cannot rank clones on galactosylation or alpha2,3-sialylation without releasing and analysing the product glycans themselves.",
+          "why_it_matters": "A clean negative result on a shortcut worth wanting: a surface lectin readout can screen fucosylation knockouts during cell line development, but you cannot rank clones on galactosylation or alpha2,3-sialylation without releasing and analyzing the product glycans themselves.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -749,8 +749,8 @@
           "url": "https://doi.org/10.64898/2026.08.20.745185",
           "doi": "10.64898/2026.08.20.745185",
           "is_preprint": true,
-          "summary": "Longitudinal proteomics and intracellular metabolomics across differential ambr250 CHO fed-batch processes traced a conserved trajectory from proliferation through metabolic transition into terminal stress, holding across media and feed combinations and an intensified seeding regime. The high-stress state was characterised by a switch toward mitochondrial and peroxisomal fatty acid beta-oxidation, lipid remodelling, oxidative burden and activation of ferroptosis-associated pathways. Enriched feed conditions delayed that transition through enhanced redox and glutathione-linked defence but did not raise antibody titre proportionally, which the authors read as cellular resource being diverted from recombinant protein production toward survival.",
-          "why_it_matters": "It undercuts the reflex that a feed which holds viability longer must buy titer: if the extra feed is paying for glutathione and redox defence, the integral viable cell time you gain will not convert, and lipid or ferroptosis markers are what would let you tell the two cases apart in your own runs.",
+          "summary": "Longitudinal proteomics and intracellular metabolomics across differential ambr250 CHO fed-batch processes traced a conserved trajectory from proliferation through metabolic transition into terminal stress, holding across media and feed combinations and an intensified seeding regime. The high-stress state was characterized by a switch toward mitochondrial and peroxisomal fatty acid beta-oxidation, lipid remodeling, oxidative burden and activation of ferroptosis-associated pathways. Enriched feed conditions delayed that transition through enhanced redox and glutathione-linked defense but did not raise antibody titer proportionally, which the authors read as cellular resource being diverted from recombinant protein production toward survival.",
+          "why_it_matters": "It undercuts the reflex that a feed which holds viability longer must buy titer: if the extra feed is paying for glutathione and redox defense, the integral viable cell time you gain will not convert, and lipid or ferroptosis markers are what would let you tell the two cases apart in your own runs.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -776,7 +776,7 @@
           "doi": "10.1007/s00449-026-03406-7",
           "is_preprint": false,
           "summary": "An integrated droplet microfluidic workflow screens and isolates antibody-producing ExpiCHO-S cells using a FRET-based secretion assay, with probe configuration, donor-to-acceptor ratio, antibody concentration range and signal saturation optimized for picodroplet operation. Secreted antibody is detected in droplet, producing cells are enriched sequentially, and single-cell isolation is image-verified for monoclonality. The reported outcome is image-verified monoclonal clones that maintained consistent antibody production through the stability assessment performed, including in the absence of selection pressure, with the transfection-to-validated-96-well-clone phase reduced to roughly five weeks.",
-          "why_it_matters": "Five weeks to image-verified clones is a real timeline claim for early CLD, but the abstract gives no clone numbers, titres or generation counts for the stability assessment, so treat it as a workflow to evaluate rather than a benchmark to plan a programme against.",
+          "why_it_matters": "Five weeks to image-verified clones is a real timeline claim for early CLD, but the abstract gives no clone numbers, titers or generation counts for the stability assessment, so treat it as a workflow to evaluate rather than a benchmark to plan a program against.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -801,8 +801,8 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42633254/",
           "doi": "10.1016/j.isci.2026.117201",
           "is_preprint": false,
-          "summary": "A competitive co-culture CRISPR array in suspension CHO pairs a CRISPR-competent population against a CRISPR-inactive GFP reference pool and reads fitness from GFP-ratio dynamics by flow cytometry. Across seven batches and more than 100 days of cultivation, 235 single-gene knockouts and 155 multiplex gene sets were tested; the assay recovered the expected lethal and growth-inhibitory perturbations and identified 28 growth-enhancing knockouts or gene sets that viable-cell-concentration measurements do not resolve. Slope-based modelling converted the GFP dynamics into inferred growth-rate changes, and combinatorial exclusion with bulk transcriptomics linked multiplex phenotypes to candidate driver genes.",
-          "why_it_matters": "The practical point is the readout rather than the hit list: small growth effects invisible to VCD-based screening become measurable by competition, which is the right format if you are prioritising host-engineering targets rather than confirming a single knockout.",
+          "summary": "A competitive co-culture CRISPR array in suspension CHO pairs a CRISPR-competent population against a CRISPR-inactive GFP reference pool and reads fitness from GFP-ratio dynamics by flow cytometry. Across seven batches and more than 100 days of cultivation, 235 single-gene knockouts and 155 multiplex gene sets were tested; the assay recovered the expected lethal and growth-inhibitory perturbations and identified 28 growth-enhancing knockouts or gene sets that viable-cell-concentration measurements do not resolve. Slope-based modeling converted the GFP dynamics into inferred growth-rate changes, and combinatorial exclusion with bulk transcriptomics linked multiplex phenotypes to candidate driver genes.",
+          "why_it_matters": "The practical point is the readout rather than the hit list: small growth effects invisible to VCD-based screening become measurable by competition, which is the right format if you are prioritizing host-engineering targets rather than confirming a single knockout.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -897,7 +897,7 @@
     {
       "id": "product_quality",
       "name": "Product Quality & CQA Control from Upstream",
-      "synthesis": "The upstream-to-CQA thread that dominated August is almost absent: no nucleotide-sugar or precursor-supply work appeared at all, and what carries the category is host-level glycoengineering plus a cluster of interfacial and analytical papers. The glycogene knockout study is the substantive result - consistent, gene-specific product glycan effects across two CHO hosts including loss of core fucosylation and tunable galactosylation and sialylation - paired with the finding that lectin surface profiling predicts only the non-redundant cases, so the attribute you can engineer is not necessarily the attribute you can screen for cheaply. Against August's conclusion that integral-viable-cell-time-driven titre gains tax the precursor pool and strip galactosylation, the TPT1 result is a genuine counterexample worth testing: titre rose through extended culture with the N-glycan profile reported unchanged, although at profile level only and without the site-resolved analysis that would settle it. The rest of the category is about interfaces rather than culture, and the sharpest item there shows bulk-phase stability failing to predict behaviour: two mAbs of comparable bulk stability diverged under mechanical stress, with vial silanization suppressing subvisible particles for one by promoting a flat immobilised layer while the other cycled adsorption and desorption and released denatured monomer, and Hofmeister anions acting through interfacial hydration rather than bulk electrostatics. Of the analytical items only the Fc-selective mobile affinity method has a specific use - aggregate quantitation in HSA-containing diluents where SE-HPLC cannot resolve the interference - while the general LC-MS characterization workflow and the two reviews are reference material, and the hyperglycosylated neuraminidase immunogen is vaccine design with no process content.",
+      "synthesis": "The upstream-to-CQA thread that dominated August is almost absent: no nucleotide-sugar or precursor-supply work appeared at all, and what carries the category is host-level glycoengineering plus a cluster of interfacial and analytical papers. The glycogene knockout study is the substantive result - consistent, gene-specific product glycan effects across two CHO hosts including loss of core fucosylation and tunable galactosylation and sialylation - paired with the finding that lectin surface profiling predicts only the non-redundant cases, so the attribute you can engineer is not necessarily the attribute you can screen for cheaply. Against August's conclusion that integral-viable-cell-time-driven titer gains tax the precursor pool and strip galactosylation, the TPT1 result is a genuine counterexample worth testing: titer rose through extended culture with the N-glycan profile reported unchanged, although at profile level only and without the site-resolved analysis that would settle it. The rest of the category is about interfaces rather than culture, and the sharpest item there shows bulk-phase stability failing to predict behavior: two mAbs of comparable bulk stability diverged under mechanical stress, with vial silanization suppressing subvisible particles for one by promoting a flat immobilised layer while the other cycled adsorption and desorption and released denatured monomer, and Hofmeister anions acting through interfacial hydration rather than bulk electrostatics. Of the analytical items only the Fc-selective mobile affinity method has a specific use - aggregate quantitation in HSA-containing diluents where SE-HPLC cannot resolve the interference - while the general LC-MS characterization workflow and the two reviews are reference material, and the hyperglycosylated neuraminidase immunogen is vaccine design with no process content.",
       "items": [
         {
           "id": "doi:10.1016/j.ymben.2026.102543",
@@ -917,7 +917,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42674249/",
           "doi": "10.1016/j.ymben.2026.102543",
           "is_preprint": false,
-          "summary": "Apoptosis profiling across CHO fed-batch located late-culture viability loss in the intrinsic pathway, with increased cleavage of caspase-9, caspase-7 and caspase-3 and minimal caspase-8 activation. Lines overexpressing TPT1, CFLAR or BCL-2 were compared: TPT1 gave the most consistent extension of late-stage viability and culture lifespan, outperformed BCL-2 on overall process performance, held viability under chemical apoptosis induction, pro-apoptotic BAK overexpression and caspase-3 activation, and matched a BAK/BAX double knockout on viability while exceeding it on growth and titre, with no further gain from combining the two in unfed batch. Transferred into industrially relevant CHO DG44 platforms expressing a monoclonal and a bispecific antibody, TPT1 improved culture longevity and titres in both formats without altering cell-specific productivity or the N-glycan profile.",
+          "summary": "Apoptosis profiling across CHO fed-batch located late-culture viability loss in the intrinsic pathway, with increased cleavage of caspase-9, caspase-7 and caspase-3 and minimal caspase-8 activation. Lines overexpressing TPT1, CFLAR or BCL-2 were compared: TPT1 gave the most consistent extension of late-stage viability and culture lifespan, outperformed BCL-2 on overall process performance, held viability under chemical apoptosis induction, pro-apoptotic BAK overexpression and caspase-3 activation, and matched a BAK/BAX double knockout on viability while exceeding it on growth and titer, with no further gain from combining the two in unfed batch. Transferred into industrially relevant CHO DG44 platforms expressing a monoclonal and a bispecific antibody, TPT1 improved culture longevity and titers in both formats without altering cell-specific productivity or the N-glycan profile.",
           "why_it_matters": "A single-cassette host lever that buys volumetric output through culture duration rather than qP and, unusually for longevity engineering, reports the N-glycan profile alongside the titer - which makes it directly comparable against whatever apoptosis-resistance option your platform already carries.",
           "thin_abstract": false,
           "relevance_score": 5,
@@ -938,7 +938,7 @@
             "Sara Carillo",
             "Eoin Casey",
             "Jonathan Bones",
-            "Ioscani Jim&#xe9;nez Del Val"
+            "Ioscani Jiménez Del Val"
           ],
           "venue": "Biotechnology and bioengineering",
           "published": "2026-08-31",
@@ -946,7 +946,7 @@
           "doi": "10.1002/bit.70359",
           "is_preprint": false,
           "summary": "Five glycogenes (COSMC, FUT8, B4GALT1, ST3GAL4 and ST6GAL1) were knocked out in two mAb-producing CHO cell lines, and released product glycan analysis was compared against lectin-based cell-surface profiling. Product glycan effects were consistent and gene-specific across both hosts, including loss of core fucosylation and tunable galactosylation and sialylation. Lectin surface profiling reliably reflected product outcomes for the COSMC and FUT8 modifications but showed limited correspondence with product galactosylation and alpha2,3-sialylation phenotypes, which the authors attribute to glycosylation pathway redundancy and context dependence.",
-          "why_it_matters": "A clean negative result on a shortcut worth wanting: a surface lectin readout can screen fucosylation knockouts during cell line development, but you cannot rank clones on galactosylation or alpha2,3-sialylation without releasing and analysing the product glycans themselves.",
+          "why_it_matters": "A clean negative result on a shortcut worth wanting: a surface lectin readout can screen fucosylation knockouts during cell line development, but you cannot rank clones on galactosylation or alpha2,3-sialylation without releasing and analyzing the product glycans themselves.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -1024,7 +1024,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42636966/",
           "doi": "10.1016/j.mbs.2026.109801",
           "is_preprint": false,
-          "summary": "A review of hybrid mechanistic-machine learning models, tracing the lineage from early bioprocess hybrids to scientific machine learning and organizing current methods into a taxonomy of coupling strategies. Its central claim is that successful hybrids share a division of labour: the mechanistic core retains interpretable states, conservation relations and intervention pathways, while learned components are confined to unresolved closures, latent drivers, observation maps and site-specific corrections. Applications span infectious disease forecasting, environmental monitoring, hydrology, systems biology and bioprocess engineering, but the worked examples are stated to be conceptual demonstrations rather than empirical benchmarks.",
+          "summary": "A review of hybrid mechanistic-machine learning models, tracing the lineage from early bioprocess hybrids to scientific machine learning and organizing current methods into a taxonomy of coupling strategies. Its central claim is that successful hybrids share a division of labor: the mechanistic core retains interpretable states, conservation relations and intervention pathways, while learned components are confined to unresolved closures, latent drivers, observation maps and site-specific corrections. Applications span infectious disease forecasting, environmental monitoring, hydrology, systems biology and bioprocess engineering, but the worked examples are stated to be conceptual demonstrations rather than empirical benchmarks.",
           "why_it_matters": "Useful as a specification rule when you commission a hybrid model - keep material balances mechanistic and let the learned component absorb only the kinetics you cannot write down - but it contains no bioprocess result you could cite in a filing.",
           "thin_abstract": false,
           "relevance_score": 4,
@@ -1040,16 +1040,16 @@
           "title": "Measuring hydrodynamic stress in mammalian cell culture across five decades: Cellular responses and the need for mechanistic integration.",
           "authors": [
             "Fernando David Montalvo-Sandoval",
-            "Octavio T Ram&#xed;rez",
+            "Octavio T Ramírez",
             "Norma A Valdez-Cruz",
-            "Mauricio A Trujillo-Rold&#xe1;n"
+            "Mauricio A Trujillo-Roldán"
           ],
           "venue": "Biotechnology advances",
           "published": "2026-08-19",
           "url": "https://pubmed.ncbi.nlm.nih.gov/42617763/",
           "doi": "10.1016/j.biotechadv.2026.109009",
           "is_preprint": false,
-          "summary": "A review of five decades of hydrodynamic stress work in mammalian culture finds a consistent disparity between the stress conditions applied in sensitivity studies and the ranges industrial bioreactors actually operate in. Catastrophic cell rupture is largely mitigated in modern systems, so the authors argue the determinants that now matter are sublethal and adaptive cellular responses, which remain the least characterised. They call for standardized stress metrics and scale-down models built to represent the moderate but persistent hydrodynamic environments of contemporary bioprocessing rather than extreme challenge conditions.",
+          "summary": "A review of five decades of hydrodynamic stress work in mammalian culture finds a consistent disparity between the stress conditions applied in sensitivity studies and the ranges industrial bioreactors actually operate in. Catastrophic cell rupture is largely mitigated in modern systems, so the authors argue the determinants that now matter are sublethal and adaptive cellular responses, which remain the least characterized. They call for standardized stress metrics and scale-down models built to represent the moderate but persistent hydrodynamic environments of contemporary bioprocessing rather than extreme challenge conditions.",
           "why_it_matters": "If your shear scale-down model challenges cells at conditions your production vessel never sees, it is answering a question you do not have - the useful redesign is to sit the scale-down in the moderate operating range and look for sublethal readouts rather than viability.",
           "thin_abstract": false,
           "relevance_score": 4,
@@ -1081,7 +1081,7 @@
           "url": "https://doi.org/10.64898/2026.08.08.743685",
           "doi": "10.64898/2026.08.08.743685",
           "is_preprint": true,
-          "summary": "Hyperglycosylation was used as an immunogen design strategy on influenza neuraminidase to steer antibody responses toward conserved antigenic regions. The hyperglycosylated NA retained enzymatic activity and reactivity to a conformation-specific antibody against the catalytic site and, in mice, elicited serum responses of comparable magnitude to wild-type NA but with greater breadth, recognising N2 neuraminidases spanning nearly 65 years of antigenic drift plus a heterosubtypic N9. Single B cell analysis identified a monoclonal antibody against a previously undefined conserved epitope at the NA tetramer interface, and passive transfer of it partially protected mice against lethal heterologous challenge.",
+          "summary": "Hyperglycosylation was used as an immunogen design strategy on influenza neuraminidase to steer antibody responses toward conserved antigenic regions. The hyperglycosylated NA retained enzymatic activity and reactivity to a conformation-specific antibody against the catalytic site and, in mice, elicited serum responses of comparable magnitude to wild-type NA but with greater breadth, recognizing N2 neuraminidases spanning nearly 65 years of antigenic drift plus a heterosubtypic N9. Single B cell analysis identified a monoclonal antibody against a previously undefined conserved epitope at the NA tetramer interface, and passive transfer of it partially protected mice against lethal heterologous challenge.",
           "why_it_matters": "Vaccine immunogen design rather than process science; the only transferable idea is glycan occupancy being used deliberately to mask and unmask epitopes, a reminder that added glycans change what an assay and an immune system can see, not only clearance.",
           "thin_abstract": false,
           "relevance_score": 4,
@@ -1130,7 +1130,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42679766/",
           "doi": "10.1016/j.jchromb.2026.125273",
           "is_preprint": false,
-          "summary": "A mobile affinity selection chromatography method was adapted so that a fluorescent selector with affinity for the antibody Fc region travels in the mobile phase after SE-HPLC separation, making only Fc-containing species fluorescent. This removes the interference from human serum albumin that prevents conventional SE-HPLC from selectively quantifying aggregates in HSA-containing diluents, since HSA carries no Fc and is not labelled. The method is reported to show good accuracy and linearity for aggregate quantitation in those matrices and is aimed at pharmacy manual qualification and in-use stability studies.",
+          "summary": "A mobile affinity selection chromatography method was adapted so that a fluorescent selector with affinity for the antibody Fc region travels in the mobile phase after SE-HPLC separation, making only Fc-containing species fluorescent. This removes the interference from human serum albumin that prevents conventional SE-HPLC from selectively quantifying aggregates in HSA-containing diluents, since HSA carries no Fc and is not labeled. The method is reported to show good accuracy and linearity for aggregate quantitation in those matrices and is aimed at pharmacy manual qualification and in-use stability studies.",
           "why_it_matters": "Narrow but real: if your in-use stability or compounded-dose studies use an HSA-containing diluent, this is how you get a defensible aggregate number out of them - no LOQ or dynamic-range figures are given in the abstract.",
           "thin_abstract": false,
           "relevance_score": 3,
@@ -1153,7 +1153,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42648489/",
           "doi": "10.1016/j.xphs.2026.104468",
           "is_preprint": false,
-          "summary": "A review of monoclonal antibody adsorption at fluid-fluid interfaces, covering air-water and oil-water boundaries, adsorption mechanisms and kinetics, the effects of surfactants, and the physicochemical factors governing interfacial behaviour. It surveys the measurement toolkit from interfacial tension and interfacial rheology through spectroscopy and neutron and X-ray reflectometry, and reviews molecular simulation work on adsorption pathways, molecular orientation and structural rearrangement at hydrophobic interfaces.",
+          "summary": "A review of monoclonal antibody adsorption at fluid-fluid interfaces, covering air-water and oil-water boundaries, adsorption mechanisms and kinetics, the effects of surfactants, and the physicochemical factors governing interfacial behavior. It surveys the measurement toolkit from interfacial tension and interfacial rheology through spectroscopy and neutron and X-ray reflectometry, and reviews molecular simulation work on adsorption pathways, molecular orientation and structural rearrangement at hydrophobic interfaces.",
           "why_it_matters": "Formulation territory rather than upstream, but it is the background for why bulk stability screens miss interface-driven aggregation - relevant if harvest holds, filtration steps or transfers in your process are generating subvisible particles.",
           "thin_abstract": false,
           "relevance_score": 3,
@@ -1217,7 +1217,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42634526/",
           "doi": "10.2174/0113892010482038260729050308",
           "is_preprint": false,
-          "summary": "A general LC-MS workflow for mAb structural characterization was assembled: intact, deglycosylated intact, reduced and deglycosylated-reduced mass on a reversed-phase column, tryptic peptide mapping for sequence coverage, and 2-AB labelled glycan profiling on an amide column. Applied to bevacizumab from three manufacturers plus sintilimab and camrelizumab, measured masses agreed with theoretical sequences to better than 10 ppm, peptide mapping matched the expected sequences, and distinct glycan profiles were resolved between the products.",
+          "summary": "A general LC-MS workflow for mAb structural characterization was assembled: intact, deglycosylated intact, reduced and deglycosylated-reduced mass on a reversed-phase column, tryptic peptide mapping for sequence coverage, and 2-AB labeled glycan profiling on an amide column. Applied to bevacizumab from three manufacturers plus sintilimab and camrelizumab, measured masses agreed with theoretical sequences to better than 10 ppm, peptide mapping matched the expected sequences, and distinct glycan profiles were resolved between the products.",
           "why_it_matters": "A methods template rather than a finding; useful only if you are standing up in-house intact-mass and peptide-mapping characterization and want a published parameter set to start from.",
           "thin_abstract": false,
           "relevance_score": 3,
@@ -1249,7 +1249,7 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42667545/",
           "doi": "10.1186/s40643-026-01105-5",
           "is_preprint": false,
-          "summary": "Chemometric models calibrated on high-throughput mini-bioreactor Raman data were made to transfer to larger scale by selecting the preprocessing pipeline separately for each target variable rather than applying one pipeline to all outputs. Across five outputs that initially transferred poorly, optimized variable-specific preprocessing cut cross-scale RMSEP by 14.0-56.1% versus the standard single-scale pipeline, bringing single-scale models close to the accuracy of resource-intensive combined-scale models. The gain came from matching the technique to each target's spectral behaviour rather than from any one preprocessing method; the abstract names neither the cell line nor the five target outputs.",
+          "summary": "Chemometric models calibrated on high-throughput mini-bioreactor Raman data were made to transfer to larger scale by selecting the preprocessing pipeline separately for each target variable rather than applying one pipeline to all outputs. Across five outputs that initially transferred poorly, optimized variable-specific preprocessing cut cross-scale RMSEP by 14.0-56.1% versus the standard single-scale pipeline, bringing single-scale models close to the accuracy of resource-intensive combined-scale models. The gain came from matching the technique to each target's spectral behavior rather than from any one preprocessing method; the abstract names neither the cell line nor the five target outputs.",
           "why_it_matters": "This is the constructive counterpart to last month's transfer-learning negative result: before spending runs collecting target-scale spectra, re-tune preprocessing per analyte, because a single shared pipeline across all your targets is a plausible cause of the scale transfer you are currently failing.",
           "thin_abstract": false,
           "relevance_score": 5,
@@ -1276,7 +1276,7 @@
           "doi": "10.1007/s00449-026-03406-7",
           "is_preprint": false,
           "summary": "An integrated droplet microfluidic workflow screens and isolates antibody-producing ExpiCHO-S cells using a FRET-based secretion assay, with probe configuration, donor-to-acceptor ratio, antibody concentration range and signal saturation optimized for picodroplet operation. Secreted antibody is detected in droplet, producing cells are enriched sequentially, and single-cell isolation is image-verified for monoclonality. The reported outcome is image-verified monoclonal clones that maintained consistent antibody production through the stability assessment performed, including in the absence of selection pressure, with the transfection-to-validated-96-well-clone phase reduced to roughly five weeks.",
-          "why_it_matters": "Five weeks to image-verified clones is a real timeline claim for early CLD, but the abstract gives no clone numbers, titres or generation counts for the stability assessment, so treat it as a workflow to evaluate rather than a benchmark to plan a programme against.",
+          "why_it_matters": "Five weeks to image-verified clones is a real timeline claim for early CLD, but the abstract gives no clone numbers, titers or generation counts for the stability assessment, so treat it as a workflow to evaluate rather than a benchmark to plan a program against.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -1301,8 +1301,8 @@
           "url": "https://pubmed.ncbi.nlm.nih.gov/42633254/",
           "doi": "10.1016/j.isci.2026.117201",
           "is_preprint": false,
-          "summary": "A competitive co-culture CRISPR array in suspension CHO pairs a CRISPR-competent population against a CRISPR-inactive GFP reference pool and reads fitness from GFP-ratio dynamics by flow cytometry. Across seven batches and more than 100 days of cultivation, 235 single-gene knockouts and 155 multiplex gene sets were tested; the assay recovered the expected lethal and growth-inhibitory perturbations and identified 28 growth-enhancing knockouts or gene sets that viable-cell-concentration measurements do not resolve. Slope-based modelling converted the GFP dynamics into inferred growth-rate changes, and combinatorial exclusion with bulk transcriptomics linked multiplex phenotypes to candidate driver genes.",
-          "why_it_matters": "The practical point is the readout rather than the hit list: small growth effects invisible to VCD-based screening become measurable by competition, which is the right format if you are prioritising host-engineering targets rather than confirming a single knockout.",
+          "summary": "A competitive co-culture CRISPR array in suspension CHO pairs a CRISPR-competent population against a CRISPR-inactive GFP reference pool and reads fitness from GFP-ratio dynamics by flow cytometry. Across seven batches and more than 100 days of cultivation, 235 single-gene knockouts and 155 multiplex gene sets were tested; the assay recovered the expected lethal and growth-inhibitory perturbations and identified 28 growth-enhancing knockouts or gene sets that viable-cell-concentration measurements do not resolve. Slope-based modeling converted the GFP dynamics into inferred growth-rate changes, and combinatorial exclusion with bulk transcriptomics linked multiplex phenotypes to candidate driver genes.",
+          "why_it_matters": "The practical point is the readout rather than the hit list: small growth effects invisible to VCD-based screening become measurable by competition, which is the right format if you are prioritizing host-engineering targets rather than confirming a single knockout.",
           "thin_abstract": false,
           "relevance_score": 5,
           "is_recurring": false,
@@ -1330,7 +1330,7 @@
           "doi": "10.1016/j.mcpro.2026.101641",
           "is_preprint": false,
           "summary": "A redox proteomics workflow was scaled down to as little as 2 ug of protein, integrating 96-well plate culture, lysis, digestion and cysteine-peptide enrichment, with FAIMS added to strip singly charged species and raise cysteine-peptide signal in low-input samples. Applied to RAW264.7 cells at 40,000 cells per well, data-independent acquisition identified more than 10,000 cysteine sites and detected a global rise in cysteine oxidation after diamide treatment. Three independent batches processed on different days gave consistent coverage, reproducible quantification and comparable diamide-induced oxidation of heat shock proteins, transcription factors and kinases.",
-          "why_it_matters": "Not a CHO result, but it makes plate-scale oxidative-stress phenotyping affordable, which is exactly the readout the fed-batch ferroptosis and redox-defence findings elsewhere this month would need to be screened against.",
+          "why_it_matters": "Not a CHO result, but it makes plate-scale oxidative-stress phenotyping affordable, which is exactly the readout the fed-batch ferroptosis and redox-defense findings elsewhere this month would need to be screened against.",
           "thin_abstract": false,
           "relevance_score": 3,
           "is_recurring": false,
@@ -1472,7 +1472,7 @@
           "url": "https://www.bioprocessintl.com/qa-qc/vendor-governance-is-a-quality-system-moving-beyond-status-based-oversight-in-outsourcing-and-technology-transfer",
           "doi": null,
           "is_preprint": false,
-          "summary": "A trade commentary arguing that vendor oversight in outsourcing and technology transfer should function as part of the quality system rather than as relationship management or periodic status review, and that organisations should adopt specific controls that surface execution risk early enough to act before late remediation is the only option. No data, case studies or named controls appear in what was published here.",
+          "summary": "A trade commentary arguing that vendor oversight in outsourcing and technology transfer should function as part of the quality system rather than as relationship management or periodic status review, and that organizations should adopt specific controls that surface execution risk early enough to act before late remediation is the only option. No data, case studies or named controls appear in what was published here.",
           "why_it_matters": "Nothing actionable in the summary itself; the underlying point matters if you are transferring an upstream process to a CDMO, where status reporting routinely lags actual execution risk.",
           "thin_abstract": true,
           "relevance_score": 4,
@@ -1541,7 +1541,7 @@
           "url": "https://doi.org/10.1002/bit.70361",
           "doi": "10.1002/bit.70361",
           "is_preprint": false,
-          "summary": "A lifecycle review of cell and gene therapy manufacturing covering donor-to-donor variability, contamination risk in aseptic processing, vector production, genomic safety and cold-chain instability, set against a comparative survey of FDA, EMA, CDSCO and other regulators and their harmonisation efforts. It emphasises post-approval change management protocols and ICH Q12 lifecycle documents as the route to reducing comparability risk during process scale-up and technology transfer, and surveys emerging paradigms including decentralized point-of-care manufacturing, QbD, closed-system processing, AI-based digital twins and continuous process verification.",
+          "summary": "A lifecycle review of cell and gene therapy manufacturing covering donor-to-donor variability, contamination risk in aseptic processing, vector production, genomic safety and cold-chain instability, set against a comparative survey of FDA, EMA, CDSCO and other regulators and their harmonisation efforts. It emphasizes post-approval change management protocols and ICH Q12 lifecycle documents as the route to reducing comparability risk during process scale-up and technology transfer, and surveys emerging paradigms including decentralized point-of-care manufacturing, QbD, closed-system processing, AI-based digital twins and continuous process verification.",
           "why_it_matters": "A different modality, but the ICH Q12 post-approval change management framing is the same tool you would use for an upstream process change on a mAb, and this is a compact reference for how it is being argued in a much harder comparability setting.",
           "thin_abstract": false,
           "relevance_score": 3,
@@ -1570,7 +1570,7 @@
           "doi": "10.1016/j.ebiom.2026.106456",
           "is_preprint": false,
           "summary": "A cross-sectional analysis of 305 registered cell therapy trials with available protocols found 209 (68.5%) incorporated preclinical evidence, but reporting was uneven across translational principles: at least one mechanism-of-action element appeared in 95% of those protocols (198/209), evidence of disease modification in 70%, evidence informing trial intervention parameters in 69%, and explicit justification that the preclinical model was relevant in only 24% (51/209). Reporting was generally stronger in trials using large-animal or original preclinical data and weaker in industry-sponsored trials and those citing prior human data, with preclinical evidence used more often to argue biological plausibility than to justify design choices.",
-          "why_it_matters": "Not upstream work, but the finding that model relevance is the least-justified element is the same weakness that shows up in scale-down model qualification packages - stating what the model represents is routinely skipped in favour of stating what it measured.",
+          "why_it_matters": "Not upstream work, but the finding that model relevance is the least-justified element is the same weakness that shows up in scale-down model qualification packages - stating what the model represents is routinely skipped in favor of stating what it measured.",
           "thin_abstract": false,
           "relevance_score": 3,
           "is_recurring": false,
@@ -1590,7 +1590,7 @@
           "url": "http://www.fda.gov/vaccines-blood-biologics/guidance-compliance-regulatory-information-biologics/biologics-procedures-sopps",
           "doi": null,
           "is_preprint": false,
-          "summary": "CBER published its Standard Operating Procedures and Policies, the internal documents its staff use in carrying out their duties, released publicly as part of the centre's transparency commitments. The posting is the documents themselves; no policy change is announced.",
+          "summary": "CBER published its Standard Operating Procedures and Policies, the internal documents its staff use in carrying out their duties, released publicly as part of the center's transparency commitments. The posting is the documents themselves; no policy change is announced.",
           "why_it_matters": "A reference source rather than news - the SOPPs show how CBER actually routes and handles a submission, which is occasionally useful when a review timeline or an information request looks unusual.",
           "thin_abstract": true,
           "relevance_score": 3,
@@ -1605,7 +1605,7 @@
     {
       "id": "industry",
       "name": "Biopharma Industry News",
-      "synthesis": "Capacity spending is the whole story again, and for the second month running it is conventional footprint rather than intensification: Genentech put $750 million into Oregon alongside a construction milestone at its $2 billion Holly Springs site, RayzeBio committed $173 million to radiopharmaceutical capacity in Indiana, Biosidus completed a $12.9 million expansion in Argentina, and WuXi XDC brought a Singapore dual-function line to GMP release. Set directly against that, the BioPlan survey commentary reports perfusion adoption still running below expectation - the same tension August framed as volumetric productivity versus steel in the ground, and this month it is again the footprint side writing the cheques. The sharpest item is negative: Bristol Myers Squibb terminated its reported $380 million Cellares collaboration after two years, during scale-up of Breyanzi, which is a datapoint about manufacturing automation platforms surviving evaluation but not the transition to commercial scale-up, and worth recalling the next time a vendor platform is offered as the way around your own capacity constraint. The Henlius-Sandoz partnership adds cetuximab, evolocumab and belimumab biosimilars to the competitive picture, the usual precursor to COGS pressure on the equivalent processes. None of these items carries technical detail, and the single-use opinion piece carries nothing at all.",
+      "synthesis": "Capacity spending is the whole story again, and for the second month running it is conventional footprint rather than intensification: Genentech put $750 million into Oregon alongside a construction milestone at its $2 billion Holly Springs site, RayzeBio committed $173 million to radiopharmaceutical capacity in Indiana, Biosidus completed a $12.9 million expansion in Argentina, and WuXi XDC brought a Singapore dual-function line to GMP release. Set directly against that, the BioPlan survey commentary reports perfusion adoption still running below expectation - the same tension August framed as volumetric productivity versus steel in the ground, and this month it is again the footprint side writing the checks. The sharpest item is negative: Bristol Myers Squibb terminated its reported $380 million Cellares collaboration after two years, during scale-up of Breyanzi, which is a datapoint about manufacturing automation platforms surviving evaluation but not the transition to commercial scale-up, and worth recalling the next time a vendor platform is offered as the way around your own capacity constraint. The Henlius-Sandoz partnership adds cetuximab, evolocumab and belimumab biosimilars to the competitive picture, the usual precursor to COGS pressure on the equivalent processes. None of these items carries technical detail, and the single-use opinion piece carries nothing at all.",
       "items": [
         {
           "id": "title:24c6b2d33c23ab42",
@@ -1630,7 +1630,7 @@
         },
         {
           "id": "title:713c37af9104abdd",
-          "title": "Genentech’s big week: $750m Oregon manufacturing investment among major moves",
+          "title": "Genentech's big week: $750m Oregon manufacturing investment among major moves",
           "authors": [
             "Josh Abbott"
           ],
@@ -1640,7 +1640,7 @@
           "doi": null,
           "is_preprint": false,
           "summary": "Genentech announced a $750 million manufacturing investment in Oregon, alongside an exclusive licensing deal with Hanmi Pharma and a construction milestone at its $2 billion Holly Springs, North Carolina site. The report gives no detail on modality, capacity or process technology for either site.",
-          "why_it_matters": "A second consecutive month of very large conventional capacity announcements, which is the market signalling that facility footprint rather than volumetric productivity is still the answer it is buying.",
+          "why_it_matters": "A second consecutive month of very large conventional capacity announcements, which is the market signaling that facility footprint rather than volumetric productivity is still the answer it is buying.",
           "thin_abstract": true,
           "relevance_score": 4,
           "is_recurring": false,
@@ -1651,7 +1651,7 @@
         },
         {
           "id": "title:33b5f5f00e410690",
-          "title": "Single-Use Comes of Age—What&#8217;s Next?",
+          "title": "Single-Use Comes of Age - What's Next?",
           "authors": [
             "John Sterling"
           ],
@@ -1723,7 +1723,7 @@
           "url": "https://www.bioprocessintl.com/perfusion-cell-culture/continuous-biomanufacturing-and-perfusion-technologies-are-finally-on-the-cusp-of-broad-adoption",
           "doi": null,
           "is_preprint": false,
-          "summary": "A BioPlan Associates analyst summarises the group's 2026 industry survey on perfusion and continuous cell culture, reporting broad agreement on the advantages alongside adoption that remains lower than expected, and discussing the factors that constrain wider uptake. What was published here is trade commentary on survey results; no adoption percentages, respondent counts or process data appear in it.",
+          "summary": "A BioPlan Associates analyst summarizes the group's 2026 industry survey on perfusion and continuous cell culture, reporting broad agreement on the advantages alongside adoption that remains lower than expected, and discussing the factors that constrain wider uptake. What was published here is trade commentary on survey results; no adoption percentages, respondent counts or process data appear in it.",
           "why_it_matters": "Directional only: intensification enthusiasm in the literature continues to outrun installed practice, which is worth remembering when you benchmark your own platform against published perfusion performance.",
           "thin_abstract": true,
           "relevance_score": 3,
