@@ -663,5 +663,398 @@
       "industry"
     ],
     "url": "https://www.bioprocessintl.com/cell-line-development/reducing-the-guesswork-increasing-predictability-in-cho-cell-line-development"
+  },
+  "doi:10.1186/s40643-026-01105-5": {
+    "title": "Variable-specific preprocessing enables cross-scale transferable Raman models from high-throughput bioreactor data.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "pat_control",
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42667545/"
+  },
+  "doi:10.1016/j.jbiotec.2026.08.008": {
+    "title": "Rational design of high-productivity perfusion processes for CHO Cells: From growth inhibitory strategies to model-driven optimization.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd",
+      "intensification",
+      "modeling_ml",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42632484/"
+  },
+  "doi:10.64898/2026.08.20.745185": {
+    "title": "Fatty Acid β-oxidation and Ferroptosis Define a Survival-Productivity Trade Off in CHO fed-Batch Bioreactors",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd",
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.64898/2026.08.20.745185"
+  },
+  "doi:10.1016/j.jbiotec.2026.08.007": {
+    "title": "Cysteine-condensed thiazolidine as an effective cysteine source for CHO cell culture.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd",
+      "media_dev",
+      "intensification",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42632485/"
+  },
+  "doi:10.1016/j.biotechadv.2026.109009": {
+    "title": "Measuring hydrodynamic stress in mammalian cell culture across five decades: Cellular responses and the need for mechanistic integration.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42617763/"
+  },
+  "doi:10.1016/j.ymben.2026.102543": {
+    "title": "Engineering TPT1-mediated apoptosis resistance for improved mammalian cell biomanufacturing.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd",
+      "cell_line_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42674249/"
+  },
+  "doi:10.1038/s41598-026-68945-1": {
+    "title": "Comparative numerical and experimental evaluation of 3D-printed micromixers for biotechnological applications.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd"
+    ],
+    "url": "https://doi.org/10.1038/s41598-026-68945-1"
+  },
+  "doi:10.3389/fbioe.2026.1847073": {
+    "title": "Advancing recombinant protein production in CHO cells through metabolic engineering.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "upstream_pd",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42609441/"
+  },
+  "doi:10.1016/j.jcyt.2026.102940": {
+    "title": "Automated expansion of iPSCs enables scalable extracellular vesicle production with anti-senescence bioactivity.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42673912/"
+  },
+  "doi:10.3390/foods15162941": {
+    "title": "Algal and Cyanobacterial Hydrolysates as Serum-Reducing Supplements Across Mammalian, Avian and Fish Cells with Identification of Bioactive Chromopeptides.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "media_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42650635/"
+  },
+  "doi:10.1007/s11306-026-02515-4": {
+    "title": "Excess glutamine rewires endothelial cell metabolism.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "media_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42631795/"
+  },
+  "doi:10.1002/bit.70353": {
+    "title": "Shortening Protein Total Residence Time to Improve High-Cycle Purification Efficiency in Integrated Continuous Biomanufacturing.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42670640/"
+  },
+  "title:3bdc9238be943b5c": {
+    "title": "Continuous Biomanufacturing and Perfusion Technologies Are Finally on the Cusp of Broad Adoption",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "intensification",
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/perfusion-cell-culture/continuous-biomanufacturing-and-perfusion-technologies-are-finally-on-the-cusp-of-broad-adoption"
+  },
+  "doi:10.1093/bioinformatics/btag607": {
+    "title": "A data-driven evaluation of optimization techniques in cell culture media.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42615979/"
+  },
+  "doi:10.1016/j.mbs.2026.109801": {
+    "title": "Hybrid mechanistic-machine learning models in biosciences: Causality, forecasting, and lab-to-field translation.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "modeling_ml",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42636966/"
+  },
+  "doi:10.1002/bit.70354": {
+    "title": "Current State and Impact of Implementation of In-Silico Tools in the Biopharmaceutical Industry - Proceedings of the 6th Modeling Workshop.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42634929/"
+  },
+  "doi:10.21203/rs.3.rs-10680176/v1": {
+    "title": "Quantitative and Comparative Analysis of mRNA Poly(A) Tail Length Distributions Using LC–MS, LC–UV, and Oxford Nanopore Sequencing with Bayesian Harmonization",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.21203/rs.3.rs-10680176/v1"
+  },
+  "doi:10.1093/ismejo/wrag219": {
+    "title": "Model-guided design of defined microbial community reveals interactions underpinning plant growth and stress tolerance.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.1093/ismejo/wrag219"
+  },
+  "doi:10.1002/bit.70359": {
+    "title": "Unmasking Glycoforms: Lectin-Based Profiling and Functional Implications of Targeted Glycosylation Knockouts in Chinese Hamster Ovary Cells.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cell_line_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42670636/"
+  },
+  "doi:10.1016/j.isci.2026.117201": {
+    "title": "A high-throughput co-culture CRISPR array for rapid fitness hypothesis testing and growth engineering in CHO cells.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cell_line_dev",
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42633254/"
+  },
+  "doi:10.1002/biot.70296": {
+    "title": "Impact of Cistron Topology and Bicistronic Vector Design in the piggyBac Transposon System for Improved Antibody Expression.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42605169/"
+  },
+  "doi:10.1002/biot.70299": {
+    "title": "Expanding Transposase Technology to Regulatory Noncoding RNAs for Stable Expression in CHO Cells.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42634449/"
+  },
+  "doi:10.1186/s40643-026-01123-3": {
+    "title": "Improving recombinant protein productivity in CHO cells via multi-omics data integration.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42671675/"
+  },
+  "doi:10.1007/s00449-026-03406-7": {
+    "title": "Streamlined stable CHO cell line development using droplet microfluidics with image-based monoclonality assessment.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cell_line_dev",
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42616042/"
+  },
+  "doi:10.64898/2026.08.08.743685": {
+    "title": "A rationally designed neuraminidase immunogen elicits humoral responses to a conserved viral site",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://doi.org/10.64898/2026.08.08.743685"
+  },
+  "doi:10.1016/j.jchromb.2026.125273": {
+    "title": "Development and optimization of a mobile affinity selection chromatography method for analysis of therapeutic monoclonal antibody aggregates in the presence of human serum albumin.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42679766/"
+  },
+  "doi:10.1016/j.xphs.2026.104468": {
+    "title": "Monoclonal Antibody Adsorption at Fluid-Fluid Interfaces: Experimental and Computational Approaches for Interfacial Characterization.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42648489/"
+  },
+  "doi:10.1016/j.colsurfb.2026.116090": {
+    "title": "Adsorption-desorption dynamics at the solid-liquid interface govern monoclonal antibody aggregation under mechanical stress: Roles of Hofmeister anions and vial surface hydrophobicity.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42617427/"
+  },
+  "doi:10.2174/0113892010482038260729050308": {
+    "title": "Structural Characterisation of Monoclonal Antibody Based on LC-MS: A General Method.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42634526/"
+  },
+  "doi:10.1016/j.mcpro.2026.101641": {
+    "title": "A Scalable Low-Input Redox Proteomics Workflow Enables High-Throughput Analysis of Cysteine Oxidation in 96-Well Cell Cultures.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42607869/"
+  },
+  "title:5df77ea94ed465d8": {
+    "title": "FDA Proposes Framework to Advance Credibility of AI Models Used for Drug and Biological Product Submissions",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "http://www.fda.gov/news-events/press-announcements/fda-proposes-framework-advance-credibility-ai-models-used-drug-and-biological-product-submissions"
+  },
+  "doi:10.1016/j.xphs.2026.104490": {
+    "title": "Key strategic considerations for pooling multiple drug substance batches in biopharmaceutical drug product manufacturing.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.xphs.2026.104490"
+  },
+  "title:75389be28d5e4be4": {
+    "title": "FDA Scientific Public Workshop: Next-Generation Sequencing for Adventitious Agent Detection in Biologics - 09/23/2026",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "http://www.fda.gov/news-events/office-therapeutic-products-otp-events-meetings-and-workshops/fda-scientific-public-workshop-next-generation-sequencing-adventitious-agent-detection-biologics"
+  },
+  "doi:10.1007/s11095-026-04159-4": {
+    "title": "Generic Long-Acting Injectable Product Availability and Approval Standards.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1007/s11095-026-04159-4"
+  },
+  "doi:10.1016/j.clinthera.2026.08.002": {
+    "title": "Manufacturing Complexity and Scale-Up: Hidden Contributors to Drug Safety Risk.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.clinthera.2026.08.002"
+  },
+  "title:40b11630ab963dd4": {
+    "title": "Vendor Governance Is a Quality System: Moving Beyond Status-Based Oversight in Outsourcing and Technology Transfer",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://www.bioprocessintl.com/qa-qc/vendor-governance-is-a-quality-system-moving-beyond-status-based-oversight-in-outsourcing-and-technology-transfer"
+  },
+  "doi:10.1007/s10147-026-03160-6": {
+    "title": "Recommendations for generating real-world evidence with regulatory-grade relevance and reliability.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1007/s10147-026-03160-6"
+  },
+  "doi:10.1002/bit.70361": {
+    "title": "Cell and Gene Therapies Manufacturing Challenges and Integrated Good Manufacturing Practices Solutions: A Lifecycle Perspective.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1002/bit.70361"
+  },
+  "doi:10.1016/j.ebiom.2026.106456": {
+    "title": "Alignment of registered cell therapy trial protocols with regulatory guidance on preclinical evidence: a systematic, cross-sectional, protocol-level analysis.",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.ebiom.2026.106456"
+  },
+  "title:8c7160dce6bbcf38": {
+    "title": "Biologics Procedures (SOPPs)",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "http://www.fda.gov/vaccines-blood-biologics/guidance-compliance-regulatory-information-biologics/biologics-procedures-sopps"
+  },
+  "title:24c6b2d33c23ab42": {
+    "title": "Cellares suffers financial blow as Bristol Myers Squibb ends collaboration",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/bioprocess-insider/cellares-suffers-financial-blow-as-bristol-myers-squibb-ends-collaboration"
+  },
+  "title:713c37af9104abdd": {
+    "title": "Genentech’s big week: $750m Oregon manufacturing investment among major moves",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/manufacturing/genentech-s-big-week-750m-oregon-manufacturing-investment-among-major-moves"
+  },
+  "title:33b5f5f00e410690": {
+    "title": "Single-Use Comes of Age—What&#8217;s Next?",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.genengnews.com/topics/bioprocessing/single-use-comes-of-age-what-comes-next/"
+  },
+  "title:ac44aefa2abe404d": {
+    "title": "Argentine firm Biosidus completes $12.9m biomanufacturing expansion",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/biosimilars/argentine-firm-biosidus-completes-12-9m-biomanufacturing-expansion"
+  },
+  "title:9779876f4253dd17": {
+    "title": "RayzeBio invests $173m in Indiana radiopharmaceutical footprint",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/business/rayzebio-invests-173m-in-indiana-radiopharmaceutical-footprint"
+  },
+  "title:145e3d24640ed02e": {
+    "title": "WuXI XDC announces GMP release of Singapore dual-function production line",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/facility-design-engineering/wuxi-xdc-announces-gmp-release-of-singapore-drug-substance-production-line"
+  },
+  "title:5fd31f2ee2f17a97": {
+    "title": "Henlius and Sandoz announce global biosimilar commercialization partnership",
+    "first_seen_month": "2026-09",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/business/henlius-and-sandoz-announce-global-biosimilar-commercialization-partnership"
   }
 }
