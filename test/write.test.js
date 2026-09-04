@@ -55,12 +55,28 @@ test('assembles the report shape the viewer and the brief expect', async () => {
   assert.equal(report.summary, 'An overview.');
   assert.deepEqual(report.top_items, [{ id: 'doi:a', reason: 'because' }]);
   assert.equal(report.categories[0].name, 'Upstream Process Development', 'category names come from config');
+  assert.deepEqual(report.references, [], 'defaults to empty rather than undefined when the caller has none');
+  assert.deepEqual(report.categories[0].references, [], 'same default, per category');
 
   const item = report.categories[0].items[0];
   for (const key of ['id', 'title', 'authors', 'venue', 'published', 'url', 'doi', 'summary', 'why_it_matters', 'relevance_score', 'is_recurring']) {
     assert.ok(key in item, `item is missing ${key}`);
   }
   assert.equal(item.relevance_score, 4);
+});
+
+test('footnote references carry through into the report, top-level and per-category', async () => {
+  const { report } = await write(
+    args({
+      dry: true,
+      references: [{ marker: 1, id: 'doi:a' }],
+      narratives: [
+        { id: 'upstream_pd', synthesis: 'Titer rose [1].', references: [{ marker: 1, id: 'doi:a' }], papers: [paper('a')] },
+      ],
+    }),
+  );
+  assert.deepEqual(report.references, [{ marker: 1, id: 'doi:a' }]);
+  assert.deepEqual(report.categories[0].references, [{ marker: 1, id: 'doi:a' }]);
 });
 
 test('a dry run writes nothing and leaves the ledger alone', async () => {

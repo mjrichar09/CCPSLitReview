@@ -115,17 +115,27 @@ using that category's papers in the exact order given by `by_category[id]`:
 
 - Write 3-5 sentences covering the through-line of the month in this
   category: what connects these items, what extends prior work, and above
-  all what *contradicts* it. Name the specific papers by their finding, not
-  by citation. If the items have no through-line, say that rather than
-  inventing one — "Three unrelated results, of which the perfusion media
-  work is the one worth reading" is a good answer. No preamble, no list,
-  prose only.
+  all what *contradicts* it. Name the specific papers by their finding. If
+  the items have no through-line, say that rather than inventing one —
+  "Three unrelated results, of which the perfusion media work is the one
+  worth reading" is a good answer. No preamble, no list, prose only.
 - If `history.by_category[id]` has entries (oldest last), you have prior
   months' narratives for this category. Reference them **only** when this
   month's items genuinely extend, reverse, or leave unresolved something
   stated before, and say which. If there is no real connection, say nothing
   about previous months at all — an invented "building on last month's
   finding" is a factual error, not a stylistic one.
+- Footnote a direct citation: when you cite one specific paper's finding
+  directly, mark it inline the first time with a bracketed number, like
+  "...raised titer 2-fold [1]...". Reuse the same number for a repeat
+  citation of the same paper later in this narrative. Don't mark general
+  scene-setting, or a claim spanning several papers at once. Record every
+  marker you used for this category in `routine-output.json`'s
+  `narratives[].references` (step 5) — `{ marker, id }`, using the paper's
+  `external_id` from `papers` exactly. If you cite nothing directly in this
+  category, its `references` is `[]`. A number range resets per category and
+  per the overview — `[1]` in one narrative and `[1]` in another (or in the
+  overview) are unrelated.
 
 Then, across **all** categories together, pick the Top `top_items_wanted`
 items of the month: rank on what would change this reader's thinking, not
@@ -149,7 +159,10 @@ this issue" — start with the substance. If `history.overviews` is
 non-empty, do not re-announce a theme the reader already read about last
 time — either say what moved it this month or leave it out; comparisons
 across months ("quieter than July", "the third month running without X")
-are welcome where true.
+are welcome where true. The same footnote convention applies here too —
+you have real ids for the Top items you just picked, so cite one of those
+directly with `[1]` the same way, and record it in `routine-output.json`'s
+top-level `references`.
 
 Plain ASCII and American spellings throughout, same rule as step 3.
 
@@ -164,14 +177,19 @@ shape — nothing more, nothing less:
     { "index": 0, "summary": "...", "why_it_matters": "...", "thin_abstract": false }
   ],
   "narratives": [
-    { "id": "upstream_pd", "synthesis": "..." }
+    { "id": "upstream_pd", "synthesis": "...[1]...", "references": [{ "marker": 1, "id": "doi:10.1234/xyz" }] }
   ],
   "top": [
     { "id": "doi:10.1234/xyz", "reason": "..." }
   ],
-  "overview": "..."
+  "overview": "...[1]...",
+  "references": [{ "marker": 1, "id": "doi:10.1234/xyz" }]
 }
 ```
+
+`references` (both places) is optional to populate — an empty array is
+correct whenever you cited nothing directly — but the key itself must be
+present, even as `[]`.
 
 Then run:
 

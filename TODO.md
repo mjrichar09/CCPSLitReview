@@ -16,7 +16,6 @@
 ## Backlog
 
 - [ ] Optional: an owner-only `/digest/admin` page listing pending readers with an Approve button, gated by an `is_owner` flag and its own RLS policy. The Supabase table editor covers this until the list gets long.
-- [ ] **Inline reference links in prose.** The overview and section synthesis paragraphs mention specific papers by finding but don't link to them — deliberately skipped rather than done with fragile text-matching (see Status_update.md, "restructured into front / section / article pages"). The real fix is upstream: have `synthesize.js` ask the model to tag each reference with the item's id/index as it writes (e.g. inline `[[doi:...]]` markers, or a structured `references: [{ span, id }]` array alongside the prose), then render those as links to the item's `#item-id` anchor on its section page (see the collapsible-item design above — there's no separate article page to link to anymore, just the anchor). Needs a prompt/schema change and a render-time parser; worth a dedicated pass rather than bolting on.
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
 - [ ] Optional: a `STYLE_GUIDE.md` for the token set in `app/globals.css`, once a real design pass happens
@@ -24,6 +23,7 @@
 
 ## Done (sweep to Status_update.md when this section outgrows the backlog)
 
+- [x] Footnote references in prose (`[1]`-style, linking to the cited paper), a real deep-link bug fix (notifications/Top-5/search/"Also appears in" landed on the right page but a closed, unhighlighted card — `:target` CSS never re-fires on Next's client-side navigation, only a full page load), and the @mention picker silently dropping any match past the 6th (2026-09-02)
 - [x] Push notification on new sign-up via a `pg_net` trigger on `profiles` insert -> ntfy.sh, so a pending approval doesn't wait to be noticed (2026-08-19)
 - [x] Real sign-in gate: `proxy.js` (Next 16's renamed Middleware) blocks every `/digest/**` request unless signed in and approved, landing page at `/` (2026-08-18)
 - [x] Per-reader read marks, favorites + `/digest/favorites`, cross-month discussion board at `/digest/discussion` (2026-08-18)

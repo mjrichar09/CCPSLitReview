@@ -8,10 +8,18 @@
  * see Engagement.jsx), it filters and renders. `Comments.jsx` owns the
  * caret-tracking and the actual text replacement.
  */
+// A soft cap, not a display limit — the box scrolls (see .mention-picker's
+// max-height/overflow-y in globals.css) so this only exists to bound
+// rendering if the reader list ever grows very large, not to hide anyone
+// who matches the query.
+const MAX_CANDIDATES = 50;
+
 export default function MentionPicker({ query, candidates, onSelect }) {
   if (query === null) return null;
 
-  const matches = candidates.filter((c) => c.display_name.toLowerCase().startsWith(query.toLowerCase())).slice(0, 6);
+  const matches = candidates
+    .filter((c) => c.display_name.toLowerCase().startsWith(query.toLowerCase()))
+    .slice(0, MAX_CANDIDATES);
   if (matches.length === 0) return null;
 
   return (

@@ -225,7 +225,7 @@ async function runStage(step, ctx, previous) {
       if (!s) throw new Error('write: nothing synthesized — run --stage synthesize first');
       return write({
         items: s.items, narratives: s.narratives, top_items: s.top_items, summary: s.summary,
-        month, config: ctx.config, health: s.health, run_stats: ctx.usage.toJSON(),
+        references: s.references, month, config: ctx.config, health: s.health, run_stats: ctx.usage.toJSON(),
         dry, force: ctx.force,
       });
     }

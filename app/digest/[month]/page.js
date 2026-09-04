@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getAllMonths, getReport } from '../../../lib/digest.js';
 import { resolveItem, monthLabel } from '../shared.js';
 import Health from '../Health.jsx';
+import FootnoteText from '../FootnoteText.jsx';
 
 /**
  * Every committed month is prerendered, and only those.
@@ -37,7 +38,12 @@ export default async function MonthPage({ params }) {
   return (
     <>
       <h1 className="report-title">{monthLabel(report.month_of)}</h1>
-      <p className="report-summary">{report.summary}</p>
+      <FootnoteText
+        className="report-summary"
+        text={report.summary}
+        references={report.references}
+        resolveHref={(id) => resolveItem(month, report, id)?.href ?? null}
+      />
 
       {report.top_items?.length > 0 && (
         <section className="top5">

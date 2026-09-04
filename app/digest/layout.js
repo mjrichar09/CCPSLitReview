@@ -1,5 +1,6 @@
 import SessionProvider from './SessionProvider.jsx';
 import ReactionProvider from './ReactionFX.jsx';
+import HashTargetHighlight from './HashTargetHighlight.jsx';
 
 /**
  * The one auth context for everything under /digest — month pages,
@@ -12,11 +13,14 @@ import ReactionProvider from './ReactionFX.jsx';
  * `ReactionProvider` is here for the same reason `SessionProvider` is: every
  * page under /digest can vote/favorite/mark-read, and the animation layer it
  * renders needs to sit above all of them, not be re-created per page.
+ * `HashTargetHighlight` is here for the same reason again — it has to see
+ * every navigation between pages under /digest, not just the first one.
  */
 export default function DigestLayout({ children }) {
   return (
     <SessionProvider>
       <ReactionProvider>{children}</ReactionProvider>
+      <HashTargetHighlight />
     </SessionProvider>
   );
 }
