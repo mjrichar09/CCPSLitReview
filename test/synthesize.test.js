@@ -50,6 +50,30 @@ test('writes one narrative per category that actually has papers', async () => {
   assert.equal(result.summary, 'an overview');
 });
 
+test('footnote references pass through from the model to the report, category and overview alike', async () => {
+  const generator = {
+    async generate({ schema }) {
+      if (schema.properties.synthesis) {
+        return { synthesis: 'Titer rose 2-fold [1].', references: [{ marker: 1, id: 'doi:a' }] };
+      }
+      if (schema.properties.summary) {
+        return { summary: 'The month turned on one result [1].', references: [{ marker: 1, id: 'doi:a' }] };
+      }
+      return { top: [{ id: 'doi:a', reason: 'because' }] };
+    },
+  };
+  const result = await synthesize({ items: [paper('a')], config, month: '2026-08', generator });
+
+  assert.deepEqual(result.narratives[0].references, [{ marker: 1, id: 'doi:a' }]);
+  assert.deepEqual(result.references, [{ marker: 1, id: 'doi:a' }]);
+});
+
+test('a stub that omits references entirely does not throw — the field is additive', async () => {
+  const result = await synthesize({ items: [paper('a')], config, month: '2026-08', generator: stubGenerator() });
+  assert.deepEqual(result.narratives[0].references, []);
+  assert.deepEqual(result.references, []);
+});
+
 test('a paper in two categories appears in both narratives', async () => {
   const result = await synthesize({
     items: [paper('shared', { scored_in: ['upstream_pd', 'modeling_ml'] })],

@@ -195,6 +195,14 @@ a:hover { text-decoration: underline; }
 .cat-count { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .cat-synthesis { margin-bottom: 1.1rem; line-height: 1.72; }
 
+/* A footnote marker in prose (FootnoteText.jsx) — raised and smaller like a
+   real footnote, so "[1]" reads as a reference rather than more body text. */
+.footnote-ref {
+  font-size: 0.72em; vertical-align: super; font-weight: 600;
+  color: var(--link); text-decoration: none; padding: 0 0.05em;
+}
+.footnote-ref:hover, .footnote-ref:focus { text-decoration: underline; }
+
 /* ---- items: a <details> disclosure per paper, not a separate page ---- */
 .item-list { list-style: none; display: grid; gap: 1.1rem; }
 .item {
@@ -226,14 +234,25 @@ a:hover { text-decoration: underline; }
 .item-source, .also-in { margin-top: 0.9rem; font-size: 0.85rem; color: var(--muted); }
 .item-source a { font-weight: 600; }
 
-/* A Top-5 or archive link to #item-id lands on a collapsed <details>. Force it
-   open so the reader isn't dropped on a closed card with no visible content —
-   the native `open` attribute doesn't respond to :target on its own. */
-.item:target > .item-body { display: block !important; }
 /* Clears the sticky header, which would otherwise cover a paper reached by its
    #anchor from the Top 5 or an "Also appears in" link. The header measures
    120px, so this is that plus a gap - flush against the bar reads as clipped. */
 .item { scroll-margin-top: 8.75rem; }
+
+/* Opening the right card and scrolling to it is HashTargetHighlight.jsx's job,
+   not CSS's: :target only re-evaluates on a real fragment navigation (a full
+   page load, or location.hash = ...), and Next's client-side router changes
+   the URL through the History API instead, which never re-triggers :target —
+   every in-app link (notifications, Top 5, search, "Also appears in") took
+   that path and landed on a closed, unhighlighted, indistinguishable card. */
+.hash-target-flash { animation: hash-target-flash 2.6s ease-out; }
+@keyframes hash-target-flash {
+  0%, 15% { box-shadow: 0 0 0 3px var(--accent); background: var(--badge-new-bg); }
+  100% { box-shadow: 0 0 0 3px transparent; background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hash-target-flash { animation: none; outline: 3px solid var(--accent); outline-offset: 2px; }
+}
 
 .back-link { display: inline-block; margin-bottom: 1.25rem; font-size: 0.85rem; color: var(--muted); }
 
@@ -396,7 +415,7 @@ a:hover { text-decoration: underline; }
 
 .mention-picker {
   position: absolute; left: 0; top: 100%; z-index: 10; margin-top: 0.25rem;
-  min-width: 12rem; max-height: 10rem; overflow-y: auto;
+  min-width: 12rem; max-height: 14rem; overflow-y: auto;
   list-style: none; padding: 0.3rem; border-radius: 8px;
   background: var(--surface); border: 1px solid var(--border-strong);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);

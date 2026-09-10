@@ -5,6 +5,7 @@ import { itemSlug, otherAppearances, monthLabel } from '../../shared.js';
 import ItemRow from '../../ItemRow.jsx';
 import Engagement from '../../Engagement.jsx';
 import SortableItemList from '../../SortableItemList.jsx';
+import FootnoteText from '../../FootnoteText.jsx';
 
 /** Every category of every committed month, and only those. */
 export const dynamicParams = false;
@@ -60,7 +61,12 @@ export default async function CategoryPage({ params }) {
           {cat.items.length} {cat.items.length === 1 ? 'item' : 'items'}
         </span>
       </div>
-      <p className="cat-synthesis">{cat.synthesis}</p>
+      <FootnoteText
+        className="cat-synthesis"
+        text={cat.synthesis}
+        references={cat.references}
+        resolveHref={(id) => (cat.items.some((i) => i.id === id) ? `#${itemSlug(id)}` : null)}
+      />
       {/* One provider for the whole section: tallies and comment counts for
           every paper here arrive in two queries, not two per paper. The list
           below stays server-rendered inside it. */}

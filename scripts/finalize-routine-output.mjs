@@ -87,7 +87,7 @@ async function main() {
       fail(`routine-output: category "${c.id}" has an empty or missing "synthesis"`);
     }
     const categoryPapers = input.by_category[c.id].map((i) => paperByIndex.get(i));
-    return { id: c.id, synthesis: n.synthesis, papers: categoryPapers };
+    return { id: c.id, synthesis: n.synthesis, references: sanitizeReferences(n.references), papers: categoryPapers };
   });
 
   // --- top picks: same hallucination guard the real synthesize.js uses ------
@@ -104,6 +104,11 @@ async function main() {
     narratives,
     top_items: topItems,
     summary: output.overview,
+    // Decorative, not required: a missing or malformed reference just means
+    // that "[1]" renders as plain text on the page (FootnoteText.jsx), not a
+    // failed run — so this is sanitized, never validated to the point of
+    // calling fail().
+    references: sanitizeReferences(output.references),
     stats: { categories: narratives.length, top_items: topItems.length },
     health: scored.health,
   };
@@ -118,6 +123,12 @@ async function main() {
   process.stderr.write(
     `finalized: ${papers.length} papers, ${narratives.length} narratives, ${topItems.length} top items -> staging/${month}/{summarized,synthesized}.json\n`,
   );
+}
+
+/** Keeps only well-shaped {marker, id} entries; drops anything else silently. */
+function sanitizeReferences(references) {
+  if (!Array.isArray(references)) return [];
+  return references.filter((r) => r && Number.isInteger(r.marker) && typeof r.id === 'string' && r.id.length > 0);
 }
 
 function fail(msg) {

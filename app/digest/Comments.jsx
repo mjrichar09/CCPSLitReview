@@ -60,18 +60,18 @@ export default function Comments({ itemId, categoryId }) {
   /**
    * The disclosure is the browser's, not React's: this subscribes to the parent
    * `<details>` toggle rather than mirroring open/closed into state. That keeps
-   * ItemRow a server component and leaves the `:target` deep-link override
-   * working — which is also why the initial check also tests `:target`
-   * directly: that override forces the body visible with a CSS rule alone, it
-   * never sets the native `open` attribute or fires a `toggle` event, so a
-   * paper reached via a notification link (or the Top 5, or "Also appears
-   * in") would otherwise show an already-open-looking card whose thread never
-   * actually loads.
+   * ItemRow a server component. It also means a paper opened programmatically
+   * — HashTargetHighlight.jsx sets `.open = true` on whatever element a URL
+   * fragment names, for a notification link, the Top 5, a search result, or
+   * "Also appears in" — loads its thread correctly too: setting `.open` fires
+   * a real `toggle` event whether a person or a script did it, and that event
+   * can arrive either before or after this effect's own mount check runs, so
+   * both are covered.
    */
   useEffect(() => {
     const details = anchor.current?.closest('details');
     if (!details) return undefined;
-    if (details.open || details.matches(':target')) load();
+    if (details.open) load();
     const onToggle = () => {
       if (details.open) load();
     };
