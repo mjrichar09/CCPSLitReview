@@ -1,4 +1,11 @@
-# CCPSLitReview — presentation outline
+# CCPSLitReview — presentation outline (long form)
+
+> **If you are presenting from the live site, use
+> [`presentation-script.md`](presentation-script.md) instead.** That is the
+> demo-led talk: what to click, what to say, where the lessons go. This file
+> is the long-form source material behind it — deeper on the engineering,
+> with the war stories and Q&A prep in full. `ccpslitreview-deck.pptx` is the
+> no-demo version.
 
 For an internal AI group. Target: **35 minutes + 10 Q&A**. Adjust by cutting
 §6 (war stories) to two items and dropping §8.
