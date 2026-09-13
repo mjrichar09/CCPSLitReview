@@ -130,6 +130,10 @@ jobs:
           # entirely, the feature disables rather than failing the run.
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          # Reader-imported papers fed to the generation stage. Unlike the anon
+          # key above, this one can read `user_papers`/`comments`, which are
+          # approved-readers-only. Absent, imports are simply not included.
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           DIGEST_MODEL_SCORE: ${{ inputs.score_model }}
           DIGEST_BATCH_SIZE: ${{ inputs.batch_size }}
           IN_MONTH: ${{ inputs.month }}

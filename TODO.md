@@ -15,6 +15,15 @@
 
 ## Backlog
 
+- [ ] **Apply migration `20260913000200_user_papers.sql`** (and `20260913000100_restrict_comment_reads.sql`
+      before it) — the imports feature does nothing until the table and its policies exist.
+- [ ] **Add `SUPABASE_SERVICE_ROLE_KEY` to Actions secrets** if imported papers should reach the
+      generation stage. Without it the section works fine and months simply generate without
+      import context. Never add it to Vercel as a `NEXT_PUBLIC_*` variable.
+- [ ] Imported papers are never re-scored. If one is later published by the monthly run it keeps
+      its own row and its comments unify by DOI, but the two copies render in two places
+      (its month, and the imports section). Worth deciding whether the imports section should
+      hide papers the pipeline has since picked up.
 - [ ] Optional: an owner-only `/digest/admin` page listing pending readers with an Approve button, gated by an `is_owner` flag and its own RLS policy. The Supabase table editor covers this until the list gets long.
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)

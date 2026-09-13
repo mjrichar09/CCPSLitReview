@@ -8,6 +8,7 @@ import { stagingDir } from '../lib/digestDir.js';
 import { trimToCaps, dedupeToDistinctPapers } from '../lib/pipeline/summarize.js';
 import { sortForReading } from '../lib/pipeline/synthesize.js';
 import { loadHistory } from '../lib/util/history.js';
+import { loadImportedPapers } from '../lib/importedPapers.js';
 
 /**
  * Everything the routine-based generator needs to do the LLM-shaped part of
@@ -47,6 +48,7 @@ async function main() {
   );
 
   const history = await loadHistory(month, config.history);
+  const imported = await loadImportedPapers(month);
 
   const out = {
     month,
@@ -59,13 +61,18 @@ async function main() {
       by_category: Object.fromEntries(history.byCategory),
       overviews: history.overviews,
     },
+    // Reader-imported papers, so the routine can refer back to something a
+    // reader added by hand. Empty when the read is not configured — see
+    // lib/importedPapers.js for why this one needs its own key.
+    imported: imported.papers,
     health: scored.health,
   };
 
   const file = path.join(stagingDir(month), 'routine-input.json');
   await writeFile(file, `${JSON.stringify(out, null, 2)}\n`, 'utf8');
   process.stderr.write(
-    `routine input: ${papers.length} distinct papers across ${categories.length} categories -> ${file}\n`,
+    `routine input: ${papers.length} distinct papers across ${categories.length} categories`
+      + `${imported.enabled ? `, ${imported.papers.length} imported` : ''} -> ${file}\n`,
   );
 }
 
