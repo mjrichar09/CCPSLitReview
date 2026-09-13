@@ -9,8 +9,9 @@ import { getSupabase } from '../../lib/supabase/client.js';
  *
  * Same shape as `SortableItemList`/`FavoritesList`: the server renders every
  * `<ItemRow>` ever published, and this client leaf only ever hides or
- * reorders the elements it is handed. `comment_counts` is public (anyone can
- * read it, same as the comments themselves), so this needs no sign-in.
+ * reorders the elements it is handed. `comment_counts` requires a signed-in,
+ * approved reader (migration 20260913000100), which every visitor to this
+ * page already is — the access gate admits nobody else.
  *
  * `comment_counts` is grouped by (item_id, month) — a paper that recurred
  * across two months and was commented on in both would have two rows — so
