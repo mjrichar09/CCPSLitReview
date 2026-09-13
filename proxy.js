@@ -69,5 +69,17 @@ function blocked(request, response) {
 }
 
 export const config = {
-  matcher: ['/digest/:path*'],
+  // Must be a static literal — Next statically analyzes this field, so it
+  // cannot be a reference to a shared constant (test/accessGate.test.js reads
+  // this file's source to guard the list instead).
+  //
+  // `/search-index.json` is not a page but it is digest *content*: every
+  // paper's title, authors, venue and link, for every month. It is written to
+  // `public/` by scripts/build-search-index.mjs (this app has no API routes to
+  // serve it from), and `public/` is served from the site root, outside
+  // `/digest/**`. Left off this list the gate is trivially walked around —
+  // fetch one static file, read the whole curated list without signing in.
+  // Middleware does run for public assets (unlike `/_next/static`), so naming
+  // the path is all it takes.
+  matcher: ['/digest/:path*', '/search-index.json'],
 };
