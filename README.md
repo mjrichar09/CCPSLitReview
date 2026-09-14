@@ -89,6 +89,33 @@ Edit `sources.rss.feeds`. Each entry is `{ id, name, url, tags }`, plus optional
 
 Categories select feeds by `tags` (default: all live feeds) or by explicit `ids`. A feed that starts failing is reported in `source_health` and the run continues — check the report footer rather than trusting silence.
 
+### Import papers by hand, or from a conference deck
+
+`/digest/imports` is the user-added section. Any approved reader can:
+
+- **Add one paper** by pasting a DOI (or a doi.org link, or any line of text containing one).
+  Crossref supplies the metadata; you confirm it before it is written, and can attach a comment.
+- **Import a conference deck.** Upload a `.pptx` and every paper it cites is added, with the
+  speaker notes for that slide attached to each paper as a comment from you. The deck is parsed
+  **in your browser** and never uploaded — only the DOIs and title lines it finds are sent to
+  Crossref.
+
+Citations found by DOI are pre-selected, because a DOI identifies exactly one paper. Citations
+found by title alone are resolved through a Crossref title search, which can return a confidently
+wrong paper, so those start unchecked and name the paper they would import — confirm each one.
+
+Imported papers are **scored 5** and belong to no month. They render in their own section and are
+read back into the write-up for later months as context (see below).
+
+Two things have to exist for this to work:
+
+- Migrations `20260913000100` and `20260913000200` applied to the Supabase project.
+- `SUPABASE_SERVICE_ROLE_KEY` in Actions secrets, *only* if imports should reach the generation
+  stage. `user_papers` and `comments` are readable by approved signed-in readers only, and the
+  pipeline is neither, so the publishable key cannot do this read. Without the key the section
+  still works and months simply generate without import context. It must never be set as a
+  `NEXT_PUBLIC_*` variable or added to Vercel.
+
 ### Tune the relevance threshold
 
 `relevance.threshold` in the config; items scoring below it are discarded. The default is 3 on a 0–5 scale. Use a dry run to see what a change would keep and drop before committing to it.

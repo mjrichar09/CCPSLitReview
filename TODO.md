@@ -15,11 +15,23 @@
 
 ## Backlog
 
-- [ ] **Apply migration `20260913000100_restrict_comment_reads.sql`.** Written and
-      committed, NOT yet applied to the live project — comments stay world-readable
-      until it is. Push it with the Supabase CLI (or paste it into the SQL editor),
-      then verify as `anon`: a `select` on `comments` and on `comment_counts` should
-      both come back empty, while a signed-in approved reader still sees everything.
+- [ ] **Apply both pending migrations to the live project.** They are independent of each
+      other — `20260913000200` only needs `public.is_approved()`, which has existed since the
+      original schema — so either order is fine, but neither feature works until its own is
+      applied.
+      - `20260913000100_restrict_comment_reads.sql` — comments stay world-readable until this
+        runs. Verify as `anon` afterwards: `select` on `comments` and on `comment_counts`
+        should both come back empty, while a signed-in approved reader still sees everything.
+      - `20260913000200_user_papers.sql` — the imports section errors on load until the table
+        and its policies exist.
+- [ ] **Add `SUPABASE_SERVICE_ROLE_KEY` to Actions secrets** if imported papers should reach the
+      generation stage. Without it the section works fine and months simply generate without
+      import context. Never add it to Vercel, and never under a `NEXT_PUBLIC_*` name — it
+      bypasses row-level security.
+- [ ] Imported papers are never re-scored. If one is later published by the monthly run it keeps
+      its own row and its comments unify by DOI, but the two copies render in two places
+      (its month, and the imports section). Worth deciding whether the imports section should
+      hide papers the pipeline has since picked up.
 - [ ] **Rotate the ntfy topic out of the public repo.** `20260819000100_notify_new_signup.sql`
       hardcodes `ccps-signups-a9c88194948bca3649570fe9ce9917cc`, and its comment
       reasons that the topic is unguessable — which stopped being true when the repo

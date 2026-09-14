@@ -33,6 +33,10 @@ lib/
   digestDir.js        DIGEST_DIR and friends — single source of truth for data paths
   digest.js           read helpers: getAllMonths / getReport / getLatest
   config.js           loadConfig (validation) + resolveSource / resolveFeeds
+  userPapers.js       imported-paper identity, validation, the score-5 rule (browser-safe)
+  importedPapers.js   reads imports back into generation (service-role key)
+  crossref.js         DOI and title metadata lookup, called from the browser
+  pptx/               unzip + slide/notes text + citation extraction, browser-safe
   adapters/           one module per source, all behind {records, health}
     index.js          registry + runAdapter (the fail-soft wrapper)
     record.js         makeRecord + XML/text helpers shared by every adapter
@@ -55,6 +59,8 @@ app/
     SessionProvider/SignIn/SignInButtons   auth state and sign-in (Google, GitHub)
     Engagement/VoteButtons/Comments        votes and comments, per page and per item
     ArchiveNav/CategoryNav                 the sticky header's two navs
+    ImportsPanel/ConferenceImport          reader paper imports, incl. .pptx parsing
+    ImportedPaper/importPapers             one imported paper, and the shared write path
 data/digest/          (Phase 3) one YYYY-MM.json per month, plus index/ and staging/
 ```
 
@@ -88,6 +94,10 @@ data/digest/
 - **Scoring batches run concurrently, in two waves: the first batch of every category, then all the rest.** Measured: 48 calls at ~14s each, so ~11 minutes sequential against ~3 minutes at concurrency 4. Sequential *did* fit the 45-minute job — this is a speed-up, not a rescue. The wave split is not cosmetic — a flat pool fires same-category batches together, and each then misses and re-writes the rubric cache. Verdicts are applied in batch order, never completion order, so concurrency cannot change the report.
 - **Provider is per stage, not global** (`models.<stage>.provider`). Scoring is high-volume bounded judgement; generation is the product. Both answer the same `complete({ system, user, schema })`.
 - **Pages are static/SSG — never add `force-dynamic` or runtime filesystem reads.** Vercel's runtime fs is read-only and ephemeral; the *content* write path is exclusively Actions → commit → push. There are still no API routes at all, unlike TrendTracker.
+- **Reader-imported papers are the second exception, and they follow the first.** `/digest/imports` lets an approved reader add a paper by DOI, or every paper a conference deck cites, with their own commentary attached as a comment. Imports live in Postgres (`user_papers`), not in a month file — months are pipeline-written, committed and append-only, and there is no runtime write path to them. The `.pptx` is parsed **in the browser** (`lib/pptx/`, a minimal zip reader over `DecompressionStream`) and never uploaded; only the DOIs and title lines it yields go to Crossref for metadata. So this adds no API route, no server, and no runtime fs access.
+- **Every imported paper is scored 5, and that number means something different.** The scoring model never sees an import — it runs in the pipeline against a month's candidates. A 5 here asserts that a human picked the paper out by hand, which is a stronger signal than the filter was built to produce, not a prediction of what the rubric would have said. `IMPORTED_SCORE` in `lib/userPapers.js` is the single definition.
+- **A DOI import takes the `doi:` id namespace; a title-only import takes `user:`.** That is what lets a paper imported in September and published by the pipeline in October be one item with one comment thread, instead of two. A title-only import cannot make that claim — nothing verified it is the same paper — so it never borrows `title:`, which dedupe treats as a real identity. `lib/userPapers.js` restates `normalizeDoi` to stay browser-safe (`lib/util/identity.js` pulls in `node:crypto`), and `test/pptx.test.js` pins the two against each other so they cannot drift.
+- **Reading imports back into generation needs `SUPABASE_SERVICE_ROLE_KEY`, and that is deliberate.** `user_papers` and `comments` admit only an approved signed-in reader; the pipeline is neither. The obvious fix — a `security definer` view granted to `anon`, the way `vote_tallies` works — would re-expose reader discussion to anyone holding the publishable key, which is exactly what migration `20260913000100` closed. The service-role key is the narrower exposure: Actions secrets only, never `NEXT_PUBLIC_*`. Absent it, generation runs without import context rather than failing.
 - **Reader feedback is the one exception, and it does not touch that path.** Votes and comments go browser → Supabase → Postgres, under row-level security, from client islands. No server, no API route, no fs. The consequence to remember: tallies are absent from the prerendered HTML and arrive after hydration.
 - **`profiles.approved` is enforced in Postgres, never in the UI.** A hidden button proves nothing; the policies re-check every insert, so revoking approval stops writing immediately even on a live session. Test it as `anon` / unapproved / approved with SQL, not by clicking.
 - **The Actions job commits to the default branch.** TrendTracker's routine committed to `claude/*` session branches and Vercel only builds `main`, which stranded two weekly reports invisibly. Committing straight to the default branch is why this design can't repeat that.
