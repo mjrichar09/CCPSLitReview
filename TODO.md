@@ -15,6 +15,21 @@
 
 ## Backlog
 
+- [ ] **Apply migration `20260913000100_restrict_comment_reads.sql`.** Written and
+      committed, NOT yet applied to the live project — comments stay world-readable
+      until it is. Push it with the Supabase CLI (or paste it into the SQL editor),
+      then verify as `anon`: a `select` on `comments` and on `comment_counts` should
+      both come back empty, while a signed-in approved reader still sees everything.
+- [ ] **Rotate the ntfy topic out of the public repo.** `20260819000100_notify_new_signup.sql`
+      hardcodes `ccps-signups-a9c88194948bca3649570fe9ce9917cc`, and its comment
+      reasons that the topic is unguessable — which stopped being true when the repo
+      went public. Anyone reading the migration can subscribe to sign-up
+      notifications (new readers' display names) or publish fake ones. Fix: pick a
+      new random topic, store it in Supabase Vault, and read it in
+      `notify_new_signup()` via `vault.decrypted_secrets` instead of the literal.
+      Low severity, ~15 minutes, touches the database. The old topic stays burned
+      either way, so rotating is the point — moving the literal alone achieves
+      nothing.
 - [ ] Optional: an owner-only `/digest/admin` page listing pending readers with an Approve button, gated by an `is_owner` flag and its own RLS policy. The Supabase table editor covers this until the list gets long.
 - [ ] Decide whether to keep `biorxiv.mode: 'europepmc-ppr'` (current default) or switch to `'api'` — see PLAN.md §11.1; the Europe PMC route returned 30 preprints across four categories with one request each
 - [ ] `NCBI_API_KEY` is unset, so PubMed runs at the unkeyed 3 req/s. Supplying one cuts fetch wall time materially (PubMed is the slowest source at ~4s/category)
