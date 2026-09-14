@@ -12,8 +12,13 @@ import ConferenceImport from './ConferenceImport.jsx';
 import { importMonth, importPapers } from './importPapers.js';
 
 /**
- * The whole user-added section: the two import forms, and the list of what has
- * been imported.
+ * The whole user-added section: the imported papers, and the two forms that
+ * add to them.
+ *
+ * Laid out like a month page rather than like a tool — the papers are the
+ * content and get the main column, the import forms sit in a sidebar beside
+ * them. The sidebar is sticky, so adding a second paper does not mean
+ * scrolling back past everything already imported.
  *
  * Everything here is browser-side — Supabase reads and writes under row-level
  * security, exactly like votes and comments. There is no API route and no
@@ -61,41 +66,62 @@ export default function ImportsPanel() {
   );
   const itemIds = useMemo(() => (rows ?? []).map((r) => r.item_id), [rows]);
 
+  // The gate states render in the same main column as the papers would, so
+  // the page keeps one <main> whatever it is showing.
   if (!enabled) {
-    return <p className="imports-empty">Imports need Supabase configured; this deployment has no reader features.</p>;
+    return (
+      <main className="col-main">
+        <p className="imports-empty">Imports need Supabase configured; this deployment has no reader features.</p>
+      </main>
+    );
   }
   if (!user) {
     return (
-      <div className="imports-signin">
+      <main className="col-main imports-signin">
         <p>Sign in to see and add imported papers.</p>
         <SignInButtons />
-      </div>
+      </main>
     );
   }
   if (!approved) {
-    return <p className="imports-empty">Your account is awaiting approval.</p>;
+    return (
+      <main className="col-main">
+        <p className="imports-empty">Your account is awaiting approval.</p>
+      </main>
+    );
   }
 
   return (
-    <div className="imports">
-      <ManualImport supabase={supabase} user={user} onDone={reload} />
-      <ConferenceImport supabase={supabase} user={user} onDone={reload} />
+    <div className="imports-grid">
+      <main className="col-main">
+        <section className="imports-list">
+          <h2>
+            {rows?.length ? `${rows.length} paper${rows.length === 1 ? '' : 's'}` : 'Papers'}
+          </h2>
+          {error && <p className="imports-error">Could not load imports: {error}</p>}
+          {rows === null && <p className="imports-empty">Loading…</p>}
+          {rows?.length === 0 && (
+            <p className="imports-empty">
+              Nothing imported yet. Add a paper by DOI, or bring in a whole conference deck, from the panel beside
+              this one.
+            </p>
+          )}
+          {rows?.length > 0 && (
+            <Engagement itemMonths={itemMonths} itemIds={itemIds}>
+              <ul className="item-list">
+                {rows.map((row) => (
+                  <ImportedPaper key={row.id} row={row} importerName={names[row.user_id]} />
+                ))}
+              </ul>
+            </Engagement>
+          )}
+        </section>
+      </main>
 
-      <section className="imports-list">
-        <h2>Imported so far</h2>
-        {error && <p className="imports-error">Could not load imports: {error}</p>}
-        {rows === null && <p className="imports-empty">Loading…</p>}
-        {rows?.length === 0 && <p className="imports-empty">Nothing imported yet.</p>}
-        {rows?.length > 0 && (
-          <Engagement itemMonths={itemMonths} itemIds={itemIds}>
-            <ul className="item-list">
-              {rows.map((row) => (
-                <ImportedPaper key={row.id} row={row} importerName={names[row.user_id]} />
-              ))}
-            </ul>
-          </Engagement>
-        )}
-      </section>
+      <aside className="col-side imports-side" aria-label="Add papers">
+        <ManualImport supabase={supabase} user={user} onDone={reload} />
+        <ConferenceImport supabase={supabase} user={user} onDone={reload} />
+      </aside>
     </div>
   );
 }

@@ -562,13 +562,32 @@ a:hover { text-decoration: underline; }
 
 
 /* ---- imported papers: the user-added section (/digest/imports) ---- */
-.imports { display: flex; flex-direction: column; gap: 1.5rem; }
+/* Papers get the main column, the import forms a sidebar beside them — the
+   page is a reading surface first and a tool second. Mirrors `.layout`'s
+   measure; the sidebar drops below the list on narrow screens rather than
+   squeezing both, and the papers stay first in both source and visual order. */
+.imports-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 22rem;
+  gap: 2.25rem;
+  align-items: start;
+}
+.col-side { min-width: 0; display: flex; flex-direction: column; gap: 1.25rem; }
+/* Sticky so adding a second paper does not mean scrolling back past every
+   paper already imported. The offset clears the sticky site header, which on
+   this page is the single top bar with no category strip under it. */
+.imports-side { position: sticky; top: 4.75rem; }
+
+@media (max-width: 980px) {
+  .imports-grid { grid-template-columns: 1fr; gap: 1.75rem; }
+  .imports-side { position: static; }
+}
 
 .import-card {
   padding: 1.1rem 1.25rem; border: 1px solid var(--border); border-radius: 10px;
   background: var(--surface);
 }
-.import-card h2 { margin: 0 0 0.4rem; font-size: 1.05rem; }
+.import-card h2 { margin: 0 0 0.4rem; font-size: 0.98rem; }
 .import-hint { margin: 0 0 0.75rem; font-size: 0.85rem; color: var(--muted); }
 
 .import-form { display: flex; flex-direction: column; gap: 0.35rem; }
@@ -606,11 +625,13 @@ a:hover { text-decoration: underline; }
 }
 .import-candidate-unresolved { opacity: 0.6; }
 
-.imports-list h2 { font-size: 1.05rem; margin: 0 0 0.6rem; }
+.imports-list h2 {
+  font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 0.75rem;
+}
 .imports-empty, .imports-signin { color: var(--muted); font-size: 0.9rem; }
 .imports-error { color: var(--danger, #b3261e); font-size: 0.85rem; }
 .imports-ok { color: var(--accent); font-size: 0.85rem; }
-.imports-back { margin-top: 2rem; font-size: 0.9rem; }
 
 .badge-import { background: var(--accent-soft, var(--background)); color: var(--accent); border-color: var(--accent); }
 .item-summary-absent { color: var(--muted); font-style: italic; }
