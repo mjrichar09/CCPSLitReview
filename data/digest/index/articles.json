@@ -1056,5 +1056,657 @@
       "industry"
     ],
     "url": "https://www.bioprocessintl.com/business/henlius-and-sandoz-announce-global-biosimilar-commercialization-partnership"
+  },
+  "doi:10.1007/s00449-026-03437-0": {
+    "title": "Cross-attention fusion of Raman and NIR spectra for glucose soft sensing in fed-batch fermentation.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control",
+      "upstream_pd"
+    ],
+    "url": "https://doi.org/10.1007/s00449-026-03437-0"
+  },
+  "doi:10.1002/biot.70309": {
+    "title": "Machine Learning-Enhanced Generic Raman Model for Commercial-Scale Cell Culture Process Monitoring.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control",
+      "upstream_pd",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42764603/"
+  },
+  "doi:10.1002/btpr.88556": {
+    "title": "BioOps: Enabling MLOps for scalable and flexible model-centric process control in biopharmaceutical development.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42745426/"
+  },
+  "doi:10.1021/acsomega.6c04405": {
+    "title": "Data-Driven Approach for Bioreactor Monitoring and Prediction in Monoclonal Antibody Production.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control",
+      "upstream_pd",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42799020/"
+  },
+  "doi:10.1039/d6an00841k": {
+    "title": "Sensitive and derivatization-free amino acid analysis using liquid chromatography-Raman spectroscopy.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://doi.org/10.1039/d6an00841k"
+  },
+  "doi:10.13345/j.cjb.260303": {
+    "title": "[Machine learning-based optimization strategies for fermentation processes].",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42773650/"
+  },
+  "doi:10.3390/molecules31183313": {
+    "title": "A Review on Applications of Artificial Intelligence (AI) in Monoclonal Antibody (mAb) Manufacturing.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control",
+      "modeling_ml",
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.3390/molecules31183313"
+  },
+  "doi:10.1002/elps.70146": {
+    "title": "Electrical Signatures of Life: A Review of Cell Electrophysiology and Dielectric Analysis (2015-2026).",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42693401/"
+  },
+  "doi:10.1016/j.tibtech.2026.08.010": {
+    "title": "Sensing the future of cell therapy manufacturing.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "pat_control"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42692931/"
+  },
+  "doi:10.1016/j.pep.2026.107020": {
+    "title": "A Benchmark Fed-Batch Bioprocess for Production of cNISTmAb using NISTCHO.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "harvest_dsp",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42822555/"
+  },
+  "doi:10.1002/bit.70389": {
+    "title": "Implementing an Intensified Dynamic Perfusion Process for Biologics Manufacturing at Scale and Continued Development.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "harvest_dsp",
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42802679/"
+  },
+  "doi:10.1016/j.ymben.2026.102552": {
+    "title": "A kinetically constrained dynamic flux balance analysis model predicts diverse CHO-cell culture process modes and conditions.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "intensification",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42744013/"
+  },
+  "doi:10.1002/bit.70395": {
+    "title": "Mechanistic Digital Model for Real-Time Monitoring and Optimization of Adenovirus Production.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.1002/bit.70395"
+  },
+  "doi:10.64898/2026.09.26.754714": {
+    "title": "Next-gen glycoengineering: combining cellular and metabolic engineering to fine-tune mAb β1,4-galactosylation",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "product_quality",
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.64898/2026.09.26.754714"
+  },
+  "doi:10.13345/j.cjb.260249": {
+    "title": "[Data-mechanism integrated optimization and preliminary scale-up study of feeding process in penicillin fermentation].",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42773673/"
+  },
+  "doi:10.1002/bit.70385": {
+    "title": "Enabling Bioprocess Upscaling Prediction Through Hybrid Modelling and Transfer Learning Under Small-Data Scenarios.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42765624/"
+  },
+  "doi:10.3389/fped.2026.1880830": {
+    "title": "Developing affordable monoclonal antibodies for LMICs through high performance manufacturing processes and LMIC based commercial manufacturing.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "harvest_dsp",
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42807280/"
+  },
+  "doi:10.1002/btpr.88557": {
+    "title": "Evaluation of media intensification strategies in perfusion.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "upstream_pd",
+      "intensification",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42723420/"
+  },
+  "doi:10.3389/fbioe.2026.1934410": {
+    "title": "Upstream process optimization and its critical role in chimpanzee adenoviral vector clinical drug development: lessons learned from VRON-0200 manufacturing.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp",
+      "intensification",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42787404/"
+  },
+  "doi:10.1002/btpr.88547": {
+    "title": "DNA concentration in harvest affects retrovirus clearance capabilities of protein A chromatography.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42687332/"
+  },
+  "doi:10.1016/j.chroma.2026.467470": {
+    "title": "Going with the flow: peptide affinity membranes for high-throughput, high-yield purification of adenovirus and lentiviral vectors.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://doi.org/10.1016/j.chroma.2026.467470"
+  },
+  "doi:10.3390/microorganisms14091874": {
+    "title": "Development and Validation of an Antigen-Capture ELISA for Quantitative Detection of Donkey-Origin Rotavirus: Application in Vaccine Manufacturing Process Monitoring.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42795456/"
+  },
+  "doi:10.1007/978-1-0716-5547-4_7": {
+    "title": "Production of Lentiviral Vectors Encoding the CRISPR-Cas13d System for RNA Targeting.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42771310/"
+  },
+  "doi:10.64898/2026.09.14.751635": {
+    "title": "Integrated Continuous Biomanufacturing of Recombinant Adeno-Associated Virus.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp",
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42779920/"
+  },
+  "title:647b2d3a1cc3110c": {
+    "title": "Simulation-Aided Development of Multicolumn Chromatography Processes for Protein-Based Vaccine Production",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "harvest_dsp"
+    ],
+    "url": "https://www.bioprocessintl.com/chromatography/simulation-aided-development-of-multicolumn-chromatography-processes-for-protein-based-vaccine-production"
+  },
+  "doi:10.1186/s12985-026-03318-8": {
+    "title": "Cell culture medium influences RSV G protein glycosylation and recognition by monoclonal antibodies.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "media_dev",
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42811372/"
+  },
+  "doi:10.1080/10408398.2026.2728303": {
+    "title": "Recycling of bioresource by-products for the production of cell culture media: research trends and prospects.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "media_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42712124/"
+  },
+  "doi:10.1016/j.biortech.2026.135829": {
+    "title": "Integrated extractive fermentation of laccase using aqueous biphasic systems: From production to functional coatings.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "intensification"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42716395/"
+  },
+  "doi:10.1016/j.nbt.2026.09.004": {
+    "title": "Sequence optimization targeting mRNA stability enhances monoclonal antibody titers in CHO cells.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml",
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42735877/"
+  },
+  "doi:10.64898/2026.09.21.753176": {
+    "title": "Towards Digital-Twin-Enabled Bioprocess Monitoring: Fault-Inclusive Soft Sensing of Penicillin Concentration Under Process Deviations",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.64898/2026.09.21.753176"
+  },
+  "doi:10.1007/s00216-026-06806-6": {
+    "title": "Artificial intelligence in bioanalytics: implications for research and education.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42717041/"
+  },
+  "title:bb404810ec93c972": {
+    "title": "From Learning to Control: Data-Driven Multi-Agent Reinforcement Learning for Multivariable Control in a Microalgae Bioprocess",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://arxiv.org/abs/2609.09313v1"
+  },
+  "doi:10.1007/s11538-026-01744-x": {
+    "title": "How AI Can Advance Mathematical Biology: Opportunities, Challenges, and Future Directions.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.1007/s11538-026-01744-x"
+  },
+  "doi:10.64898/2026.08.28.747735": {
+    "title": "INFORME: coupling information-theoretic experimental design with nonlinear mixed-effects modeling for efficient observation scheduling",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://doi.org/10.64898/2026.08.28.747735"
+  },
+  "doi:10.1016/j.jbc.2026.113610": {
+    "title": "\"EXPERT\" A Practical and Forward-Looking Guide to Capturing Protein Expression and Purification Metadata to develop Machine Learning Models.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42810683/"
+  },
+  "title:2a98e326ce82f960": {
+    "title": "Industry-defined opportunities for advancing big data capabilities in biopharmaceutical manufacturing",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "modeling_ml"
+    ],
+    "url": "https://europepmc.org/article/PMC/PMC13586689"
+  },
+  "doi:10.1016/j.ymben.2026.102554": {
+    "title": "SEC-seq reveals translation-focused metabolic strategies for high IgG productivity in clonal CHO cells.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42749212/"
+  },
+  "doi:10.48130/els-0026-0004": {
+    "title": "Synthetic promoters developed through a site-specific integration system enhance antibody expression in fed-batch culture.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42781470/"
+  },
+  "title:65c537f2a60577a8": {
+    "title": "R2Tg retrotransposon mediated targeted integration of exogenous genes into the 28S rDNA locus in mammalian cell lines for PKU gene therapy",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://europepmc.org/article/PMC/PMC13621248"
+  },
+  "doi:10.3390/ph19091423": {
+    "title": "Non-Clinical Evaluation of the Anti-PD-1 Antibody UDIZ-007.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.3390/ph19091423"
+  },
+  "doi:10.3390/ijms27188348": {
+    "title": "Barcoded Sleeping Beauty Transposons as Mobile Reporters of Chromatin Architecture.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.3390/ijms27188348"
+  },
+  "doi:10.1016/j.xpro.2026.104837": {
+    "title": "Protocol for robust gene knockout and reliable validation in human cell lines using quad-guide RNA vectors.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.1016/j.xpro.2026.104837"
+  },
+  "doi:10.3390/cimb48090908": {
+    "title": "Rapid Generation of High-Affinity Rabbit Anti-Mouse IgG Monoclonal Antibodies by High-Throughput Single-B-Cell Sorting and Recombinant Expression.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://doi.org/10.3390/cimb48090908"
+  },
+  "doi:10.5713/ab.250962": {
+    "title": "Development and characterization of Hanwoo oviduct epithelial cell line for heat stress study.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cell_line_dev"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42692438/"
+  },
+  "doi:10.1016/j.jbiotec.2026.09.011": {
+    "title": "Differential effects of N-acetylmannosamine on O-glycan sialylation of therapeutic Fc-fusion glycoproteins in CHO and HEK293 cells.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42753818/"
+  },
+  "doi:10.3390/ph19091444": {
+    "title": "Protein Therapeutic Quality Control Using Multi-Attribute Method (MAM): Challenges and Current Practice in cGMP Environments.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://doi.org/10.3390/ph19091444"
+  },
+  "doi:10.1016/j.ymben.2026.102549": {
+    "title": "Computationally inspired glycoengineering to maximise mAb β4-galactosylation.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42705496/"
+  },
+  "doi:10.1002/biot.70302": {
+    "title": "TPST Gene Knock-Out Eliminates Tyrosine Sulfation on a Recombinant Antibody Produced in CHO Cells.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42683944/"
+  },
+  "doi:10.1016/j.chroma.2026.467501": {
+    "title": "Deciphering complex charge heterogeneity in a glycosylated monoclonal antibody by integrated icIEF-MS and enzymatic digestion system.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42822191/"
+  },
+  "doi:10.1208/s12248-026-01307-x": {
+    "title": "Benchmarking Automated Mass Photometry against SEC-MALS and AUC for Quantifying Cross-Linked Monoclonal Antibody Aggregates.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42768232/"
+  },
+  "doi:10.1080/19420862.2026.2732607": {
+    "title": "A framework for evaluating unexpected reactions in antibody-drug conjugates during clinical development: a case study of a promiscuous payload.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "product_quality"
+    ],
+    "url": "https://doi.org/10.1080/19420862.2026.2732607"
+  },
+  "doi:10.1039/d6an00623j": {
+    "title": "Machine vision-enabled OD 600 measurement and mass spectrometric determination of metabolites of microbial cell-containing microfluidic droplets in real-time.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.1039/d6an00623j"
+  },
+  "doi:10.1002/smtd.71037": {
+    "title": "High-Throughput Dual Resonance and Non-Resonance Mode Raman-Activated Cell Sorting With Low-Volume Harvesting.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.1002/smtd.71037"
+  },
+  "doi:10.1016/j.mtbio.2026.103638": {
+    "title": "Robotic handling preserves iPSC-derived vascular smooth muscle cell differentiation.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42774489/"
+  },
+  "doi:10.3390/cells15171533": {
+    "title": "Machine Learning-Driven Automated Culture Reveals Similar Performance of mTeSR+ and StemFlex in Human iP11N Pluripotent Stem Cells.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42738827/"
+  },
+  "doi:10.64898/2026.09.24.750079": {
+    "title": "Stimulatrix: An open-source automated platform for high-throughput functional characterization of engineered contractile tissues",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.64898/2026.09.24.750079"
+  },
+  "doi:10.3791/73445": {
+    "title": "Fabrication and Use of a 32-Well LED-Embedded Microplate for Optogenetic Dynamic Control.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42775794/"
+  },
+  "doi:10.1371/journal.pcbi.1013511": {
+    "title": "High-throughput virus quantification using cytopathic effect area analysis.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42748173/"
+  },
+  "doi:10.3389/fbioe.2026.1923405": {
+    "title": "Early considerations for village-in-a-dish platform: a multidisciplinary perspective.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "htpd_automation"
+    ],
+    "url": "https://doi.org/10.3389/fbioe.2026.1923405"
+  },
+  "doi:10.1016/j.vaccine.2026.129206": {
+    "title": "Development and internal analytical validation of plaque reduction neutralization test for clinical trial application of Kyasanur forest disease virus vaccine.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.vaccine.2026.129206"
+  },
+  "doi:10.1016/j.biologicals.2026.101914": {
+    "title": "Globally harmonized specifications: Implementing a patient-centric, enhanced control strategy - a meeting report.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.biologicals.2026.101914"
+  },
+  "doi:10.1002/cpt.70480": {
+    "title": "Perspective on Pharmacokinetic Comparability for Biologics Development.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1002/cpt.70480"
+  },
+  "doi:10.3390/biotech15040079": {
+    "title": "Regulatory Convergence in Cell and Gene Therapy: Harmonizing Quality, CMC, and Approval Pathways Across the FDA, EMA, PMDA, and Emerging Markets.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.3390/biotech15040079"
+  },
+  "doi:10.1007/s11095-026-04178-1": {
+    "title": "An Orthogonal Framework for Higher-Order Structural and In Vitro Functional Comparability of Chemically Synthesized Liraglutide Relative to an rDNA-Origin Reference Product.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1007/s11095-026-04178-1"
+  },
+  "title:218f180b2d2d10b7": {
+    "title": "A Regulatory- and Risk-Based Statistical Approach to Reduced-Volume Bioburden Testing for Cell and Gene Therapy Products",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://www.bioprocessintl.com/qa-qc/a-regulatory-and-risk-based-statistical-approach-to-reduced-volume-bioburden-testing-for-cell-and-gene-therapy-products"
+  },
+  "title:93e121486269ecfe": {
+    "title": "How Evolving Biosimilar Guidance Is Reshaping Bioanalytical Strategy",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg",
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/biosimilars/how-evolving-biosimilar-guidance-is-reshaping-bioanalytical-strategy"
+  },
+  "doi:10.1016/j.ijpharm.2026.127476": {
+    "title": "Physicochemical and biological evaluation of a GMP-grade ionizable lipid for robust and scalable manufacturing of siRNA- and mRNA-loaded lipid nanoparticles.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1016/j.ijpharm.2026.127476"
+  },
+  "doi:10.1093/jaoacint/qsag089": {
+    "title": "A Risk-Based Framework to Optimize Microbiological Testing of Primary Packaging Materials.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.1093/jaoacint/qsag089"
+  },
+  "doi:10.3390/ph19091495": {
+    "title": "Critical Quality Attribute Investigation and Analytical Method Establishment for Glyco-Site-Specific Anti-HER2 Bispecific ADC.",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "cmc_reg"
+    ],
+    "url": "https://doi.org/10.3390/ph19091495"
+  },
+  "title:c3c9966af93dcb43": {
+    "title": "Continuous biomanufacturing: Sanofi going big on downstream",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/event-report/continuous-biomanufacturing-sanofi-going-big-on-downstream"
+  },
+  "title:77a480a6e44f6c34": {
+    "title": "Sanofi inaugurates $661 million vaccine production facility in Toronto",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/vaccines/sanofi-inaugurates-661-million-vaccine-production-facility-in-toronto"
+  },
+  "title:39b8522ef37298b2": {
+    "title": "Equipment-Level Digital Twins for Bioprocessing: Practical Models for Upstream, Downstream, Fill-Finish, and Life-Cycle Controls",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/pat/equipment-level-digital-twins-for-bioprocessing-practical-models-for-upstream-downstream-fill-finish-and-life-cycle-controls"
+  },
+  "title:bf6e45969016fe60": {
+    "title": "Samsung Biologics secures $262m manufacturing contract amid Songdo expansion",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/economics/samsung-biologics-secures-262m-manufacturing-contract-amid-songdo-expansion"
+  },
+  "title:f576bb542dcec866": {
+    "title": "FDA hits 2nd Fresenius site with contamination-related warning letter in less than a month",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.fiercepharma.com/ai-and-machine-learning/second-fresenius-site-hit-fda-warning-letter-citing-contamination-concerns"
+  },
+  "title:8e439c1861f0b8b9": {
+    "title": "NorthStar locks down $185M as radiopharmaceutical isotope, CDMO expansion plans advance",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.fiercepharma.com/manufacturing/northstar-locks-down-180m-radiopharmaceutical-isotope-cdmo-expansion-plans-advance"
+  },
+  "title:9e8f582e14476a63": {
+    "title": "BPI 2026: Panel addresses cost challenges at BioProcess International event in Boston",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/economics/bpi-2026-panel-addresses-cost-challenges-at-bioprocess-international-event-in-boston"
+  },
+  "title:6870f165dc379b5a": {
+    "title": "When the Lights Start Going Out: Leading Quality Through Site Closure in Cell and Gene Therapy Manufacturing",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/facility-design-engineering/when-the-lights-start-going-out-leading-quality-through-site-closure-in-cell-and-gene-therapy-manufacturing"
+  },
+  "title:8331feda89ceeef9": {
+    "title": "Phacilitate Advanced Therapies Europe addresses CGT commercialization challenges",
+    "first_seen_month": "2026-10",
+    "categories": [
+      "industry"
+    ],
+    "url": "https://www.bioprocessintl.com/emerging-therapeutics-manufacturing/phacilitate-advanced-therapies-europe-addresses-cgt-commercialization-challenges"
   }
 }
