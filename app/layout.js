@@ -1,5 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import { GUEST_INIT_SCRIPT } from "../lib/guest.js";
 
@@ -34,6 +35,9 @@ export default function RootLayout({ children }) {
           {GUEST_INIT_SCRIPT}
         </Script>
         {children}
+        {/* Vercel Web Analytics: page views only, cookieless. Records nothing
+            off Vercel (local dev, a build run elsewhere). */}
+        <Analytics />
       </body>
     </html>
   );
