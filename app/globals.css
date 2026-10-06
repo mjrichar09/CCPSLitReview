@@ -414,8 +414,9 @@ a:hover { text-decoration: underline; }
 .comment-form button:disabled { cursor: not-allowed; opacity: 0.5; }
 
 .mention-picker {
-  position: absolute; left: 0; top: 100%; z-index: 10; margin-top: 0.25rem;
-  min-width: 12rem; max-height: 14rem; overflow-y: auto;
+  /* Placement (left/top or bottom, max-height) is set inline by MentionPicker.jsx. */
+  position: fixed; z-index: 40; overscroll-behavior: contain;
+  min-width: 12rem; max-width: calc(100vw - 16px); max-height: 15rem; overflow-y: auto;
   list-style: none; padding: 0.3rem; border-radius: 8px;
   background: var(--surface); border: 1px solid var(--border-strong);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);

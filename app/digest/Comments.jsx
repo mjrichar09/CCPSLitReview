@@ -290,7 +290,7 @@ export default function Comments({ itemId, categoryId }) {
               rows={3}
               maxLength={MAX_BODY}
             />
-            <MentionPicker query={mentionQuery} candidates={engagement?.mentionable ?? []} onSelect={onSelectMention} />
+            <MentionPicker query={mentionQuery} candidates={engagement?.mentionable ?? []} onSelect={onSelectMention} anchorRef={textareaRef} />
           </div>
           <div className="comment-form-foot">
             <span className="comment-count-left">
