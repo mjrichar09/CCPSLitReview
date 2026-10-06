@@ -1,6 +1,7 @@
 'use client';
 
 import { useEngagement } from './Engagement.jsx';
+import { useSession } from './SessionProvider.jsx';
 
 /**
  * The comment count for one paper, shown on the collapsed row so a reader can
@@ -12,7 +13,8 @@ import { useEngagement } from './Engagement.jsx';
  */
 export default function CommentBadge({ itemId }) {
   const engagement = useEngagement();
-  if (!engagement) return null;
+  const { guest } = useSession();
+  if (!engagement || guest) return null;
 
   const count = engagement.counts.get(itemId) ?? 0;
 

@@ -451,6 +451,17 @@ a:hover { text-decoration: underline; }
 .landing-note { color: var(--muted); font-size: 0.85rem; }
 .landing-signin { display: flex; justify-content: center; }
 .landing-signin .signin-group { gap: 0.6rem; }
+.landing-guest { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--border); }
+.landing-guest .link-button { font-size: 0.95rem; }
+.landing-guest .landing-note { margin-top: 0.35rem; }
+
+/* Guest view (lib/guest.js): no reader feedback of any kind. The islands
+   render nothing for a guest once hydrated; this hides what the static HTML
+   already carries, from first paint. */
+html[data-guest] .members-only,
+html[data-guest] .reader-controls,
+html[data-guest] .comment-badge,
+html[data-guest] .comments { display: none !important; }
 .landing-signin .signin { padding: 0.55rem 1.2rem; font-size: 0.9rem; }
 .landing-pending { display: grid; gap: 0.7rem; justify-items: center; }
 .landing-pending p { color: var(--muted); font-size: 0.9rem; line-height: 1.55; }

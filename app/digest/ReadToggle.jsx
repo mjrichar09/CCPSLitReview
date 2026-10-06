@@ -12,10 +12,10 @@ import { useReaction } from './ReactionFX.jsx';
  */
 export default function ReadToggle({ itemId }) {
   const engagement = useEngagement();
-  const { enabled, ready, user, approved } = useSession();
+  const { enabled, ready, user, approved, guest } = useSession();
   const reaction = useReaction();
 
-  if (!engagement || !enabled) return null;
+  if (!engagement || !enabled || guest) return null;
 
   const { readIds, toggleRead } = engagement;
   const isRead = readIds.has(itemId);

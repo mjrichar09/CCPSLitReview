@@ -1,6 +1,7 @@
 import { createServerClient } from '@supabase/ssr';
 import { NextResponse } from 'next/server';
 import { admits } from './lib/accessGate.js';
+import { GUEST_COOKIE } from './lib/guest.js';
 
 /**
  * The real access gate: every /digest/** request is checked here, at the
@@ -12,6 +13,9 @@ import { admits } from './lib/accessGate.js';
  * configuration means fail CLOSED (block everyone) rather than fail open.
  * A misconfigured deployment must never silently become a public one.
  *
+ * The one deliberate opening is guest access (lib/guest.js): a visitor with
+ * the guest cookie reads the digest itself, never the member-only pages.
+ *
  * `profiles.approved` isn't part of the session/JWT, so this costs one
  * extra query per request — reading the visitor's own profile row, which
  * `profiles_select_approved`'s RLS policy already allows (`id = auth.uid()`
@@ -22,7 +26,11 @@ export async function proxy(request) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const configured = Boolean(url && key);
-  if (!configured) return blocked(request);
+  const guest = request.cookies.get(GUEST_COOKIE)?.value === '1';
+  const pathname = request.nextUrl.pathname;
+  if (!configured) {
+    return admits({ configured, user: null, approved: false, guest, pathname }) ? NextResponse.next() : blocked(request);
+  }
 
   let response = NextResponse.next({ request: { headers: request.headers } });
 
@@ -52,7 +60,7 @@ export async function proxy(request) {
     approved = Boolean(profile?.approved);
   }
 
-  if (!admits({ configured, user, approved })) return blocked(request, response);
+  if (!admits({ configured, user, approved, guest, pathname })) return blocked(request, response);
   return response;
 }
 

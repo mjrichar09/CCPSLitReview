@@ -15,12 +15,12 @@ import { useReaction } from './ReactionFX.jsx';
  */
 export default function VoteButtons({ itemId }) {
   const engagement = useEngagement();
-  const { enabled, ready, user, approved } = useSession();
+  const { enabled, ready, user, approved, guest } = useSession();
   const reaction = useReaction();
 
   // Rendered outside a page that provides engagement, or Supabase unconfigured:
   // the digest is the product, so the widget simply is not there.
-  if (!engagement || !enabled) return null;
+  if (!engagement || !enabled || guest) return null;
 
   const { tallies, mine, castVote } = engagement;
   const { up = 0, down = 0 } = tallies.get(itemId) ?? {};

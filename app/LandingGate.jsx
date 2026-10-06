@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { useSession } from './digest/SessionProvider.jsx';
 import SignInButtons from './digest/SignInButtons.jsx';
 import ThemeToggle from './digest/ThemeToggle.jsx';
+import { startGuestSession } from '../lib/guest.js';
 
 /**
  * Only ever redirect back into the digest, never wherever `?next=` happens
@@ -29,6 +30,22 @@ function LandingGateInner() {
     }
   }, [ready, user, approved, router, searchParams]);
 
+  // Guest view: the digest without comments, ratings or favorites. The
+  // cookie is what proxy.js admits on; see lib/guest.js.
+  const viewAsGuest = () => {
+    startGuestSession();
+    router.push(safeNext(searchParams.get('next')));
+  };
+
+  const guestOption = (
+    <div className="landing-guest">
+      <button type="button" className="link-button" onClick={viewAsGuest}>
+        View as guest
+      </button>
+      <p className="landing-note">Read the digest without an account. Comments, ratings and favorites are hidden.</p>
+    </div>
+  );
+
   return (
     <div className="landing">
       <div className="landing-theme">
@@ -46,6 +63,7 @@ function LandingGateInner() {
         </p>
 
         {!enabled && <p className="landing-note">Sign-in isn&apos;t configured for this deployment yet.</p>}
+        {!enabled && guestOption}
 
         {enabled && !ready && <p className="landing-note">Loading…</p>}
 
@@ -54,6 +72,7 @@ function LandingGateInner() {
             <SignInButtons />
           </div>
         )}
+        {enabled && ready && !user && guestOption}
 
         {enabled && ready && user && !approved && (
           <div className="landing-pending">
@@ -65,6 +84,7 @@ function LandingGateInner() {
             <button type="button" className="link-button" onClick={signOut}>
               Sign out
             </button>
+            {guestOption}
           </div>
         )}
       </div>

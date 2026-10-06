@@ -1,6 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
+import { GUEST_INIT_SCRIPT } from "../lib/guest.js";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,6 +27,11 @@ export default function RootLayout({ children }) {
             returning visitor never sees a flash of the wrong theme. */}
         <Script id="theme-init" strategy="beforeInteractive">
           {`(function(){try{var t=localStorage.getItem('ccpslitreview:theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}})();`}
+        </Script>
+        {/* Marks a guest view before hydration, so the feedback controls
+            baked into the static HTML never flash on screen. */}
+        <Script id="guest-init" strategy="beforeInteractive">
+          {GUEST_INIT_SCRIPT}
         </Script>
         {children}
       </body>

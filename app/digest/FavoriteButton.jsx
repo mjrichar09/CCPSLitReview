@@ -7,10 +7,10 @@ import { useReaction } from './ReactionFX.jsx';
 /** Star toggle for one paper, on the collapsed row next to the vote buttons. */
 export default function FavoriteButton({ itemId }) {
   const engagement = useEngagement();
-  const { enabled, ready, user, approved } = useSession();
+  const { enabled, ready, user, approved, guest } = useSession();
   const reaction = useReaction();
 
-  if (!engagement || !enabled) return null;
+  if (!engagement || !enabled || guest) return null;
 
   const { favoriteIds, toggleFavorite } = engagement;
   const isFavorite = favoriteIds.has(itemId);

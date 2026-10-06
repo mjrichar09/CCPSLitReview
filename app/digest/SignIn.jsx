@@ -11,9 +11,20 @@ import Notifications from './Notifications.jsx';
  * the feedback feature shows no dead sign-in button.
  */
 export default function SignIn() {
-  const { enabled, ready, user, profile, approved, signOut } = useSession();
+  const { enabled, ready, user, profile, approved, guest, signOut } = useSession();
 
   if (!enabled || !ready) return null;
+
+  if (!user && guest) {
+    return (
+      <span className="signin-state">
+        <span className="badge badge-recurring" title="Comments, ratings and favorites are hidden in guest view">
+          Guest view
+        </span>
+        <SignInButtons compact />
+      </span>
+    );
+  }
 
   if (!user) return <SignInButtons />;
 

@@ -22,7 +22,7 @@ const MAX_BODY = 2000;
 export default function Comments({ itemId, categoryId }) {
   const supabase = useMemo(() => getSupabase(), []);
   const engagement = useEngagement();
-  const { enabled, user, approved } = useSession();
+  const { enabled, user, approved, guest } = useSession();
 
   const anchor = useRef(null);
   const textareaRef = useRef(null);
@@ -204,7 +204,7 @@ export default function Comments({ itemId, categoryId }) {
     [supabase, itemId, engagement],
   );
 
-  if (!enabled) return null;
+  if (!enabled || guest) return null;
 
   return (
     <div className="comments" ref={anchor}>

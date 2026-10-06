@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { getSupabase } from '../../lib/supabase/client.js';
 import { useSession } from './SessionProvider.jsx';
+import { readGuestCookie } from '../../lib/guest.js';
 
 /**
  * Vote tallies and comment counts for every paper on one page.
@@ -27,6 +28,11 @@ export const useEngagement = () => useContext(EngagementContext);
 export default function Engagement({ itemMonths, itemIds, children }) {
   const supabase = useMemo(() => getSupabase(), []);
   const { user, approved } = useSession();
+  // Read straight from the cookie rather than the session's `guest`, which
+  // is false for the hydration render: these effects would otherwise fire
+  // their reads once for a guest before the flag catches up. A guest sees no
+  // tallies, counts or names, so nothing here is fetched for one.
+  const isGuest = !approved && readGuestCookie();
   const [tallies, setTallies] = useState(() => new Map());
   const [counts, setCounts] = useState(() => new Map());
   const [mineFor, setMine] = useState({ id: null, map: EMPTY });
@@ -39,7 +45,7 @@ export default function Engagement({ itemMonths, itemIds, children }) {
   const key = useMemo(() => itemIds.join(' '), [itemIds]);
 
   useEffect(() => {
-    if (!supabase) return undefined;
+    if (!supabase || isGuest) return undefined;
     const ids = key ? key.split(' ') : [];
     if (ids.length === 0) return undefined;
     let alive = true;
@@ -63,7 +69,7 @@ export default function Engagement({ itemMonths, itemIds, children }) {
     return () => {
       alive = false;
     };
-  }, [supabase, key]);
+  }, [supabase, key, isGuest]);
 
   /**
    * Every approved reader's display name, for the @mention picker.
@@ -74,7 +80,7 @@ export default function Engagement({ itemMonths, itemIds, children }) {
    * `profiles_select_approved` read policy — no new policy needed.
    */
   useEffect(() => {
-    if (!supabase) return undefined;
+    if (!supabase || isGuest) return undefined;
     let alive = true;
     supabase
       .from('profiles')
@@ -86,7 +92,7 @@ export default function Engagement({ itemMonths, itemIds, children }) {
     return () => {
       alive = false;
     };
-  }, [supabase]);
+  }, [supabase, isGuest]);
 
   /**
    * Which of these papers the current reader has already voted on.

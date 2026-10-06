@@ -28,7 +28,9 @@ export default function SiteHeader({ archive, categories }) {
           Cell Culture Literature Review
         </Link>
         {archive}
-        <nav className="top-nav" aria-label="More pages">
+        {/* Every page here is reader feedback; hidden for a guest (lib/guest.js),
+            who the gate would turn away from them anyway. */}
+        <nav className="top-nav members-only" aria-label="More pages">
           <Link href="/digest/favorites" className="archive-link" data-reaction-target="favorites">
             Favorites
           </Link>

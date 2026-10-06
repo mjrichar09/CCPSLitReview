@@ -1,7 +1,8 @@
 'use client';
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, useSyncExternalStore } from 'react';
 import { getSupabase } from '../../lib/supabase/client.js';
+import { readGuestCookie, endGuestSession } from '../../lib/guest.js';
 
 /**
  * Who is reading, and may they write?
@@ -12,6 +13,10 @@ import { getSupabase } from '../../lib/supabase/client.js';
  *   signed out      -> counts and threads render; the controls invite sign-in
  *   signed in, not approved -> "awaiting approval", controls disabled
  *   approved        -> full write access
+ *
+ * Plus a fourth, `guest`: someone who chose "View as guest" on the landing
+ * page and is not an approved reader. The feedback islands render nothing at
+ * all for a guest — no counts, no threads, no controls (see lib/guest.js).
  *
  * `approved` here is only ever a hint for rendering. The database decides:
  * every insert is re-checked by row-level security, so a stale or forged
@@ -24,6 +29,7 @@ const SessionContext = createContext({
   user: null,
   profile: null,
   approved: false,
+  guest: false,
   categoryOrder: null,
   setCategoryOrder: () => {},
   signIn: () => {},
@@ -31,6 +37,13 @@ const SessionContext = createContext({
 });
 
 export const useSession = () => useContext(SessionContext);
+
+// The cookie only changes through a full navigation (the landing page sets
+// it, approval clears it below), so there is nothing to subscribe to. The
+// server snapshot is false so hydration matches the static HTML; the real
+// value takes over on the very next render.
+const noSubscribe = () => () => {};
+const serverGuest = () => false;
 
 export default function SessionProvider({ children }) {
   const supabase = useMemo(() => getSupabase(), []);
@@ -83,6 +96,16 @@ export default function SessionProvider({ children }) {
   }, [supabase, user]);
 
   const currentProfile = user && profile?.id === user.id ? profile.data : null;
+  const approved = Boolean(currentProfile?.approved);
+
+  const guestCookie = useSyncExternalStore(noSubscribe, readGuestCookie, serverGuest);
+  const guest = guestCookie && !approved;
+
+  // An approved reader who once browsed as a guest should not keep the
+  // guest flag (and its pre-paint hiding) on every later visit.
+  useEffect(() => {
+    if (approved && guestCookie) endGuestSession();
+  }, [approved, guestCookie]);
 
   /**
    * Sign in with an identity the reader already has.
@@ -135,13 +158,14 @@ export default function SessionProvider({ children }) {
       ready,
       user,
       profile: currentProfile,
-      approved: Boolean(currentProfile?.approved),
+      approved,
+      guest,
       categoryOrder: currentProfile?.category_order ?? null,
       setCategoryOrder,
       signIn,
       signOut,
     }),
-    [supabase, ready, user, currentProfile, setCategoryOrder, signIn, signOut],
+    [supabase, ready, user, currentProfile, approved, guest, setCategoryOrder, signIn, signOut],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 
 import { admits } from '../lib/accessGate.js';
+import { hasGuestCookie, isMemberOnlyPath, GUEST_COOKIE, GUEST_INIT_SCRIPT } from '../lib/guest.js';
 
 const user = { id: 'u1' };
 
@@ -20,6 +21,45 @@ test('blocks a signed-in but unapproved reader', () => {
 
 test('admits a signed-in, approved reader', () => {
   assert.equal(admits({ configured: true, user, approved: true }), true);
+});
+
+test('admits a guest to the digest pages, even with Supabase unconfigured', () => {
+  for (const configured of [true, false]) {
+    assert.equal(admits({ configured, user: null, approved: false, guest: true, pathname: '/digest' }), true);
+    assert.equal(admits({ configured, user: null, approved: false, guest: true, pathname: '/digest/2026-10/upstream_pd' }), true);
+    assert.equal(admits({ configured, user: null, approved: false, guest: true, pathname: '/search-index.json' }), true);
+  }
+});
+
+test('keeps a guest off the member-only pages', () => {
+  for (const pathname of ['/digest/favorites', '/digest/discussion', '/digest/imports', '/digest/imports/x']) {
+    assert.equal(admits({ configured: true, user: null, approved: false, guest: true, pathname }), false, pathname);
+  }
+});
+
+test('a signed-in, unapproved reader can still choose guest view', () => {
+  assert.equal(admits({ configured: true, user, approved: false, guest: true, pathname: '/digest' }), true);
+  assert.equal(admits({ configured: true, user, approved: false, guest: true, pathname: '/digest/discussion' }), false);
+});
+
+test('an approved reader reaches the member-only pages, guest cookie or not', () => {
+  assert.equal(admits({ configured: true, user, approved: true, guest: true, pathname: '/digest/discussion' }), true);
+});
+
+test('member-only matching is by path segment, not prefix', () => {
+  assert.equal(isMemberOnlyPath('/digest/favorites'), true);
+  assert.equal(isMemberOnlyPath('/digest/favoritesx'), false);
+  assert.equal(isMemberOnlyPath('/digest/2026-10'), false);
+});
+
+test('guest cookie parsing', () => {
+  assert.equal(hasGuestCookie(`a=1; ${GUEST_COOKIE}=1; b=2`), true);
+  assert.equal(hasGuestCookie(`${GUEST_COOKIE}=0`), false);
+  assert.equal(hasGuestCookie(`x${GUEST_COOKIE}=1`), false);
+  assert.equal(hasGuestCookie(''), false);
+  assert.equal(hasGuestCookie(undefined), false);
+  // The pre-paint script matches the same cookie the gate admits on.
+  assert.ok(GUEST_INIT_SCRIPT.includes(`'${GUEST_COOKIE}=1'`));
 });
 
 // proxy.js can't be imported here (it pulls in next/server, unresolvable
