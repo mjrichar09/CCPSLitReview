@@ -32,7 +32,7 @@ test('admits a guest to the digest pages, even with Supabase unconfigured', () =
 });
 
 test('keeps a guest off the member-only pages', () => {
-  for (const pathname of ['/digest/favorites', '/digest/discussion', '/digest/imports', '/digest/imports/x']) {
+  for (const pathname of ['/digest/favorites', '/digest/discussion', '/digest/imports', '/digest/imports/x', '/digest/admin/topics']) {
     assert.equal(admits({ configured: true, user: null, approved: false, guest: true, pathname }), false, pathname);
   }
 });

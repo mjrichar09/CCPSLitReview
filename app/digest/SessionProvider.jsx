@@ -30,6 +30,7 @@ const SessionContext = createContext({
   profile: null,
   approved: false,
   guest: false,
+  isAdmin: false,
   categoryOrder: null,
   setCategoryOrder: () => {},
   signIn: () => {},
@@ -98,6 +99,31 @@ export default function SessionProvider({ children }) {
   const currentProfile = user && profile?.id === user.id ? profile.data : null;
   const approved = Boolean(currentProfile?.approved);
 
+  /**
+   * Admin flag, fetched on its own rather than added to the profile select
+   * above: before migration 20261008000100 is applied the column does not
+   * exist, and a failed profile query would lock every reader out of the UI.
+   * Failing here only hides the topic editor. Like `approved`, this is a
+   * rendering hint; the database re-checks it on every save.
+   */
+  const [adminFor, setAdmin] = useState({ id: null, value: false });
+  useEffect(() => {
+    if (!supabase || !user) return undefined;
+    let alive = true;
+    supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', user.id)
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (alive) setAdmin({ id: user.id, value: !error && Boolean(data?.is_admin) });
+      });
+    return () => {
+      alive = false;
+    };
+  }, [supabase, user]);
+  const isAdmin = Boolean(user && adminFor.id === user.id && adminFor.value && approved);
+
   const guestCookie = useSyncExternalStore(noSubscribe, readGuestCookie, serverGuest);
   const guest = guestCookie && !approved;
 
@@ -160,12 +186,13 @@ export default function SessionProvider({ children }) {
       profile: currentProfile,
       approved,
       guest,
+      isAdmin,
       categoryOrder: currentProfile?.category_order ?? null,
       setCategoryOrder,
       signIn,
       signOut,
     }),
-    [supabase, ready, user, currentProfile, approved, guest, setCategoryOrder, signIn, signOut],
+    [supabase, ready, user, currentProfile, approved, guest, isAdmin, setCategoryOrder, signIn, signOut],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

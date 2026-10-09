@@ -2,6 +2,13 @@
 
 ## Next session plan
 
+**Topic and feed editor (2026-10-08), not yet live.** Topics and feeds moved from `config/digest.config.js` into `config/topics.json` (resolved config verified identical to before), with an editor at `/digest/admin/topics`. Before it can save, in order:
+
+1. **Apply migration `20261008000100_admins_and_topic_config.sql`** (adds `profiles.is_admin`, pins it in `profiles_update_own`, creates `topic_config_versions`). Until then the editor loads read-only from the committed file and says saved versions are unavailable.
+2. **Make yourself an admin**: `update profiles set is_admin = true where id = '<your user id>';` in the SQL editor.
+3. Nothing new for Actions: the sync step uses the existing `SUPABASE_URL` / `SUPABASE_ANON_KEY` secrets.
+4. Decide whether the existing topics' **Europe PMC searches should follow their keyword lists**. They are kept as custom queries (shorter, hand-picked lists), so editing a topic's keywords today changes PubMed only. "Use keywords instead" under Advanced switches one over; it broadens Europe PMC slightly and costs a little more scoring.
+
 **UX improvements from `claude/ux-improvements-cn248b` are merged and live on `main`** (pill reordering, vote-sorted lists, votes into scoring, @mentions/notifications, comment badges, dark mode, reader engagement — reads/favorites/discussion board, sign-in gate, reaction animations, site search). See Status_update.md for the full account.
 
 **Generation split off Actions onto a Claude Code routine, on `claude/routine-generation-8f3k2p`** — summarize/synthesize now run as the routine's own reasoning (billed to subscription) instead of the metered Anthropic API; Actions stops after `score` and fires the routine. Code and docs are done and verified locally; **the routine itself does not exist yet** and needs one-time manual setup before this actually runs live, in order:
@@ -15,6 +22,7 @@
 
 ## Backlog
 
+- [ ] **Admin privileges for managing access.** `is_admin` exists (topic editing) but is set by hand in Supabase, and so is `approved`. Wanted: an admin-only page listing readers with Approve / Revoke / Make admin, plus pending sign-ups, backed by RLS policies that let `is_admin()` update other users' `approved`/`is_admin` (and never their own admin flag, so the last admin cannot lock everyone out by accident). Supersedes the older "owner-only /digest/admin" item below.
 - [ ] **Apply both pending migrations to the live project.** They are independent of each
       other — `20260913000200` only needs `public.is_approved()`, which has existed since the
       original schema — so either order is fine, but neither feature works until its own is

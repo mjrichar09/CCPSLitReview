@@ -53,41 +53,41 @@ npm run --silent fetch 2>/dev/null | jq '.records | length'
 
 ## How to…
 
-### Add a category
+### Add or change a topic
 
-Append one entry to `categories` in [`config/digest.config.js`](config/digest.config.js). Nothing else changes — no code edit. Each entry needs:
+Topics (categories) and RSS feeds live in [`config/topics.json`](config/topics.json), and the normal way to edit them is on the site: **Topics** in the header, `/digest/admin/topics`. Any approved reader can look; only an **admin** can save (set `profiles.is_admin = true` in the Supabase table editor).
 
-- `id` — lowercase, digits, underscores; must be unique
-- `name` — display name
-- `max_items` — cap on how many items reach the report
-- `scope` — **the verbatim rubric the scoring model judges against.** Write it for the model, not for a human reader. If a category is prone to false positives, state the requirement explicitly (see `modeling_ml`, which demands an actual bioprocess application rather than a passing mention).
-- `sources` — per-source overrides; anything omitted inherits the global defaults in `sources`
+- Saving stores a numbered version in Supabase (`topic_config_versions`). Nothing changes immediately: the next monthly run copies the newest saved version into `config/topics.json` (`scripts/sync-topics.mjs`), validates it, uses it, and commits it with the month. Past months are never rewritten.
+- Every version is kept. **History → Load into editor → Save** undoes a bad change.
+- **Copy AI prompt** gives any AI assistant the format, the rubric and keyword guidance, and the current topics, so it can draft a new topic (or rewrite one) without overlapping the others. Paste its JSON reply back and press *Add to topics*; nothing is saved until you press Save.
 
-```js
+A topic in the file looks like this:
+
+```json
 {
-  id: 'single_use',
-  name: 'Single-Use Systems',
-  max_items: 10,
-  scope: 'Extractables and leachables; film compatibility; ...',
-  sources: {
-    pubmed: { query: '("single-use"[tiab] OR "disposable bioreactor"[tiab]) AND ...' },
-    europepmc: { query: '("single-use" OR "disposable bioreactor") AND ...' },
-    rss: { terms: ['single-use', 'single use', 'disposable'] },
-  },
+  "id": "single_use",
+  "name": "Single-Use Systems",
+  "max_items": 10,
+  "rubric": "Extractables and leachables; film compatibility; ...",
+  "mammalian_preference": true,
+  "keywords": ["single-use", "disposable bioreactor", "extractables"],
+  "anchor": "bioprocess",
+  "sources": { "rss": { "terms": ["single-use", "single use", "disposable"] } }
 }
 ```
 
-Run `npm test` afterwards — config validation is covered, so a malformed entry fails with a message naming the offending path.
+- `rubric` — **the verbatim text the scoring model judges against.** Write it for the model. If a topic is prone to false positives, state the requirement explicitly (see `modeling_ml`).
+- `mammalian_preference` — appends the shared expression-system paragraph to the rubric (`MAMMALIAN_PREFERENCE` in `lib/topics.js`).
+- `keywords` + `anchor` — build the PubMed and Europe PMC queries. `anchor: "bioprocess"` adds the shared bioprocess anchor and off-target title exclusions. A `sources.pubmed.query` / `sources.europepmc.query` overrides the keyword-built one; the existing topics keep their hand-tuned Europe PMC queries this way.
+- `sources` — per-source overrides; anything omitted inherits the global defaults in `config/digest.config.js`.
+
+Hand-editing the file in git still works. Which copy wins is decided by version number (`pickNewer` in `lib/topics.js`): a saved version newer than the one the file records replaces it; otherwise the file stands. Run `npm test` after a hand edit — a malformed file fails with a message naming the topic and field.
 
 ### Add or remove an RSS feed
 
-Edit `sources.rss.feeds`. Each entry is `{ id, name, url, tags }`, plus optional `enabled: false` to keep a feed on the books without fetching it.
+On the same page, **Feeds** tab — or `feeds` in `config/topics.json`. Each entry is `{ id, name, url, tags }`, plus optional `enabled: false` to keep a feed on the books without fetching it. The tab's AI prompt helps find a publication's feed URL and pick tags.
 
-```js
-{ id: 'pda', name: 'PDA Letter', url: 'https://www.pda.org/rss', tags: ['regulatory'] }
-```
-
-Categories select feeds by `tags` (default: all live feeds) or by explicit `ids`. A feed that starts failing is reported in `source_health` and the run continues — check the report footer rather than trusting silence.
+Topics select feeds by `tags` (default: all live feeds) or by explicit `ids`; the *Used by* column shows the result. A feed that starts failing is reported in `source_health` and the run continues — check the report footer rather than trusting silence.
 
 ### Import papers by hand, or from a conference deck
 

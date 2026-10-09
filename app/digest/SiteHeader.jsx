@@ -40,6 +40,9 @@ export default function SiteHeader({ archive, categories }) {
           <Link href="/digest/imports" className="archive-link">
             Imported
           </Link>
+          <Link href="/digest/admin/topics" className="archive-link">
+            Topics
+          </Link>
         </nav>
         <SearchBar />
         <div className="site-header-account">

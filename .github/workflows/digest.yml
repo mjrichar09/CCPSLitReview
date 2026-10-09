@@ -73,6 +73,16 @@ jobs:
 
       - run: npm ci
 
+      # Topics and feeds edited on the site (/digest/admin/topics) are saved to
+      # Supabase; the newest saved version is written into config/topics.json
+      # here, so validation below, this run, and the commit all use it. A no-op
+      # when nothing newer was saved, or when Supabase is not configured.
+      - name: Sync topics from the site
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+        run: node scripts/sync-topics.mjs
+
       # Config errors should fail in seconds, before any network or LLM spend.
       # This also validates score_model, which is checked against knownModels.
       - name: Validate config
@@ -184,7 +194,10 @@ jobs:
           set -euo pipefail
           git config user.name  'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git add data/digest
+          # config/topics.json too: if the sync step applied a newer saved
+          # version, the routine and the site must see the config this month
+          # was actually fetched and scored with.
+          git add data/digest config/topics.json
           if git diff --cached --quiet; then
             echo "::notice::nothing to commit — no new report and no ledger change"
             echo "committed=false" >> "$GITHUB_OUTPUT"

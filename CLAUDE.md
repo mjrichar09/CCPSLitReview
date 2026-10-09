@@ -28,11 +28,14 @@ Git history carries everything else; don't duplicate what a commit message alrea
 
 ```
 config/
-  digest.config.js    THE file to edit — categories, queries, rubrics, feeds, models, rates
+  digest.config.js    pipeline settings — sources, models, rates, thresholds
+  topics.json         WHAT the digest covers — topics (rubrics, keywords) and RSS feeds; edited on the site
 lib/
   digestDir.js        DIGEST_DIR and friends — single source of truth for data paths
   digest.js           read helpers: getAllMonths / getReport / getLatest
   config.js           loadConfig (validation) + resolveSource / resolveFeeds
+  topics.js           topics.json format: spec -> category, query building, validation, pickNewer (browser-safe)
+  topicPrompts.js     copy-paste AI prompts for drafting topics and feeds, and parsing the reply
   userPapers.js       imported-paper identity, validation, the score-5 rule (browser-safe)
   importedPapers.js   reads imports back into generation (service-role key)
   crossref.js         DOI and title metadata lookup, called from the browser
@@ -50,6 +53,7 @@ lib/
     http.js           fetch with timeout, retry, polite UA
     log.js            structured stderr logging
 scripts/
+  sync-topics.mjs     newest topic config saved on the site -> config/topics.json (first step of the monthly run)
   digest.mjs          CLI: --stage --month --since --category --source --dry-run --fresh --from-stage --force
   prep-for-routine.mjs           scored.json -> routine-input.json (deterministic prep for the routine)
   finalize-routine-output.mjs    routine-output.json -> summarized.json + synthesized.json (validate + assemble)
@@ -61,6 +65,7 @@ app/
     ArchiveNav/CategoryNav                 the sticky header's two navs
     ImportsPanel/ConferenceImport          reader paper imports, incl. .pptx parsing
     ImportedPaper/importPapers             one imported paper, and the shared write path
+    admin/                                 topic and feed editor (/digest/admin/topics)
 data/digest/          (Phase 3) one YYYY-MM.json per month, plus index/ and staging/
 ```
 
@@ -101,6 +106,8 @@ data/digest/
 - **Reader feedback is the one exception, and it does not touch that path.** Votes and comments go browser → Supabase → Postgres, under row-level security, from client islands. No server, no API route, no fs. The consequence to remember: tallies are absent from the prerendered HTML and arrive after hydration.
 - **`profiles.approved` is enforced in Postgres, never in the UI.** A hidden button proves nothing; the policies re-check every insert, so revoking approval stops writing immediately even on a live session. Test it as `anon` / unapproved / approved with SQL, not by clicking.
 - **`proxy.js` gates `/digest/**` and `/search-index.json`, failing closed — with one deliberate opening, guest view.** A visitor carrying the `ccps_guest` cookie (set by "View as guest" on the landing page) reads the digest content but is refused the member-only pages (favorites, discussion, imports), and every feedback island renders nothing for them. The cookie is not a credential: guest view makes the digest content public by design, while reader feedback stays behind approval and RLS. `lib/accessGate.js` `admits()` is the decision; `lib/guest.js` holds the cookie name and the member-only path list.
+- **What the digest covers is data, edited on the site; the repo file is still what runs.** `/digest/admin/topics` saves numbered, append-only versions to `topic_config_versions` (insert gated on `is_admin()` in Postgres). The monthly workflow's first step, `scripts/sync-topics.mjs`, writes the newest saved version into `config/topics.json`, and the commit step commits it with the month, so the routine and the deployed site see the config the month was built with. `pickNewer` decides which copy wins: higher version, ties to the file, so a hand edit in git is never clobbered by an older save. Topic ids are fixed once saved — months, links and votes key on them.
+- **`profiles.is_admin` is pinned by `profiles_update_own` exactly like `approved`.** Any new privileged column on `profiles` needs the same pin, or a user can grant it to themselves with one UPDATE.
 - **The Actions job commits to the default branch.** TrendTracker's routine committed to `claude/*` session branches and Vercel only builds `main`, which stranded two weekly reports invisibly. Committing straight to the default branch is why this design can't repeat that.
 - **Generation runs on a routine, not the metered API — and pushes straight to `main` too.** Actions stops after `score` and fires a Claude Code routine (`docs/digest-routine-prompt.md`), which does summarize+synthesize as its own reasoning (subscription-billed) rather than an Anthropic API call, then commits the finished month directly to `main` — no PR, no `claude/*` branch. This works here specifically because `main` is unprotected and every commit on it already carries this account's identity: Claude Code checks a directed push and only redirects it to a session branch if the target is protected, has someone else's open PR, or carries a commit authored by someone else. If any of that ever stops being true (a collaborator merges under their own account, branch protection gets turned on), the routine's push would silently fall back to a `claude/*` branch and reintroduce exactly the stranded-report bug the line above describes — which is why the routine's prompt has it verify the push landed on `origin/main` rather than trusting a "success" status.
 - **A `#item-id` deep link is opened by `HashTargetHighlight.jsx`, not CSS.** A `:target` rule only re-evaluates on a real fragment navigation (a full page load, or `location.hash = ...`); Next's client-side router changes the URL through the History API instead, which never re-triggers it. Every in-app link to a specific paper — notifications, the Top 5, search, "Also appears in", a footnote — is a client-side navigation, so a `:target`-only approach silently never opens the right card outside a hard refresh. Don't reach for `:target` for this again.
