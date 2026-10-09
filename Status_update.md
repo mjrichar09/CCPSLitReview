@@ -1,5 +1,14 @@
 # Status updates
 
+## 2026-10-06/08 — guest view, analytics, a topic editor, and a visual pass
+
+- **Guest view.** "View as guest" on the landing page sets a `ccps_guest` cookie; `proxy.js` admits it to the digest but not favorites, discussion, imports or admin, and every feedback island renders nothing for a guest (plus pre-paint CSS so nothing flashes). This makes the digest content public by design; comments stay behind approval in Postgres (`comments_select_live` requires `is_approved()`, verified on the live project).
+- **Vercel Web Analytics** added to the root layout. Guest vs member split is not possible from page URLs alone; custom events (Pro) or tagging the page-view URL in `beforeSend` were proposed, not built.
+- **Topics and feeds are data.** `config/topics.json` (built into categories by `lib/topics.js`; resolved config deep-equal to the old hand-written one) is edited at `/digest/admin/topics` with help tips and copy-paste AI prompts (`lib/topicPrompts.js`). Saves are append-only versions in `topic_config_versions`, insert-gated on the new `profiles.is_admin` (pinned in `profiles_update_own` like `approved`). `scripts/sync-topics.mjs` is the monthly run's first step; the commit step now also commits `config/topics.json`. PubMed queries are now keyword-built; Europe PMC keeps its hand-tuned queries as custom overrides.
+- **Visual pass.** Topic colors (the dataviz skill's validated 8-hue palette, checked against this site's surfaces; 11 topics so 3 share a hue, always beside the name); per-topic reading progress on the section pills; "Readers' pick" / "Most discussed" badges ranked month-wide (`MonthStats.jsx`, top 3, needs net +2 votes / 2 comments); a 5-pip relevance meter; key-figure chips; Source Serif 4 for reading text; italic warm-panel comments; a relevant-papers-per-month chart per topic (from committed `scored.json` stats via `lib/digest.js` `getCategoryTrend`).
+- **Key figures, and a pattern that was rejected.** New months get `key_figures` from the summarising model, filtered at write time so every number must appear in the abstract or summary. Older months use a conservative extractor. Labelled percentages were tried and dropped after checking against published summaries: "VCD 31%" was a 31% loss in growth rate, "qP 190.36%" belonged to volumetric productivity, "viability 80%" was 80% reduced serum.
+- Also: the @mention picker no longer clips inside a paper card (portaled, fixed-position).
+
 ## 2026-08-18/19 — two real bugs from the previous session, three new features, and an actual access gate
 
 The previous session's five UX improvements merged to `main`, then two of them turned out to be broken in ways only real usage surfaced.

@@ -5,7 +5,7 @@ import { getSupabase } from '../../../lib/supabase/client.js';
 import { useSession } from '../SessionProvider.jsx';
 import baseConfig from '../../../config/digest.config.js';
 import { loadConfig, resolveFeeds, resolveSource } from '../../../lib/config.js';
-import { applyTopics, topicsDocErrors, topicErrors, pickNewer } from '../../../lib/topics.js';
+import { applyTopics, topicsDocErrors, topicErrors, pickNewer, TOPIC_COLORS } from '../../../lib/topics.js';
 import { topicPrompt, feedPrompt } from '../../../lib/topicPrompts.js';
 import TopicForm from './TopicForm.jsx';
 import FeedsEditor from './FeedsEditor.jsx';
@@ -55,6 +55,7 @@ function blankTopic(existing) {
   return {
     id: `new_topic_${n}`,
     name: 'New topic',
+    color: TOPIC_COLORS[existing.length % TOPIC_COLORS.length],
     max_items: 10,
     rubric: '',
     mammalian_preference: true,

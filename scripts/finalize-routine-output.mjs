@@ -59,7 +59,15 @@ async function main() {
 
   const papers = input.papers.map(({ index, ...paper }) => {
     const s = byIndex.get(index);
-    return { ...paper, summary: s.summary, why_it_matters: s.why_it_matters, thin_abstract: Boolean(s.thin_abstract) };
+    return {
+      ...paper,
+      summary: s.summary,
+      why_it_matters: s.why_it_matters,
+      thin_abstract: Boolean(s.thin_abstract),
+      // Optional: a routine running an older copy of its prompt omits it, and
+      // the viewer then falls back to lib/keyFigures.js extractKeyFigures.
+      ...(Array.isArray(s.key_figures) ? { key_figures: s.key_figures } : {}),
+    };
   });
   const paperByIndex = new Map(input.papers.map((p, i) => [p.index, papers[i]]));
 

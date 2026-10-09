@@ -1,6 +1,6 @@
 'use client';
 
-import { buildCategory } from '../../../lib/topics.js';
+import { buildCategory, TOPIC_COLORS } from '../../../lib/topics.js';
 import { feedTags } from '../../../lib/topicPrompts.js';
 import ListField from './ListField.jsx';
 import Help from './Help.jsx';
@@ -78,6 +78,26 @@ export default function TopicForm({ topic, onChange, idEditable, feeds, errors, 
             onChange={(e) => set({ max_items: Number.parseInt(e.target.value, 10) || 0 })}
           />
         </div>
+      </div>
+
+      <div className="field">
+        <p className="field-label">Color</p>
+        <div className="swatches" role="radiogroup" aria-label="Topic color">
+          {TOPIC_COLORS.map((c) => (
+            <button
+              key={c}
+              type="button"
+              role="radio"
+              aria-checked={topic.color === c}
+              aria-label={c}
+              title={c}
+              className={topic.color === c ? 'swatch swatch-on' : 'swatch'}
+              style={{ '--topic': `var(--topic-${c})` }}
+              onClick={() => set({ color: c })}
+            />
+          ))}
+        </div>
+        <p className="hint">Shown beside the topic name on pills, cards and charts. Eight colors stay distinguishable, so some topics share one.</p>
       </div>
 
       <div className="field">

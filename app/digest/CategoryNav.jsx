@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useSession } from './SessionProvider.jsx';
 import { mergeOrder, readStoredOrder, writeStoredOrder } from './categoryOrder.js';
+import { useMonthStats } from './MonthStats.jsx';
+import { topicStyle } from '../../lib/topicColors.js';
 
 /**
  * The section banner: every category as a pill, linking to its section page,
@@ -23,6 +25,7 @@ import { mergeOrder, readStoredOrder, writeStoredOrder } from './categoryOrder.j
 export default function CategoryNav({ month, categories }) {
   const pathname = usePathname();
   const { user, categoryOrder, setCategoryOrder } = useSession();
+  const stats = useMonthStats();
   const current = pathname?.startsWith(`/digest/${month}/`)
     ? pathname.slice(`/digest/${month}/`.length).split('/')[0]
     : null;
@@ -74,7 +77,11 @@ export default function CategoryNav({ month, categories }) {
 
   return (
     <nav className="section-nav" aria-label="Sections">
-      {order.map((c) => (
+      {order.map((c) => {
+        // Reading progress for this month, when there is a reader to track.
+        const progress = stats?.progress(c.id) ?? null;
+        const done = progress && progress.total > 0 && progress.read === progress.total;
+        return (
         <Link
           key={c.id}
           href={`/digest/${month}/${c.id}`}
@@ -87,6 +94,11 @@ export default function CategoryNav({ month, categories }) {
             .filter(Boolean)
             .join(' ')}
           aria-current={c.id === current ? 'page' : undefined}
+          style={{
+            ...topicStyle(c.id),
+            ...(progress ? { '--progress': `${progress.total ? (progress.read / progress.total) * 100 : 0}%` } : {}),
+          }}
+          data-progress={progress ? '' : undefined}
           draggable
           onDragStart={(e) => {
             setDraggingId(c.id);
@@ -106,10 +118,21 @@ export default function CategoryNav({ month, categories }) {
             setDragOverId(null);
           }}
         >
+          <span className="topic-dot" aria-hidden="true" />
           {c.name}
-          <span className="section-nav-count">{c.items.length}</span>
+          {progress ? (
+            <span
+              className={done ? 'section-nav-count section-nav-done' : 'section-nav-count'}
+              title={`${progress.read} of ${progress.total} read`}
+            >
+              {done ? '✓' : `${progress.read}/${progress.total}`}
+            </span>
+          ) : (
+            <span className="section-nav-count">{c.items.length}</span>
+          )}
         </Link>
-      ))}
+        );
+      })}
     </nav>
   );
 }

@@ -2,6 +2,7 @@ import { getAllMonths, getReport } from '../../../lib/digest.js';
 import ArchiveNav from '../ArchiveNav.jsx';
 import CategoryNav from '../CategoryNav.jsx';
 import SiteHeader from '../SiteHeader.jsx';
+import MonthStats from '../MonthStats.jsx';
 
 /**
  * Shared chrome for one month.
@@ -21,9 +22,11 @@ export default async function MonthLayout({ children, params }) {
   const [months, report] = await Promise.all([getAllMonths(), getReport(month)]);
   // An unknown month still renders this layout around not-found.jsx.
   const categories = report?.categories ?? [];
+  const itemsByCategory = Object.fromEntries(categories.map((c) => [c.id, c.items.map((i) => i.id)]));
 
+  // MonthStats wraps the header too: the section pills show reading progress.
   return (
-    <>
+    <MonthStats itemsByCategory={itemsByCategory}>
       <SiteHeader
         archive={<ArchiveNav months={months} current={month} />}
         categories={<CategoryNav month={month} categories={categories} />}
@@ -34,6 +37,6 @@ export default async function MonthLayout({ children, params }) {
             credit appears on section pages too. */}
         <footer className="site-credit">Created by Mark Richards. All Rights Reserved.</footer>
       </div>
-    </>
+    </MonthStats>
   );
 }

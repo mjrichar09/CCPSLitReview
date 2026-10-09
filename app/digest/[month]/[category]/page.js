@@ -6,6 +6,8 @@ import ItemRow from '../../ItemRow.jsx';
 import Engagement from '../../Engagement.jsx';
 import SortableItemList from '../../SortableItemList.jsx';
 import FootnoteText from '../../FootnoteText.jsx';
+import TopicTrend from '../../TopicTrend.jsx';
+import { topicStyle } from '../../../../lib/topicColors.js';
 
 /** Every category of every committed month, and only those. */
 export const dynamicParams = false;
@@ -55,11 +57,14 @@ export default async function CategoryPage({ params }) {
       <Link href={`/digest/${month}`} className="back-link">
         &larr; {monthLabel(report.month_of)}
       </Link>
-      <div className="cat-head">
-        <h1 className="cat-title">{cat.name}</h1>
-        <span className="cat-count">
-          {cat.items.length} {cat.items.length === 1 ? 'item' : 'items'}
-        </span>
+      <div className="cat-head" style={topicStyle(category)}>
+        <div className="cat-head-text">
+          <h1 className="cat-title">{cat.name}</h1>
+          <span className="cat-count">
+            {cat.items.length} {cat.items.length === 1 ? 'item' : 'items'}
+          </span>
+        </div>
+        <TopicTrend categoryId={category} month={month} />
       </div>
       <FootnoteText
         className="cat-synthesis"

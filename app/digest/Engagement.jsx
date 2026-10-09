@@ -4,6 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 import { getSupabase } from '../../lib/supabase/client.js';
 import { useSession } from './SessionProvider.jsx';
 import { readGuestCookie } from '../../lib/guest.js';
+import { useMonthStats } from './MonthStats.jsx';
 
 /**
  * Vote tallies and comment counts for every paper on one page.
@@ -28,6 +29,9 @@ export const useEngagement = () => useContext(EngagementContext);
 export default function Engagement({ itemMonths, itemIds, children }) {
   const supabase = useMemo(() => getSupabase(), []);
   const { user, approved } = useSession();
+  // Present inside a month (null on favorites/discussion): told about read
+  // toggles so the section pills' progress moves immediately.
+  const monthStats = useMonthStats();
   // Read straight from the cookie rather than the session's `guest`, which
   // is false for the hydration render: these effects would otherwise fire
   // their reads once for a guest before the flag catches up. A guest sees no
@@ -249,12 +253,16 @@ export default function Engagement({ itemMonths, itemIds, children }) {
         });
       };
       applyLocal(!wasRead);
+      monthStats?.setRead(itemId, !wasRead);
       const { error } = wasRead
         ? await supabase.from('reads').delete().eq('user_id', user.id).eq('item_id', itemId)
         : await supabase.from('reads').insert({ user_id: user.id, item_id: itemId });
-      if (error) applyLocal(wasRead);
+      if (error) {
+        applyLocal(wasRead);
+        monthStats?.setRead(itemId, wasRead);
+      }
     },
-    [supabase, user, approved, readIds],
+    [supabase, user, approved, readIds, monthStats],
   );
 
   const toggleFavorite = useCallback(

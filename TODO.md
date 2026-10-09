@@ -2,12 +2,13 @@
 
 ## Next session plan
 
-**Topic and feed editor (2026-10-08), not yet live.** Topics and feeds moved from `config/digest.config.js` into `config/topics.json` (resolved config verified identical to before), with an editor at `/digest/admin/topics`. Before it can save, in order:
+**Topic and feed editor + visual pass (2026-10-08).** Topics and feeds moved from `config/digest.config.js` into `config/topics.json` (resolved config verified identical to before), editable at `/digest/admin/topics`. Migration `20261008000100_admins_and_topic_config` **is applied** to the Supabase project. Still to do:
 
-1. **Apply migration `20261008000100_admins_and_topic_config.sql`** (adds `profiles.is_admin`, pins it in `profiles_update_own`, creates `topic_config_versions`). Until then the editor loads read-only from the committed file and says saved versions are unavailable.
-2. **Make yourself an admin**: `update profiles set is_admin = true where id = '<your user id>';` in the SQL editor.
-3. Nothing new for Actions: the sync step uses the existing `SUPABASE_URL` / `SUPABASE_ANON_KEY` secrets.
-4. Decide whether the existing topics' **Europe PMC searches should follow their keyword lists**. They are kept as custom queries (shorter, hand-picked lists), so editing a topic's keywords today changes PubMed only. "Use keywords instead" under Advanced switches one over; it broadens Europe PMC slightly and costs a little more scoring.
+1. **Make yourself an admin**: `update profiles set is_admin = true where id = '<your user id>';` in the SQL editor. Until someone is, the editor is read-only for everyone.
+2. **Re-paste the routine prompt** from `docs/digest-routine-prompt.md` into the routine at claude.ai/code/routines. The live routine runs its pasted copy, which predates `key_figures`; until re-pasted, new months fall back to the pattern-matched chips (`lib/keyFigures.js` `extractKeyFigures`), which cover about one paper in eight.
+3. Nothing new for Actions: the topic sync step uses the existing `SUPABASE_URL` / `SUPABASE_ANON_KEY` secrets.
+4. Two earlier migrations (`20260913000100_restrict_comment_reads`, `20260913000200_user_papers`) are live in the database but missing from its migration history, so they were applied by hand. Harmless; worth recording with `supabase migration repair` before anyone runs `db push`.
+5. Decide whether the existing topics' **Europe PMC searches should follow their keyword lists**. They are kept as custom queries (shorter, hand-picked lists), so editing a topic's keywords today changes PubMed only. "Use keywords instead" under Advanced switches one over; it broadens Europe PMC slightly and costs a little more scoring.
 
 **UX improvements from `claude/ux-improvements-cn248b` are merged and live on `main`** (pill reordering, vote-sorted lists, votes into scoring, @mentions/notifications, comment badges, dark mode, reader engagement — reads/favorites/discussion board, sign-in gate, reaction animations, site search). See Status_update.md for the full account.
 

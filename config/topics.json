@@ -5,6 +5,7 @@
     {
       "id": "pat_control",
       "name": "PAT & Spectroscopic Process Control",
+      "color": "blue",
       "max_items": 12,
       "rubric": "Raman, NIR, dielectric/capacitance spectroscopy; chemometrics and PLS modeling; soft sensors; calibration transfer and chemometric model lifecycle; in-line/on-line feedback control loops and control law design; MPC as *implemented* on a bioreactor. Boundary with modeling_ml: if the novelty is the measurement or the closed loop, it belongs here; if the novelty is the model itself — its structure, training, or inference — it belongs in modeling_ml. Items may legitimately carry both.",
       "mammalian_preference": true,
@@ -56,6 +57,7 @@
     {
       "id": "upstream_pd",
       "name": "Upstream Process Development",
+      "color": "orange",
       "max_items": 12,
       "rubric": "Fed-batch and perfusion operation; feeding strategies; metabolic control; scale-up and scale-down model qualification; bioreactor engineering, kLa, mixing, sparging, shear; temperature/pH/DO strategy.",
       "mammalian_preference": true,
@@ -107,6 +109,7 @@
     {
       "id": "harvest_dsp",
       "name": "Harvest, Clarification & DSP Interface",
+      "color": "aqua",
       "max_items": 10,
       "rubric": "Centrifugation, depth and tangential flow filtration, flocculation and precipitation at harvest; harvest turbidity and cell lysis; HCP/DNA/impurity clearance through capture; harvest impact on downstream performance.",
       "mammalian_preference": true,
@@ -146,6 +149,7 @@
     {
       "id": "media_dev",
       "name": "Media & Feed Development",
+      "color": "yellow",
       "max_items": 10,
       "rubric": "Chemically defined media and feed design; amino acid and trace metal strategies; raw material variability and lot-to-lot control; media stability, photodegradation, and preparation; hydrolysate replacement.",
       "mammalian_preference": true,
@@ -184,6 +188,7 @@
     {
       "id": "intensification",
       "name": "Process Intensification & Continuous Manufacturing",
+      "color": "magenta",
       "max_items": 12,
       "rubric": "N-1 and N-stage perfusion; high inoculation density fed-batch; seed train intensification; connected and continuous processing; space-time yield and facility throughput; ATF/TFF perfusion hardware.",
       "mammalian_preference": true,
@@ -232,6 +237,7 @@
     {
       "id": "modeling_ml",
       "name": "Process Modeling, Digital Twins & Statistical Learning",
+      "color": "green",
       "max_items": 15,
       "rubric": "Mechanistic, hybrid (mechanistic + ML), and data-driven models of cell culture and bioprocess unit operations; digital twins and their qualification; Bayesian methods including hierarchical models, Bayesian DOE/optimal design, Bayesian scale-down model equivalence, and uncertainty quantification; machine learning applied to process development, clone/condition screening, and CQA prediction; kinetic and metabolic flux models used predictively; model validation, transferability, and lifecycle.\n\nREQUIRED: the work must have an actual bioprocess, cell culture, or biomanufacturing application — not merely a mention, a motivating sentence, or a dataset borrowed from biology. A methods paper that names bioprocessing only in its introduction does not qualify. If the application domain is generic tabular data, chemistry, or another industry, score 0.",
       "mammalian_preference": true,
@@ -280,6 +286,7 @@
     {
       "id": "cell_line_dev",
       "name": "Cell Line Development & Clone Selection",
+      "color": "violet",
       "max_items": 10,
       "rubric": "Expression vector and promoter design for CHO; random versus targeted integration and site-specific integration into defined loci; transposase systems (piggyBac, Sleeping Beauty); host cell engineering including CRISPR knockouts affecting productivity, glycosylation, apoptosis, or lactate metabolism; selection systems (GS/MSX, DHFR/MTX); single-cell cloning and clonality assurance; clone screening strategy and its correlation to bench and manufacturing scale; clonal and production stability over generations; specific productivity and its trade-off against growth.\n\nBoundary with upstream_pd: if the lever is the cell line or its genome, it belongs here; if the lever is how the bioreactor is operated, it belongs in upstream_pd.",
       "mammalian_preference": true,
@@ -335,6 +342,7 @@
     {
       "id": "product_quality",
       "name": "Product Quality & CQA Control from Upstream",
+      "color": "red",
       "max_items": 12,
       "rubric": "How upstream conditions move product quality attributes: N-glycosylation (galactosylation, fucosylation, high mannose, sialylation), charge variants, C-terminal lysine, aggregation and fragmentation, deamidation and oxidation, and disulfide/free thiol. Media and feed levers on glycans — manganese, galactose, uridine, nucleotide sugar precursors. Effects of pH, temperature, dissolved oxygen, osmolality, ammonia, and culture duration on quality. Glycoengineering by host or process. Quality comparability across scales and sites, and the analytics used to establish it. Control strategy connecting an upstream parameter to a CQA.\n\nBoundary with harvest_dsp: quality changes arising in culture belong here; clearance and quality changes arising in purification belong there. Boundary with cmc_reg: the science of the attribute belongs here, the guidance and filing expectations belong there.",
       "mammalian_preference": true,
@@ -387,6 +395,7 @@
     {
       "id": "htpd_automation",
       "name": "High-Throughput PD & Lab Automation",
+      "color": "blue",
       "max_items": 10,
       "rubric": "Automated and high-throughput process development: ambr250/ambr15 and other micro- and mini-bioreactor systems; deep-well plate and shake-flask screening as scale-down formats; robotic liquid handling and automated feeding; automated and at-line sampling, cell counting, and metabolite analysis; integration of analytics into the screening loop; execution of DOE campaigns at scale; closed-loop and self-driving laboratory approaches where the platform proposes the next experiment; data infrastructure, LIMS and ELN plumbing that makes high-throughput PD data usable; qualification of high-throughput systems as scale-down models.\n\nBoundary with upstream_pd: if the finding is about the process condition, it belongs there; if it is about the platform, the throughput, or the automation that produced it, it belongs here. Boundary with modeling_ml: a new experimental-design algorithm belongs there, its automated execution belongs here — a closed-loop paper may legitimately carry both.",
       "mammalian_preference": true,
@@ -442,6 +451,7 @@
     {
       "id": "cmc_reg",
       "name": "CMC Regulatory & Guidance",
+      "color": "orange",
       "max_items": 10,
       "rubric": "ICH guidelines (Q2(R2), Q5A, Q8–Q14) and their implementation; FDA and EMA guidance, draft guidance, and warning letter trends relevant to biologics CMC; PDA and BioPhorum technical reports; comparability and post-approval change management.",
       "mammalian_preference": false,
@@ -464,6 +474,7 @@
     {
       "id": "industry",
       "name": "Biopharma Industry News",
+      "color": "aqua",
       "max_items": 10,
       "rubric": "Manufacturing capacity and facility investment; CDMO landscape; biosimilar entry and its manufacturing implications; COGS, pricing and supply chain; approvals with notable manufacturing or modality angles.\n\nREQUIRED: manufacturing relevance. Exclude pure clinical readouts, financial and market news with no manufacturing angle, and personnel announcements.",
       "mammalian_preference": false,

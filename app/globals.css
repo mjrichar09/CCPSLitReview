@@ -22,6 +22,12 @@
   /* Reader comments: a warm "reader's voice", set apart from the cool,
      neutral machine-written summaries around them. */
   --comment-bg: #fbf6ec; --comment-fg: #4b3a1f; --comment-rule: #d4a24c;
+
+  /* Topic identity (lib/topics.js TOPIC_COLORS). The validated categorical
+     palette, light steps; checked against this surface with the dataviz
+     validator. Always shown beside the topic's name, never alone. */
+  --topic-blue: #2a78d6; --topic-orange: #eb6834; --topic-aqua: #1baf7a; --topic-yellow: #eda100;
+  --topic-magenta: #e87ba4; --topic-green: #008300; --topic-violet: #4a3aa7; --topic-red: #e34948;
 }
 
 /* Dark tokens apply either from the OS preference, or from an explicit
@@ -50,6 +56,9 @@
     --badge-failed-bg: #3a1f1b; --badge-failed-fg: #ffb3a8;
 
     --comment-bg: #211c13; --comment-fg: #ead9b8; --comment-rule: #b8863a;
+
+    --topic-blue: #3987e5; --topic-orange: #d95926; --topic-aqua: #199e70; --topic-yellow: #c98500;
+    --topic-magenta: #d55181; --topic-green: #008300; --topic-violet: #9085e9; --topic-red: #e66767;
   }
   html:not([data-theme="light"]) { color-scheme: dark; }
 }
@@ -71,6 +80,9 @@
   --badge-failed-bg: #3a1f1b; --badge-failed-fg: #ffb3a8;
 
   --comment-bg: #211c13; --comment-fg: #ead9b8; --comment-rule: #b8863a;
+
+  --topic-blue: #3987e5; --topic-orange: #d95926; --topic-aqua: #199e70; --topic-yellow: #c98500;
+  --topic-magenta: #d55181; --topic-green: #008300; --topic-violet: #9085e9; --topic-red: #e66767;
 }
 html[data-theme="dark"] { color-scheme: dark; }
 html[data-theme="light"] { color-scheme: light; }
@@ -807,3 +819,123 @@ html[data-guest] .comments { display: none !important; }
   letter-spacing: 0.05em; padding: 0.5rem;
 }
 .history-table td { padding: 0.55rem 0.5rem; border-top: 1px solid var(--border); vertical-align: top; }
+
+/* ---- topic identity, reading progress, badges, key figures, trend ---- */
+
+/* Reading text in a serif, interface in the sans: summaries, why-it-matters,
+   the month overview and topic narratives read like an editorial page, while
+   controls, metadata and reader comments (italic sans, warm panel) stay
+   visibly something else. */
+.item-summary, .item-why, .report-summary, .cat-synthesis {
+  font-family: var(--font-serif), Georgia, "Times New Roman", serif;
+}
+.item-summary, .item-why { font-size: 1rem; }
+.cat-synthesis { font-size: 1.05rem; }
+
+/* Pills: a topic dot, and this month's reading progress as a thin bar along
+   the pill's bottom edge once there is a signed-in reader. */
+.topic-dot {
+  width: 0.55rem; height: 0.55rem; border-radius: 50%; flex: none;
+  background: var(--topic, var(--muted));
+}
+.section-nav-link.active .topic-dot { box-shadow: 0 0 0 2px var(--surface); }
+.section-nav-link[data-progress] {
+  background-image: linear-gradient(var(--topic), var(--topic));
+  background-repeat: no-repeat; background-position: left bottom;
+  background-size: var(--progress, 0%) 3px;
+}
+.section-nav-done { opacity: 1; font-weight: 700; }
+
+/* Cards and headings carry the topic color as an edge, never as a fill
+   behind text. */
+.item { border-left: 3px solid var(--topic, var(--border)); }
+.cat-head { align-items: flex-end; flex-wrap: wrap; }
+.cat-head-text {
+  display: flex; align-items: baseline; gap: 0.75rem;
+  border-left: 4px solid var(--topic, var(--border-strong)); padding-left: 0.7rem;
+}
+.topic-chip {
+  display: flex; width: fit-content; align-items: center; gap: 0.35rem; margin-bottom: 0.2rem;
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em;
+  color: var(--muted); text-decoration: none;
+}
+.topic-chip::before {
+  content: ""; width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--topic, var(--muted));
+}
+.topic-chip:hover { color: var(--foreground); }
+.top5-item > div { min-width: 0; }
+
+/* Relevance: five pips in the topic color; the number is in the label. */
+.relevance-meter { display: inline-flex; gap: 3px; align-items: center; padding: 0 0.2rem; }
+.pip {
+  width: 0.5rem; height: 0.5rem; border-radius: 50%;
+  border: 1px solid var(--border-strong); background: transparent;
+}
+.pip-on { background: var(--topic, var(--muted)); border-color: var(--topic, var(--muted)); }
+
+/* Key figures: the numbers worth skimming, on the collapsed card. */
+.key-figures { list-style: none; display: flex; flex-wrap: wrap; gap: 0.35rem; margin: 0 0 0.15rem; padding: 0; }
+.key-figure {
+  font-family: var(--font-geist-mono), ui-monospace, monospace; font-size: 0.76rem;
+  padding: 0.12rem 0.5rem; border-radius: 6px; font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border-strong); background: var(--background); color: var(--foreground);
+}
+
+/* Reader badges: icon + label, in the warm "reader's voice" of comments. */
+.badge-pick, .badge-discussed {
+  display: inline-flex; align-items: center; gap: 0.3rem;
+  background: var(--comment-bg); color: var(--comment-fg);
+  border: 1px solid var(--comment-rule); font-weight: 600;
+}
+
+/* Relevant papers per month: one series, the topic's color, labelled current
+   month, hover tooltip per bar, and a screen-reader table. */
+.trend { margin: 0; display: flex; flex-direction: column; gap: 0.3rem; }
+.trend-caption { font-size: 0.72rem; color: var(--muted); }
+.trend-plot { display: flex; align-items: flex-end; gap: 0.3rem; height: 4.2rem; }
+.trend-col {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  width: 1.7rem; height: 100%; cursor: default;
+}
+.trend-bar {
+  width: 100%; min-height: 3px; border-radius: 4px 4px 0 0;
+  background: var(--topic, var(--muted)); opacity: 0.55;
+}
+.trend-current .trend-bar { opacity: 1; }
+.trend-col:hover .trend-bar { opacity: 0.85; }
+.trend-current:hover .trend-bar { opacity: 1; }
+.trend-value {
+  font-size: 0.7rem; font-variant-numeric: tabular-nums; color: var(--foreground); line-height: 1.3;
+  visibility: hidden;
+}
+.trend-current .trend-value, .trend-col:hover .trend-value { visibility: visible; }
+.trend-month {
+  font-size: 0.66rem; color: var(--muted); line-height: 1.5;
+  border-top: 1px solid var(--border-strong); width: 100%; text-align: center;
+}
+.trend-current .trend-month { color: var(--foreground); font-weight: 600; }
+.trend-tip {
+  position: absolute; bottom: calc(100% + 0.35rem); left: 50%; transform: translateX(-50%);
+  display: none; flex-direction: column; gap: 0.1rem; white-space: nowrap; z-index: 5;
+  padding: 0.35rem 0.55rem; border-radius: 6px; font-size: 0.72rem; color: var(--foreground);
+  background: var(--background); border: 1px solid var(--border-strong);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+.trend-col:hover .trend-tip { display: flex; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+
+/* Topic color swatches in the editor. */
+.swatches { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.swatch {
+  width: 1.5rem; height: 1.5rem; border-radius: 50%; cursor: pointer; padding: 0;
+  background: var(--topic); border: 2px solid var(--background); box-shadow: 0 0 0 1px var(--border-strong);
+}
+.swatch-on { box-shadow: 0 0 0 2px var(--foreground); }
+.swatch:disabled { cursor: default; }
+
+/* Guest view: reading progress is reader data too. */
+html[data-guest] .section-nav-link[data-progress] { background-image: none; }

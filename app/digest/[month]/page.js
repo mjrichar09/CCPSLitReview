@@ -4,6 +4,7 @@ import { getAllMonths, getReport } from '../../../lib/digest.js';
 import { resolveItem, monthLabel } from '../shared.js';
 import Health from '../Health.jsx';
 import FootnoteText from '../FootnoteText.jsx';
+import { topicStyle } from '../../../lib/topicColors.js';
 
 /**
  * Every committed month is prerendered, and only those.
@@ -56,8 +57,11 @@ export default async function MonthPage({ params }) {
               // constrains ids to real papers; this is the second guard.
               if (!resolved) return null;
               return (
-                <li key={t.id} className="top5-item">
+                <li key={t.id} className="top5-item" style={topicStyle(resolved.category.id)}>
                   <div>
+                    <Link href={`/digest/${month}/${resolved.category.id}`} className="topic-chip">
+                      {resolved.category.name}
+                    </Link>
                     <strong>
                       <Link href={resolved.href}>{resolved.item.title}</Link>
                     </strong>

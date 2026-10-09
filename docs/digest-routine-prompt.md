@@ -85,6 +85,13 @@ For every paper in `papers`, write:
   that plainly.
 - **thin_abstract**: `true` when the paper's `abstract` field is absent or
   too thin to support a real summary.
+- **key_figures**: up to 3 headline numbers a reader could skim instead of
+  expanding the card, each under 32 characters, with its unit and a one-word
+  label when the number alone is ambiguous: `"R2 0.991"`, `"Titer 8.2 g/L"`,
+  `"1.6-fold IVC"`, `"2000 L scale"`. Every number must appear in the
+  abstract; copy it, never round or compute. An empty list when there is no
+  headline number (common for trade press and reviews). Figures whose numbers
+  are not in the abstract are dropped when the month is written.
 
 Hard rule: never invent a finding not in the abstract you were given. If the
 abstract is thin, set `thin_abstract: true`, keep the summary to what is
@@ -174,7 +181,7 @@ shape — nothing more, nothing less:
 ```json
 {
   "summaries": [
-    { "index": 0, "summary": "...", "why_it_matters": "...", "thin_abstract": false }
+    { "index": 0, "summary": "...", "why_it_matters": "...", "thin_abstract": false, "key_figures": ["R2 0.991"] }
   ],
   "narratives": [
     { "id": "upstream_pd", "synthesis": "...[1]...", "references": [{ "marker": 1, "id": "doi:10.1234/xyz" }] }

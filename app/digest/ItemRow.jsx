@@ -5,6 +5,10 @@ import ReadToggle from './ReadToggle.jsx';
 import FavoriteButton from './FavoriteButton.jsx';
 import CommentBadge from './CommentBadge.jsx';
 import Comments from './Comments.jsx';
+import ReaderBadges from './ReaderBadges.jsx';
+import RelevanceMeter from './RelevanceMeter.jsx';
+import KeyFigures from './KeyFigures.jsx';
+import { topicStyle } from '../../lib/topicColors.js';
 
 function Meta({ item }) {
   const authors = formatAuthors(item.authors);
@@ -31,7 +35,7 @@ function Badges({ item }) {
       {/* Surfaced, not hidden: set when the source could not support a real
           summary, and the reader should weigh the item accordingly. */}
       {item.thin_abstract && <span className="badge badge-recurring">Thin abstract</span>}
-      <span className="item-score">relevance {item.relevance_score}/5</span>
+      <RelevanceMeter score={item.relevance_score} />
     </>
   );
 }
@@ -51,14 +55,16 @@ function Badges({ item }) {
 export default function ItemRow({ item, id, also = [], categoryId, defaultOpen = false }) {
   return (
     <li>
-      <details className="item" id={id} open={defaultOpen}>
+      <details className="item" id={id} open={defaultOpen} style={categoryId ? topicStyle(categoryId) : undefined}>
         <summary>
           <h3 className="item-title">{item.title}</h3>
           <div className="item-meta">
             <Meta item={item} />
           </div>
+          <KeyFigures item={item} />
           <div className="item-tags">
             <Badges item={item} />
+            <ReaderBadges itemId={item.id} />
             <CommentBadge itemId={item.id} />
             {/* Inside `<summary>` on purpose, so the reader's rating sits beside
                 the model's score on the collapsed row: `relevance 4/5` is what
